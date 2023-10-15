@@ -278,7 +278,9 @@
     <text name="FromDate">من تاريخ</text>
     <text name="ToDate">إلى تاريخ</text>
     <text name="From-Company-Client"> من عميل/شركة </text>
-    
-    
+	  <text name="DirectTransfer">الحوالات المباشرة</text>
+
+
+
   </texts>
 </localizationDictionary>
