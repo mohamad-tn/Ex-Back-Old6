@@ -61,8 +61,8 @@ namespace Bwr.Exchange.ExchangeCurrencies.Services.Implements
 
                 var secondCurrencyName = result.SecondCurrency != null ? result.SecondCurrency.Name : "";
                 var firstCurrencyName = result.FirstCurrency != null ? result.FirstCurrency.Name : "";
-                
-                var type = result.ActionType == ActionType.Sell ? 
+
+                var type = result.ActionType == ActionType.Sell ?
                     (TransactionConst.Sell + " " + firstCurrencyName) : (TransactionConst.Buy + " " + firstCurrencyName);
 
                 EventBus.Default.Trigger(
@@ -78,7 +78,7 @@ namespace Bwr.Exchange.ExchangeCurrencies.Services.Implements
                         Commission = 0.0,
                         InstrumentNo = null,
                         CompanyCommission = 0.0,
-                        Note = "عن مبلغ " + result.AmoutOfSecondCurrency + secondCurrencyName,
+                        Note = " عن مبلغ " + string.Format("{0:n}", result.AmoutOfSecondCurrency) + " " + secondCurrencyName,
                         Beneficiary = "",
                         Sender = "",
                         Destination = ""
@@ -97,7 +97,7 @@ namespace Bwr.Exchange.ExchangeCurrencies.Services.Implements
                         Commission = 0.0,
                         InstrumentNo = null,
                         CompanyCommission = 0.0,
-                        Note = "عن مبلغ " + result.AmountOfFirstCurrency + firstCurrencyName,
+                        Note = " عن مبلغ " + string.Format("{0:n}", result.AmountOfFirstCurrency) + " " + firstCurrencyName,
                         Beneficiary = "",
                         Sender = "",
                         Destination = ""
@@ -145,7 +145,7 @@ namespace Bwr.Exchange.ExchangeCurrencies.Services.Implements
                         Commission = 0.0,
                         InstrumentNo = null,
                         CompanyCommission = 0.0,
-                        Note = "عن مبلغ " + result.AmoutOfSecondCurrency + secondCurrencyName,
+                        Note = " عن مبلغ " + string.Format("{0:n}", result.AmoutOfSecondCurrency) + " " + secondCurrencyName,
                         Beneficiary = "",
                         Sender = "",
                         Destination = ""
@@ -164,7 +164,7 @@ namespace Bwr.Exchange.ExchangeCurrencies.Services.Implements
                         Commission = 0.0,
                         InstrumentNo = null,
                         CompanyCommission = 0.0,
-                        Note = "عن مبلغ " + result.AmountOfFirstCurrency + firstCurrencyName,
+                        Note = " عن مبلغ " + string.Format("{0:n}", result.AmountOfFirstCurrency) + " " + firstCurrencyName,
                         Beneficiary = "",
                         Sender = "",
                         Destination = ""

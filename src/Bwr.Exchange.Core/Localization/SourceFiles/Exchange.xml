@@ -322,5 +322,7 @@
     <text name="ExchangeCurrencyStatement">كشف ارباح الصيرفة</text>
     <text name="InactiveClientStatment">كشف العملاء متوقفي الحركة</text>
     <text name="Summary">الخلاصة</text>
+		<text name="DirectTransfer">الحوالات المباشرة</text>
+
 	</texts>
 </localizationDictionary>
