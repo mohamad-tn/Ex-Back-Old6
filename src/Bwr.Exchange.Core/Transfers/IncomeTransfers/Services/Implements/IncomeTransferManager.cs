@@ -130,12 +130,12 @@ namespace Bwr.Exchange.Transfers.IncomeTransfers.Services.Implements
                 return _incomeTransferRepository.GetAllIncluding(c => c.Company, i => i.IncomeTransferDetails)
                 .Where(x => x.Date >= fromDate && x.Date <= toDate && x.CompanyId == companyId);
             }
-            else if (number == null && companyId == null)
+            else if(number == null && companyId == null)
             {
                 return _incomeTransferRepository.GetAllIncluding(c => c.Company, i => i.IncomeTransferDetails)
                .Where(x => x.Date >= fromDate && x.Date <= toDate);
             }
-            else if (number != null)
+            else if(number != null)
             {
                 return _incomeTransferRepository.GetAllIncluding(c => c.Company, i => i.IncomeTransferDetails)
                 .Where(x => x.Number == number);
@@ -314,7 +314,7 @@ namespace Bwr.Exchange.Transfers.IncomeTransfers.Services.Implements
 
                         }
 
-                        await _incomeTransferDetailManager.DeteleAsync(detail);
+                        //await _incomeTransferDetailManager.DeteleAsync(detail);
                     }
 
                     await _incomeTransferRepository.DeleteAsync(incomeTransfer);

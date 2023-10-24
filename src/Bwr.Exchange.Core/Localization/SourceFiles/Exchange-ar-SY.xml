@@ -278,7 +278,13 @@
     <text name="FromDate">من تاريخ</text>
     <text name="ToDate">إلى تاريخ</text>
     <text name="From-Company-Client"> من عميل/شركة </text>
-	  <text name="DirectTransfer">الحوالات المباشرة</text>
+	  <text name="Receipt">قبض</text>
+	  <text name="Spend">صرف</text>
+	  <text name="Management">الادارة</text>
+	  <text name="BeforChange">قبل التعديل</text>
+	  <text name="AfterChange">بعد التعديل</text>
+	  <text name="ChangeDate">تاريخ التعديل</text>
+	  <text name="ChangeType">الإجراء</text>
 
 
 

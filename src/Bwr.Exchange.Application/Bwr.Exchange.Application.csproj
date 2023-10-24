@@ -12,9 +12,12 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="23.1.39" />
+    <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="23.1.38" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bwr.Exchange.Core\Bwr.Exchange.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Reflection\" />
   </ItemGroup>
 </Project>

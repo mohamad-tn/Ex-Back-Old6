@@ -10,12 +10,10 @@ namespace Bwr.Exchange.Editions
         public const string DefaultEditionName = "Standard";
 
         public EditionManager(
-            IRepository<Edition> editionRepository, 
+            IRepository<Edition> editionRepository,
             IAbpZeroFeatureValueStore featureValueStore,
-            IUnitOfWorkManager unitOfWorkManager)
-            : base(
-                editionRepository,
-                featureValueStore, unitOfWorkManager)
+            IUnitOfWorkManager unitOfWorkManager) 
+            : base(editionRepository, featureValueStore, unitOfWorkManager)
         {
         }
     }

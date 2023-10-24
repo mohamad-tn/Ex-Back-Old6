@@ -77,9 +77,8 @@ namespace Bwr.Exchange.CashFlows.TreasuryCashFlows
             }
 
             var treasuryCashFlowsDto = new List<TreasuryCashFlowDto>();
-            if (treasury != null)
+            if (treasury != null && currencyId != 0)
             {
-                currencyId = 4;
                 //Add Previous Balance
                 var previousBalance = _treasuryCashFlowManager.GetPreviousBalance2(treasury.Id, currencyId, fromDate);
                 treasuryCashFlowsDto.Add(new TreasuryCashFlowDto

@@ -52,7 +52,7 @@ namespace Bwr.Exchange.Settings.ExchangePrices
 
         public async Task<ExchangePriceDto> GetById(int id)
         {
-            var exPrice = await _exchangeManager.GetByCurrencyIdAsync(id);
+             var exPrice = await _exchangeManager.GetByCurrencyIdAsync(id);
             return ObjectMapper.Map<ExchangePriceDto>(exPrice);
         }
 

@@ -22,6 +22,9 @@ using Bwr.Exchange.Shared.DataManagerRequests;
 using Syncfusion.EJ2.Base;
 using Bwr.Exchange.Shared.Dto;
 using Bwr.Exchange.Customers.Services;
+using Abp.Runtime.Session;
+using Bwr.Exchange.CashFlows.ManagementStatement.Events;
+using Bwr.Exchange.Transfers;
 
 namespace Bwr.Exchange.TreasuryActions
 {
@@ -161,7 +164,102 @@ namespace Bwr.Exchange.TreasuryActions
 
         public async Task<TreasuryActionDto> UpdateAsync(TreasuryActionDto input)
         {
+            string before = "";
+            string after = "";
+
             var treasuryAction = await _treasuryActionManager.GetByIdAsync(input.Id);
+
+            #region Before & After
+            if (treasuryAction.Note != input.Note)
+            {
+                before = L("Note") + " : " + treasuryAction.Note;
+                after = L("Note") + " : " + input.Note;
+            }
+
+            if (treasuryAction.Number != input.Number)
+            {
+                before = before + " - " + L("Number") + " : " + treasuryAction.Number;
+                after = after + " - " + L("Number") + " : " + input.Number;
+            }
+
+            if (treasuryAction.CurrencyId != input.CurrencyId)
+            {
+                before = before + " - " + L("Currency") + " : " + treasuryAction.CurrencyId;
+                after = after + " - " + L("Currency") + " : " + input.CurrencyId;
+            }
+
+            if (treasuryAction.ExchangePartyCompanyId != input.ExchangePartyCompanyId)
+            {
+                before = before + " - " + L("ExchangePartyCompany") + " : " + treasuryAction.ExchangePartyCompanyId;
+                after = after + " - " + L("ExchangePartyCompany") + " : " + input.ExchangePartyCompanyId;
+            }
+
+            if (treasuryAction.ExchangePartyClientId != input.ExchangePartyClientId)
+            {
+                before = before + " - " + L("ExchangePartyClient") + " : " + treasuryAction.ExchangePartyClientId;
+                after = after + " - " + L("ExchangePartyClient") + " : " + input.ExchangePartyClientId;
+            }
+
+            if (treasuryAction.Amount != input.Amount)
+            {
+                before = before + " - " + L("Amount") + " : " + treasuryAction.Amount;
+                after = after + " - " + L("Amount") + " : " + input.Amount;
+            }
+
+            if (treasuryAction.MainAccountCompanyId != input.MainAccountCompanyId)
+            {
+                before = before + " - " + L("MainAccountCompany") + " : " + treasuryAction.MainAccountCompanyId;
+                after = after + " - " + L("MainAccountCompany") + " : " + input.MainAccountCompanyId;
+            }
+
+            if (treasuryAction.MainAccountClientId != input.MainAccountClientId)
+            {
+                before = before + " - " + L("MainAccountClient") + " : " + treasuryAction.MainAccountClientId;
+                after = after + " - " + L("MainAccountClient") + " : " + input.MainAccountClientId;
+            }
+
+            if (treasuryAction.ExpenseId != input.ExpenseId)
+            {
+                before = before + " - " + L("Expense") + " : " + treasuryAction.ExpenseId;
+                after = after + " - " + L("Expense") + " : " + input.ExpenseId;
+            }
+
+            if (treasuryAction.IncomeId != input.IncomeId)
+            {
+                before = before + " - " + L("Income") + " : " + treasuryAction.IncomeId;
+                after = after + " - " + L("Income") + " : " + input.IncomeId;
+            }
+
+            if ((int)treasuryAction.MainAccount != input.MainAccount)
+            {
+                before = before + " - " + L("ToCompanyId") + " : " + treasuryAction.MainAccount;
+                after = after + " - " + L("ToCompanyId") + " : " + input.MainAccount;
+            }
+
+            if ((int)treasuryAction.ActionType != input.ActionType)
+            {
+                before = before + " - " + L("PaymentType") + " : " + ((PaymentType)treasuryAction.ActionType);
+                after = after + " - " + L("PaymentType") + " : " + ((PaymentType)input.ActionType);
+            }
+
+            if (treasuryAction.Date.ToString() != input.Date)
+            {
+                before = before + " - " + L("Date") + " : " + treasuryAction.Date;
+                after = after + " - " + L("Date") + " : " + input.Date;
+            }
+            #endregion
+
+
+            await _treasuryActionManager.DeleteAsync(treasuryAction);
+            EventBus.Default.Trigger(
+            new CreateManagementEventData(
+                2, treasuryAction.Amount, treasuryAction.Date, null, DateTime.Now,0, treasuryAction.Number,
+                (int?)treasuryAction.ActionType, treasuryAction.MainAccount.ToString(), before, after, null, null, null, null, null,
+                null, null, null, null, treasuryAction.CurrencyId, treasuryAction.MainAccountClientId, AbpSession.GetUserId(),
+                treasuryAction.MainAccountCompanyId, null, null, treasuryAction.ExchangePartyCompanyId, null
+                )
+            );
+
             var date = DateTime.Parse(input.Date);
             date = new DateTime
                     (
@@ -193,6 +291,14 @@ namespace Bwr.Exchange.TreasuryActions
             if(treasuryAction != null)
             {
                 await _treasuryActionManager.DeleteAsync(treasuryAction);
+                EventBus.Default.Trigger(
+                new CreateManagementEventData(
+                    2,treasuryAction.Amount,treasuryAction.Date,null,DateTime.Now,1,treasuryAction.Number,
+                    (int?)treasuryAction.ActionType,treasuryAction.MainAccount.ToString(),null,null,null,null,null,null,null,
+                    null,null,null,null,treasuryAction.CurrencyId,treasuryAction.MainAccountClientId,AbpSession.GetUserId(),
+                    treasuryAction.MainAccountCompanyId,null,null,treasuryAction.ExchangePartyCompanyId,null
+                    )
+                );
             }
         }
 

@@ -20,5 +20,8 @@
         public const string ThereIsAnotherMeetingAtTheSameTime = "ThereIsAnotherMeetingAtTheSameTime";
         public const string ThereIsAnotherCallAtTheSameTime = "ThereIsAnotherCallAtTheSameTime";
         public const string CommusionAleadyExistForThisCurrency = "CommusionAleadyExistForThisCurrency";
+        public const string CurrentUserIsNotAssociatedWithBranchAndTreasury = "CurrentUserIsNotAssociatedWithBranchAndTreasury";
+        public const string TheOutgoingTransferHasBeenDisbursedItCannotBeModified = "TheOutgoingTransferHasBeenDisbursedItCannotBeModified";
+        public const string TheDestinationBranchDoseNotDealInThisCurrency = "TheDestinationBranchDoseNotDealInThisCurrency";
     }
 }

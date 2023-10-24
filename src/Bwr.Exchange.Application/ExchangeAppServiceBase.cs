@@ -7,6 +7,8 @@ using Abp.Runtime.Session;
 using Bwr.Exchange.Authorization.Users;
 using Bwr.Exchange.MultiTenancy;
 using Bwr.Exchange.Settings.Treasuries.Services;
+using Bwr.Exchange.Settings.Treasuries;
+using Abp.UI;
 
 namespace Bwr.Exchange
 {
@@ -18,6 +20,7 @@ namespace Bwr.Exchange
         public TenantManager TenantManager { get; set; }
 
         public UserManager UserManager { get; set; }
+        public TreasuryManager TreasuryManager { get; set; }
 
         protected ExchangeAppServiceBase()
         {
@@ -39,6 +42,8 @@ namespace Bwr.Exchange
         {
             return TenantManager.GetByIdAsync(AbpSession.GetTenantId());
         }
+
+        
 
         protected virtual void CheckErrors(IdentityResult identityResult)
         {

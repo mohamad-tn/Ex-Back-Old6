@@ -15,6 +15,12 @@ using System.Linq;
 using System.Collections;
 using Abp.UI;
 using Microsoft.AspNetCore.Hosting;
+using Abp.Events.Bus;
+using Bwr.Exchange.Transfers.Customers.Events;
+using Syncfusion.EJ2.Spreadsheet;
+using Bwr.Exchange.CashFlows.ManagementStatement.Events;
+using Abp.Runtime.Session;
+using Bwr.Exchange.ExchangeCurrencies;
 
 namespace Bwr.Exchange.Transfers.OutgoingTransfers
 {
@@ -56,7 +62,115 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
 
         public async Task<OutgoingTransferDto> UpdateAsync(OutgoingTransferDto input)
         {
+            string before = "";
+            string after = "";
+
             var outgoingTransfer = await _outgoingTransferManager.GetByIdAsync(input.Id);
+
+            #region Before & After
+            if (outgoingTransfer.Note != input.Note)
+            {
+                before = L("Note") + " : " + outgoingTransfer.Note;
+                after = L("Note") + " : " + input.Note;
+            }
+
+            if (outgoingTransfer.Number != input.Number)
+            {
+                before = before + " - " + L("Number") + " : " + outgoingTransfer.Number;
+                after = after + " - " + L("Number") + " : " + input.Number;
+            }
+
+            if (outgoingTransfer.CurrencyId != input.CurrencyId)
+            {
+                before = before + " - " + L("Currency") + " : " + outgoingTransfer.CurrencyId;
+                after = after + " - " + L("Currency") + " : " + input.CurrencyId;
+            }
+
+            if (outgoingTransfer.BeneficiaryId != input.BeneficiaryId)
+            {
+                before = before + " - " + L("Beneficiary") + " : " + outgoingTransfer.BeneficiaryId;
+                after = after + " - " + L("Beneficiary") + " : " + input.BeneficiaryId;
+            }
+
+            if (outgoingTransfer.SenderId != input.SenderId)
+            {
+                before = before + " - " + L("Sender") + " : " + outgoingTransfer.SenderId;
+                after = after + " - " + L("Sender") + " : " + input.SenderId;
+            }
+
+            if (outgoingTransfer.Amount != input.Amount)
+            {
+                before = before + " - " + L("Amount") + " : " + outgoingTransfer.Amount;
+                after = after + " - " + L("Amount") + " : " + input.Amount;
+            }
+
+            if (outgoingTransfer.ToCompanyId != input.ToCompanyId)
+            {
+                before = before + " - " + L("ToCompany") + " : " + outgoingTransfer.ToCompanyId;
+                after = after + " - " + L("ToCompany") + " : " + input.ToCompanyId;
+            }
+
+            if (outgoingTransfer.CountryId != input.CountryId)
+            {
+                before = before + " - " + L("Country") + " : " + outgoingTransfer.CountryId;
+                after = after + " - " + L("Country") + " : " + input.CountryId;
+            }
+
+            if (outgoingTransfer.FromCompanyId != input.FromCompanyId)
+            {
+                before = before + " - " + L("FromCompany") + " : " + outgoingTransfer.FromCompanyId;
+                after = after + " - " + L("FromCompany") + " : " + input.FromCompanyId;
+            }
+
+            if ((int)outgoingTransfer.PaymentType != input.PaymentType)
+            {
+                before = before + " - " + L("PaymentType") + " : " + ((PaymentType)outgoingTransfer.PaymentType);
+                after = after + " - " + L("PaymentType") + " : " + ((PaymentType)input.PaymentType);
+            }
+
+            if (outgoingTransfer.FromClientId != input.FromClientId)
+            {
+                before = before + " - " + L("FromClient") + " : " + ((ActionType)outgoingTransfer.FromClientId);
+                after = after + " - " + L("FromClient") + " : " + ((ActionType)input.FromClientId);
+            }
+
+            if (outgoingTransfer.Date.ToString() != input.Date)
+            {
+                before = before + " - " + L("Date") + " : " + outgoingTransfer.Date;
+                after = after + " - " + L("Date") + " : " + input.Date;
+            }
+
+            if (outgoingTransfer.ReceivedAmount != input.ReceivedAmount)
+            {
+                before = before + " - " + L("ReceivedAmount") + " : " + outgoingTransfer.ReceivedAmount;
+                after = after + " - " + L("ReceivedAmount") + " : " + input.ReceivedAmount;
+            }
+
+            if (outgoingTransfer.InstrumentNo != input.InstrumentNo)
+            {
+                before = before + " - " + L("InstrumentNo") + " : " + outgoingTransfer.InstrumentNo;
+                after = after + " - " + L("InstrumentNo") + " : " + input.InstrumentNo;
+            }
+
+            if (outgoingTransfer.Reason != input.Reason)
+            {
+                before = before + " - " + L("Reason") + " : " + outgoingTransfer.Reason;
+                after = after + " - " + L("Reason") + " : " + input.Reason;
+            }
+            #endregion
+
+
+            EventBus.Default.Trigger(
+                new CreateManagementEventData(
+                    0, outgoingTransfer.Amount, outgoingTransfer.Date, (int?)outgoingTransfer.PaymentType,
+                    DateTime.Now, 0, outgoingTransfer.Number, null, null, before, after, null, null, null, null,
+                    null, null, outgoingTransfer.Commission, null, null, outgoingTransfer.CurrencyId,
+                    outgoingTransfer.FromClientId, AbpSession.GetUserId(), outgoingTransfer.FromCompanyId
+                    , outgoingTransfer.SenderId, outgoingTransfer.BeneficiaryId, outgoingTransfer.ToCompanyId, null
+                    )
+                );
+
+
             var date = DateTime.Parse(input.Date);
             date = new DateTime
                     (
@@ -94,6 +208,16 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
             if(outgoingTransfer != null)
             {
                 await _outgoingTransferManager.DeleteAsync(outgoingTransfer);
+
+                EventBus.Default.Trigger(
+                new CreateManagementEventData(
+                    0,outgoingTransfer.Amount,outgoingTransfer.Date, (int?)outgoingTransfer.PaymentType,
+                    DateTime.Now,1,outgoingTransfer.Number,null,null,null,null,null,null,null,null,
+                    null,null,outgoingTransfer.Commission,null,null,outgoingTransfer.CurrencyId,
+                    outgoingTransfer.FromClientId,AbpSession.GetUserId(),outgoingTransfer.FromCompanyId
+                    ,outgoingTransfer.SenderId,outgoingTransfer.BeneficiaryId,outgoingTransfer.ToCompanyId,null
+                    )
+                );
             }
         }
 

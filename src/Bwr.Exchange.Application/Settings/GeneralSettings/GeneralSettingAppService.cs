@@ -22,7 +22,7 @@ namespace Bwr.Exchange.Settings.GeneralSettings
         public async Task<GeneralSettingDto> Get()
         {
             var setting = await _generalSettingManager.Get();
-            if (setting !=null)
+            if (setting != null)
             {
                 return new GeneralSettingDto()
                 {
@@ -34,7 +34,6 @@ namespace Bwr.Exchange.Settings.GeneralSettings
             {
                 return new GeneralSettingDto();
             }
-            
         }
 
         public async Task<GeneralSettingDto> Update(GeneralSettingDto input)

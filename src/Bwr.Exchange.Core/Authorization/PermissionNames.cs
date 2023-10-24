@@ -80,5 +80,18 @@
         public const string Pages_OutgoingTransfers_Create = "Pages.OutgoingTransfers.Create";
         public const string Pages_OutgoingTransfers_Edit = "Pages.OutgoingTransfers.Edit";
 
+        // Companies
+        public const string Pages_Branches = "Pages.Branches";
+        public const string Pages_Branches_Create = "Pages.Branches.Create";
+        public const string Pages_Branches_Edit = "Pages.Branches.Edit";
+        public const string Pages_Branches_Delete = "Pages.Branches.Delete";
+
+        //IncomeTransferNotAccepted
+        public const string Pages_IncomeTransferNotAccepted = "Pages.IncomeTransferNotAccepted";
+        public const string Pages_IncomeTransferNotAccepted_Accept = "Pages.IncomeTransferNotAccepted.Accept";
+        public const string Pages_IncomeTransferNotAccepted_Reject = "Pages.IncomeTransferNotAccepted.Reject";
+
+        //BranchTransfersCounter
+        public const string Pages_BranchTransfersCounter = "Pages.BranchTransfersCounter";
     }
 }
