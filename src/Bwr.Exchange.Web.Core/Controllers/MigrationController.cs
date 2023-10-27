@@ -6,18 +6,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Abp.Authorization;
-using Abp.Authorization.Users;
-using Abp.MultiTenancy;
-using Abp.Runtime.Security;
-using Abp.UI;
-using Bwr.Exchange.Authentication.External;
-using Bwr.Exchange.Authentication.JwtBearer;
-using Bwr.Exchange.Authorization;
-using Bwr.Exchange.Authorization.Users;
-using Bwr.Exchange.Models.TokenAuth;
-using Bwr.Exchange.MultiTenancy;
-using Bwr.Exchange.Migrate;
 using Bwr.Exchange.Models.Migrate;
 using Microsoft.Data.SqlClient;
 using Bwr.Exchange.Settings.Clients.Services;
@@ -55,7 +43,7 @@ namespace Bwr.Exchange.Controllers
             ITreasuryCashFlowManager treasuryCashFlowManager,
             IConfiguration configuration)
         {
-            _connectionSerting = "server=127.0.0.1;uid=root;pwd='';database=ex2";
+            _connectionSerting = "server=127.0.0.1;uid=root;pwd='';database=ex3";
             _clientManager = clientManager;
             _currencyManager = currencyManager;
             _clientCashFlowManager = clientCashFlowManager;
@@ -94,8 +82,7 @@ namespace Bwr.Exchange.Controllers
                         "delete from Clients;" +
                         "delete from currencies;" +
                         "delete from CustomerImages;" +
-                        "delete from customers;" +
-                        "delete from expenses;";
+                        "delete from customers;";
 
             return new ClearDatabaseOutput(ClearDb(query, connectionSerting));
         }

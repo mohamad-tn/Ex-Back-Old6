@@ -18,7 +18,7 @@ namespace Bwr.Exchange.Authorization.Users
             IRepository<UserClaim, long> userClaimRepository,
             IRepository<UserPermissionSetting, long> userPermissionSettingRepository,
             IRepository<UserOrganizationUnit, long> userOrganizationUnitRepository,
-            IRepository<OrganizationUnitRole, long> organizationUnitRoleRepository)
+            IRepository<OrganizationUnitRole, long> organizationUnitRoleRepository) 
             : base(unitOfWorkManager,
                   userRepository,
                   roleRepository,

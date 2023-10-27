@@ -142,7 +142,7 @@ namespace Bwr.Exchange.TreasuryActions.Services
             {
                 if (mainAccount == 0)
                 {
-                    var mainAccountClientId = dic["MainAccountClientId"] != null ? 
+                    var mainAccountClientId = dic["MainAccountClientId"] != null ?
                         int.Parse(dic["MainAccountClientId"].ToString()) : 0;
 
                     if (mainAccountClientId == -1)
@@ -159,7 +159,7 @@ namespace Bwr.Exchange.TreasuryActions.Services
                 }
                 else if (mainAccount == 1)
                 {
-                    var mainAccountCompanyId = dic["MainAccountCompanyId"] != null ? 
+                    var mainAccountCompanyId = dic["MainAccountCompanyId"] != null ?
                         int.Parse(dic["MainAccountCompanyId"].ToString()) : 0;
                     if (mainAccountCompanyId == -1)
                     {
@@ -201,20 +201,23 @@ namespace Bwr.Exchange.TreasuryActions.Services
                     }
                 }
                 else if (mainAccount == 4)
-                {
-                    //var beneficiaryId = dic["BeneficiaryId"] != null ? int.Parse(dic["BeneficiaryId"].ToString()) : 0;
-                    //if (beneficiaryId == -1)
+                { 
+                }
+                    //else if (mainAccount == 4)
                     //{
-                    //    treasuryActions = treasuryActions
-                    //    .Where(x => x.IncomeTransferDetailId != null);
-                    //}
-                    //else
-                    //{
-                    //    treasuryActions = treasuryActions
-                    //    .Where(x => x.IncomeTransferDetailId != null && x.IncomeTransferDetail.BeneficiaryId == beneficiaryId);
+                    //    var beneficiaryId = dic["BeneficiaryId"] != null ? int.Parse(dic["BeneficiaryId"].ToString()) : 0;
+                    //    if (beneficiaryId == -1)
+                    //    {
+                    //        treasuryActions = treasuryActions
+                    //        .Where(x => x.IncomeTransferDetailId != null);
+                    //    }
+                    //    else
+                    //    {
+                    //        treasuryActions = treasuryActions
+                    //        .Where(x => x.IncomeTransferDetailId != null && x.IncomeTransferDetail.BeneficiaryId == beneficiaryId);
+                    //    }
                     //}
                 }
-            }
 
             return treasuryActions.ToList();
         }

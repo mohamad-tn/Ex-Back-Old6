@@ -38,7 +38,7 @@ namespace Bwr.Exchange.Configuration
 
             if (addUserSecrets)
             {
-                builder.AddUserSecrets(typeof(AppConfigurations).GetAssembly());
+                builder.AddUserSecrets(typeof(AppConfigurations).GetAssembly(), optional: true);
             }
 
             return builder.Build();

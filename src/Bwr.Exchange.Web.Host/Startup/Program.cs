@@ -2,6 +2,7 @@
 using Abp.Dependency;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using QuestPDF.Infrastructure;
 
 namespace Bwr.Exchange.Web.Host.Startup
 {
@@ -9,6 +10,8 @@ namespace Bwr.Exchange.Web.Host.Startup
     {
         public static void Main(string[] args)
         {
+            QuestPDF.Settings.License = LicenseType.Community;
+            QuestPDF.Settings.CheckIfAllTextGlyphsAreAvailable = false;
             CreateHostBuilder(args).Build().Run();
         }
 

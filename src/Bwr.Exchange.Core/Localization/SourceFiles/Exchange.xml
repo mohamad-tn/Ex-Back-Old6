@@ -321,8 +321,17 @@
     <text name="days">عدد الايام</text>
     <text name="ExchangeCurrencyStatement">كشف ارباح الصيرفة</text>
     <text name="InactiveClientStatment">كشف العملاء متوقفي الحركة</text>
-    <text name="Summary">الخلاصة</text>
+		<text name="Summary">الخلاصة</text>
 		<text name="DirectTransfer">الحوالات المباشرة</text>
+		<text name="Receipt">قبض</text>
+		<text name="Spend">صرف</text>
+		<text name="Management">الادارة</text>
+		<text name="BeforChange">قبل التعديل</text>
+		<text name="AfterChange">بعد التعديل</text>
+		<text name="ChangeDate">تاريخ التعديل</text>
+		<text name="Update">تعديل</text>
+		<text name="ChangeType">الإجراء</text>
+		
 
 	</texts>
 </localizationDictionary>

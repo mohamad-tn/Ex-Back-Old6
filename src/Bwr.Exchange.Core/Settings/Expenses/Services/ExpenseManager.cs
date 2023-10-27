@@ -47,6 +47,12 @@ namespace Bwr.Exchange.Settings.Expenses.Services
             return await _expenseRepository.GetAsync(id);
         }
 
+        public string GetExpenseNameById(int id)
+        {
+            var expense = _expenseRepository.Get(id);
+            return expense.Name;
+        }
+
         public async Task<Expense> InsertAndGetAsync(Expense expense)
         {
             return await _expenseRepository.InsertAsync(expense);

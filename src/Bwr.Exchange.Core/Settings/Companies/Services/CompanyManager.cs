@@ -112,6 +112,12 @@ namespace Bwr.Exchange.Settings.Companies.Services
             return clientBalance;
         }
 
+        public string GetCompanyNameById(int id)
+        {
+            var company = _companyRepository.Get(id);
+            return company.Name;
+        }
+
         #region Helper Methods
         private async Task RemoveCompanyBalances(int companyId, IList<CompanyBalance> newCompanyBalances)
         {
@@ -139,6 +145,8 @@ namespace Bwr.Exchange.Settings.Companies.Services
                 }
             }
         }
+
+        
         #endregion
     }
 }

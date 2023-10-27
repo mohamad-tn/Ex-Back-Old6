@@ -179,12 +179,6 @@ namespace Bwr.Exchange.Settings.Companies
             if (!string.IsNullOrEmpty(validationResultMessage))
                 throw new UserFriendlyException(validationResultMessage);
         }
-
-        
-
-
-
-
         #endregion
     }
 }

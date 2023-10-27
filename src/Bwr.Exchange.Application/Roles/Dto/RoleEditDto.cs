@@ -17,6 +17,7 @@ namespace Bwr.Exchange.Roles.Dto
 
         [StringLength(Role.MaxDescriptionLength)]
         public string Description { get; set; }
+
         public int DataAccess { get; set; }
 
         public bool IsStatic { get; set; }

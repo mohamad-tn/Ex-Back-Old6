@@ -1720,6 +1720,140 @@ namespace Bwr.Exchange.Migrations
                     b.ToTable("CompanyCashFlows");
                 });
 
+            modelBuilder.Entity("Bwr.Exchange.CashFlows.ManagementStatement.Management", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ActionType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AfterChange")
+                        .HasColumnType("longtext");
+
+                    b.Property<double?>("Amount")
+                        .HasColumnType("double");
+
+                    b.Property<double?>("AmountOfFirstCurrency")
+                        .HasColumnType("double");
+
+                    b.Property<double?>("AmoutOfSecondCurrency")
+                        .HasColumnType("double");
+
+                    b.Property<string>("BeforChange")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("BeneficiaryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ChangeDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("ChangeType")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<double?>("Commission")
+                        .HasColumnType("double");
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("CurrencyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("FirstCurrencyId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("MainAccount")
+                        .HasColumnType("longtext");
+
+                    b.Property<double?>("Number")
+                        .HasColumnType("double");
+
+                    b.Property<double?>("PaidAmountOfFirstCurrency")
+                        .HasColumnType("double");
+
+                    b.Property<double?>("PaidAmountOfSecondCurrency")
+                        .HasColumnType("double");
+
+                    b.Property<int?>("PaymentType")
+                        .HasColumnType("int");
+
+                    b.Property<double?>("ReceivedAmountOfFirstCurrency")
+                        .HasColumnType("double");
+
+                    b.Property<double?>("ReceivedAmountOfSecondCurrency")
+                        .HasColumnType("double");
+
+                    b.Property<int?>("SecondCurrencyId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SenderId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ToCompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TreasuryActionType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BeneficiaryId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("CurrencyId");
+
+                    b.HasIndex("FirstCurrencyId");
+
+                    b.HasIndex("SecondCurrencyId");
+
+                    b.HasIndex("SenderId");
+
+                    b.HasIndex("ToCompanyId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ManagementStatement");
+                });
+
             modelBuilder.Entity("Bwr.Exchange.CashFlows.Transaction", b =>
                 {
                     b.Property<int>("TransactionId")
@@ -3345,6 +3479,65 @@ namespace Bwr.Exchange.Migrations
                     b.Navigation("Company");
 
                     b.Navigation("Currency");
+                });
+
+            modelBuilder.Entity("Bwr.Exchange.CashFlows.ManagementStatement.Management", b =>
+                {
+                    b.HasOne("Bwr.Exchange.Customers.Customer", "Beneficiary")
+                        .WithMany()
+                        .HasForeignKey("BeneficiaryId");
+
+                    b.HasOne("Bwr.Exchange.Settings.Clients.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId");
+
+                    b.HasOne("Bwr.Exchange.Settings.Companies.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("Bwr.Exchange.Settings.Currencies.Currency", "Currency")
+                        .WithMany()
+                        .HasForeignKey("CurrencyId");
+
+                    b.HasOne("Bwr.Exchange.Settings.Currencies.Currency", "FirstCurrency")
+                        .WithMany()
+                        .HasForeignKey("FirstCurrencyId");
+
+                    b.HasOne("Bwr.Exchange.Settings.Currencies.Currency", "SecondCurrency")
+                        .WithMany()
+                        .HasForeignKey("SecondCurrencyId");
+
+                    b.HasOne("Bwr.Exchange.Customers.Customer", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId");
+
+                    b.HasOne("Bwr.Exchange.Settings.Companies.Company", "ToCompany")
+                        .WithMany()
+                        .HasForeignKey("ToCompanyId");
+
+                    b.HasOne("Bwr.Exchange.Authorization.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Beneficiary");
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Currency");
+
+                    b.Navigation("FirstCurrency");
+
+                    b.Navigation("SecondCurrency");
+
+                    b.Navigation("Sender");
+
+                    b.Navigation("ToCompany");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Bwr.Exchange.CashFlows.TreasuryCashFlows.TreasuryCashFlow", b =>

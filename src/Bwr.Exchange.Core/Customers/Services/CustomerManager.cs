@@ -70,6 +70,10 @@ namespace Bwr.Exchange.Customers.Services
             return await _customerRepository.GetAsync(id);
         }
 
-        
+        public string GetCustomerNameById(int id)
+        {
+            var customer = _customerRepository.Get(id);
+            return customer.Name;
+        }
     }
 }

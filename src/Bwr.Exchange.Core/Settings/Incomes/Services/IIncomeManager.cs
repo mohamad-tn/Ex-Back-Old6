@@ -14,5 +14,6 @@ namespace Bwr.Exchange.Settings.Incomes.Services
         Task DeleteAsync(int id);
         bool CheckIfNameAlreadyExist(string name);
         bool CheckIfNameAlreadyExist(int id, string name);
+        string GetIncomeNameById(int id)
     }
 }

@@ -83,6 +83,20 @@ namespace Bwr.Exchange.Authorization
             context.CreatePermission(PermissionNames.Pages_OutgoingTransfers, L("OutgoingTransfers"));
             context.CreatePermission(PermissionNames.Pages_OutgoingTransfers_Create, L("CreateNewOutgoingTransfer"));
             context.CreatePermission(PermissionNames.Pages_OutgoingTransfers_Edit, L("EditOutgoingTransfer"));
+
+            //Branches
+            context.CreatePermission(PermissionNames.Pages_Branches, L("Branches"));
+            context.CreatePermission(PermissionNames.Pages_Branches_Create, L("CreateNewBranche"));
+            context.CreatePermission(PermissionNames.Pages_Branches_Edit, L("EditBranche"));
+            context.CreatePermission(PermissionNames.Pages_Branches_Delete, L("DeleteBranche"));
+
+            //IncomeTransferNotAccepted
+            context.CreatePermission(PermissionNames.Pages_IncomeTransferNotAccepted, L("IncomeTransferNotAccepted"));
+            context.CreatePermission(PermissionNames.Pages_IncomeTransferNotAccepted_Accept, L("AcceptBranchTransfer"));
+            context.CreatePermission(PermissionNames.Pages_IncomeTransferNotAccepted_Reject, L("RejectBranchTransfer"));
+
+            //BranchTransfersCounter
+            context.CreatePermission(PermissionNames.Pages_BranchTransfersCounter, L("BranchTransfersCounter"));
         }
 
         private static ILocalizableString L(string name)

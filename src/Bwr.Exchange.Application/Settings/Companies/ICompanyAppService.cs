@@ -12,6 +12,6 @@ namespace Bwr.Exchange.Settings.Companies
     {
         CompanyBalanceDto GetCurrentBalance(CompanyBalanceInputDto input);
         Task<IList<CompanyBalanceWithCurrencyDto>> GetAllBalances(int companyId);
-        Task<CompanyBalanceDto> GetBalanceForEdit(CompanyBalanceForEditInputDto input);
+        Task<CompanyBalanceDto> GetBalanceForEdit(CompanyBalanceForEditInputDto input);        
     }
 }

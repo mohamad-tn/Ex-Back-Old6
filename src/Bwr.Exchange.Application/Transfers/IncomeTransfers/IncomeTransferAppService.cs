@@ -1,13 +1,23 @@
-﻿using Abp.Domain.Uow;
+﻿using Abp.Domain.Repositories;
+using Abp.Domain.Uow;
 using Abp.Events.Bus;
+using Abp.Runtime.Session;
 using Abp.Threading;
+using Bwr.Exchange.CashFlows.ManagementStatement.Events;
 using Bwr.Exchange.Customers;
 using Bwr.Exchange.Customers.Dto;
 using Bwr.Exchange.Customers.Services;
+using Bwr.Exchange.ExchangeCurrencies;
+using Bwr.Exchange.Settings.Clients.Services;
+using Bwr.Exchange.Settings.Companies;
+using Bwr.Exchange.Settings.Companies.Services;
+using Bwr.Exchange.Settings.Currencies.Services;
+using Bwr.Exchange.Settings.Incomes;
 using Bwr.Exchange.Settings.Treasuries.Services;
 using Bwr.Exchange.Transfers.IncomeTransfers.Dto;
 using Bwr.Exchange.Transfers.IncomeTransfers.Services.Interfaces;
 using Bwr.Exchange.TreasuryActions.Services;
+using Syncfusion.EJ2.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,19 +32,28 @@ namespace Bwr.Exchange.Transfers.IncomeTransfers
         private readonly ITreasuryActionManager _treasuryActionManager;
         private readonly ICustomerManager _customerManager;
         private readonly ITreasuryManager _treasuryManager;
+        private readonly ICompanyManager _companyManager;
+        private readonly IClientManager _clientManager;
+        private readonly ICurrencyManager _currencyManager;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public IncomeTransferAppService(
-            IIncomeTransferManager incomeTransferManager, 
-            ITreasuryActionManager treasuryActionManager, 
-            ICustomerManager customerManager, 
-            ITreasuryManager treasuryManager, 
+            IIncomeTransferManager incomeTransferManager,
+            ITreasuryActionManager treasuryActionManager,
+            ICustomerManager customerManager,
+            ITreasuryManager treasuryManager,
+            ICompanyManager companyManager,
+            IClientManager clientManager,
+            ICurrencyManager currencyManager,
             IUnitOfWorkManager unitOfWorkManager)
         {
             _incomeTransferManager = incomeTransferManager;
             _treasuryActionManager = treasuryActionManager;
             _customerManager = customerManager;
             _treasuryManager = treasuryManager;
+            _companyManager = companyManager;
+            _clientManager = clientManager;
+            _currencyManager = currencyManager;
             _unitOfWorkManager = unitOfWorkManager;
         }
 
@@ -65,7 +84,6 @@ namespace Bwr.Exchange.Transfers.IncomeTransfers
             var createdIncomeTransfer = await _incomeTransferManager.CreateAsync(incomeTransfer);
             return ObjectMapper.Map<IncomeTransferDto>(createdIncomeTransfer);
         }
-
         public async Task<IncomeTransferDto> UpdateAsync(IncomeTransferDto input)
         {
             var dto = new IncomeTransferDto();
@@ -74,6 +92,86 @@ namespace Bwr.Exchange.Transfers.IncomeTransfers
             var incomeTransfer = _incomeTransferManager.GetById(input.Id);
             var isDeleted = await _incomeTransferManager.DeleteDetailsAsync(incomeTransfer);
 
+            for (int i = 0; i < incomeTransfer.IncomeTransferDetails.Count; i++)
+            {
+                string before = "";
+                string after = "";
+
+                #region Before & After
+                if (incomeTransfer.Note != input.Note)
+                {
+                    before = L("Note") + " : " + incomeTransfer.Note;
+                    after = L("Note") + " : " + input.Note;
+                }
+
+                if (incomeTransfer.Number != input.Number)
+                {
+                    before = before + " - " + L("Number") + " : " + incomeTransfer.Number;
+                    after = after + " - " + L("Number") + " : " + input.Number;
+                }
+
+                if (incomeTransfer.IncomeTransferDetails[i].CurrencyId != input.IncomeTransferDetails[i].CurrencyId)
+                {
+                    before = before + " - " + L("Currency") + " : " + _currencyManager.GetCurrencyNameById(incomeTransfer.IncomeTransferDetails[i].CurrencyId);
+                    after = after + " - " + L("Currency") + " : " + _currencyManager.GetCurrencyNameById(input.IncomeTransferDetails[i].CurrencyId);
+                }
+
+                if (incomeTransfer.IncomeTransferDetails[i].BeneficiaryId != input.IncomeTransferDetails[i].BeneficiaryId)
+                {
+                    before = before + " - " + L("Beneficiary") + " : " + _customerManager.GetCustomerNameById((int)incomeTransfer.IncomeTransferDetails[i].BeneficiaryId);
+                    after = after + " - " + L("Beneficiary") + " : " + _customerManager.GetCustomerNameById((int)input.IncomeTransferDetails[i].BeneficiaryId);
+                }
+
+                if (incomeTransfer.IncomeTransferDetails[i].SenderId != input.IncomeTransferDetails[i].SenderId)
+                {
+                    before = before + " - " + L("Sender") + " : " + _customerManager.GetCustomerNameById((int)incomeTransfer.IncomeTransferDetails[i].SenderId);
+                    after = after + " - " + L("Sender") + " : " + _customerManager.GetCustomerNameById((int)input.IncomeTransferDetails[i].SenderId);
+                }
+
+                if (incomeTransfer.IncomeTransferDetails[i].Amount != input.IncomeTransferDetails[i].Amount)
+                {
+                    before = before + " - " + L("Amount") + " : " + incomeTransfer.IncomeTransferDetails[i].Amount;
+                    after = after + " - " + L("Amount") + " : " + input.IncomeTransferDetails[i].Amount;
+                }
+
+                if (incomeTransfer.CompanyId != input.CompanyId)
+                {
+                    before = before + " - " + L("Company") + " : " + _companyManager.GetCompanyNameById((int)incomeTransfer.CompanyId);
+                    after = after + " - " + L("Company") + " : " + _companyManager.GetCompanyNameById((int)input.CompanyId);
+                }
+
+                if (incomeTransfer.IncomeTransferDetails[i].ToClientId != input.IncomeTransferDetails[i].ToClientId)
+                {
+                    before = before + " - " + L("Client") + " : " + _clientManager.GetClientNameById((int)incomeTransfer.IncomeTransferDetails[i].ToClientId);
+                    after = after + " - " + L("Client") + " : " + _clientManager.GetClientNameById((int)input.IncomeTransferDetails[i].ToClientId);
+                }
+
+                if (incomeTransfer.IncomeTransferDetails[i].ToCompanyId != input.IncomeTransferDetails[i].ToCompanyId)
+                {
+                    before = before + " - " + L("ToCompany") + " : " + _companyManager.GetCompanyNameById((int)incomeTransfer.IncomeTransferDetails[i].ToCompanyId);
+                    after = after + " - " + L("ToCompany") + " : " + _companyManager.GetCompanyNameById((int)input.IncomeTransferDetails[i].ToCompanyId);
+                }
+
+                if ((int)incomeTransfer.IncomeTransferDetails[i].PaymentType != input.IncomeTransferDetails[i].PaymentType)
+                {
+                    before = before + " - " + L("PaymentType") + " : " + ((PaymentType)incomeTransfer.IncomeTransferDetails[i].PaymentType);
+                    after = after + " - " + L("PaymentType") + " : " + ((PaymentType)input.IncomeTransferDetails[i].PaymentType);
+                }
+                #endregion
+
+
+                EventBus.Default.Trigger(
+                new CreateManagementEventData(
+                1, incomeTransfer.IncomeTransferDetails[i].Amount, incomeTransfer.Date,
+                (int?)incomeTransfer.IncomeTransferDetails[i].PaymentType, DateTime.Now, 0,
+                incomeTransfer.Number, null, null, before, after, null, null, null, null, null, null,
+                incomeTransfer.IncomeTransferDetails[i].Commission, null, null,
+                incomeTransfer.IncomeTransferDetails[i].CurrencyId, incomeTransfer.IncomeTransferDetails[i].ToClientId, AbpSession.GetUserId(),
+                incomeTransfer.CompanyId, incomeTransfer.IncomeTransferDetails[i].SenderId,
+                incomeTransfer.IncomeTransferDetails[i].BeneficiaryId, incomeTransfer.IncomeTransferDetails[i].ToCompanyId, null
+                )
+                );
+            }
             ObjectMapper.Map<IncomeTransferDto, IncomeTransfer>(input, incomeTransfer);
 
             for (int i = 0; i < input.IncomeTransferDetails.Count; i++)
@@ -171,9 +269,26 @@ namespace Bwr.Exchange.Transfers.IncomeTransfers
         public async Task DeleteAsync(int id)
         {
             var incomeTransfer = await _incomeTransferManager.GetByIdAsync(id);
+
             if (incomeTransfer != null)
             {
                 var isDeleted = await _incomeTransferManager.DeleteAsync(incomeTransfer);
+
+                if (isDeleted)
+                {
+                    foreach (var income in incomeTransfer.IncomeTransferDetails)
+                    {
+                        EventBus.Default.Trigger(
+                           new CreateManagementEventData(
+                               1, income.Amount, incomeTransfer.Date, (int?)income.PaymentType, DateTime.Now, 1,
+                               incomeTransfer.Number, null, null, null, null, null, null, null, null, null, null,
+                               income.Commission, null, null, income.CurrencyId, income.ToClientId, AbpSession.GetUserId(),
+                               incomeTransfer.CompanyId, income.SenderId, income.BeneficiaryId, income.ToCompanyId,null
+                         )
+                     );
+                    }
+                }              
+
             }
         }
     }

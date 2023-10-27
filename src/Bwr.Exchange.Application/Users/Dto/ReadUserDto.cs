@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Bwr.Exchange.Users.Dto
+﻿namespace Bwr.Exchange.Users.Dto
 {
     public class ReadUserDto
     {
@@ -13,6 +9,7 @@ namespace Bwr.Exchange.Users.Dto
         public string emailAddress { get; set; }
         public bool isActive { get; set; }
         public string fullName { get; set; }
-        
+        public int? branchId { get; set; }
+
     }
 }

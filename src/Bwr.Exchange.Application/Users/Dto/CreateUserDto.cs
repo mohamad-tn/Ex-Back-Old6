@@ -36,6 +36,9 @@ namespace Bwr.Exchange.Users.Dto
         [DisableAuditing]
         public string Password { get; set; }
 
+        [Required]
+        public int? BranchId { get; set; }
+
         public void Normalize()
         {
             if (RoleNames == null)

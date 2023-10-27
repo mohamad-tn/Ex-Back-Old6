@@ -22,6 +22,12 @@ using Bwr.Exchange.Shared.DataManagerRequests;
 using Syncfusion.EJ2.Base;
 using Bwr.Exchange.Shared.Dto;
 using Bwr.Exchange.Customers.Services;
+using Abp.Runtime.Session;
+using Bwr.Exchange.CashFlows.ManagementStatement.Events;
+using Bwr.Exchange.Transfers;
+using Bwr.Exchange.Settings.Currencies.Services;
+using Bwr.Exchange.Settings.Expenses.Services;
+using Bwr.Exchange.Settings.Incomes.Services;
 
 namespace Bwr.Exchange.TreasuryActions
 {
@@ -33,6 +39,9 @@ namespace Bwr.Exchange.TreasuryActions
         private readonly IIncomeTransferDetailManager _incomeTransferDetailManager;
         private readonly ICompanyManager _companyManager;
         private readonly ICustomerManager _customerManager;
+        private readonly ICurrencyManager _currencyManager;
+        private readonly IExpenseManager _expenseManager;
+        private readonly IIncomeManager _incomeManager;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -43,9 +52,11 @@ namespace Bwr.Exchange.TreasuryActions
             ICustomerManager customerManager,
             IIncomeTransferDetailManager incomeTransferDetailManager,
             ICompanyManager companyManager,
+            ICurrencyManager currencyManager,
+            IExpenseManager expenseManager,
+            IIncomeManager incomeManager,
             IWebHostEnvironment webHostEnvironment,
-            IHttpContextAccessor httpContextAccessor
-            )
+            IHttpContextAccessor httpContextAccessor)
         {
             _treasuryActionManager = treasuryActionManager;
             _treasuryManager = treasuryManager;
@@ -53,6 +64,9 @@ namespace Bwr.Exchange.TreasuryActions
             _incomeTransferDetailManager = incomeTransferDetailManager;
             _companyManager = companyManager;
             _customerManager = customerManager;
+            _currencyManager = currencyManager;
+            _expenseManager = expenseManager;
+            _incomeManager = incomeManager;
             _webHostEnvironment = webHostEnvironment;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -161,7 +175,96 @@ namespace Bwr.Exchange.TreasuryActions
 
         public async Task<TreasuryActionDto> UpdateAsync(TreasuryActionDto input)
         {
+            string before = "";
+            string after = "";
+
             var treasuryAction = await _treasuryActionManager.GetByIdAsync(input.Id);
+
+            #region Before & After
+            if (treasuryAction.Note != input.Note)
+            {
+                before = L("Note") + " : " + treasuryAction.Note;
+                after = L("Note") + " : " + input.Note;
+            }
+
+            if (treasuryAction.Number != input.Number)
+            {
+                before = before + " - " + L("Number") + " : " + treasuryAction.Number;
+                after = after + " - " + L("Number") + " : " + input.Number;
+            }
+
+            if (treasuryAction.CurrencyId != input.CurrencyId)
+            {
+                before = before + " - " + L("Currency") + " : " + _currencyManager.GetCurrencyNameById((int)treasuryAction.CurrencyId);
+                after = after + " - " + L("Currency") + " : " + _currencyManager.GetCurrencyNameById((int)input.CurrencyId);
+            }
+
+            if (treasuryAction.ExchangePartyCompanyId != input.ExchangePartyCompanyId)
+            {
+                before = before + " - " + L("ExchangePartyCompany") + " : " + _companyManager.GetCompanyNameById((int)treasuryAction.ExchangePartyCompanyId);
+                after = after + " - " + L("ExchangePartyCompany") + " : " + _companyManager.GetCompanyNameById((int)input.ExchangePartyCompanyId);
+            }
+
+            if (treasuryAction.ExchangePartyClientId != input.ExchangePartyClientId)
+            {
+                before = before + " - " + L("ExchangePartyClient") + " : " + _clientManager.GetClientNameById((int)treasuryAction.ExchangePartyClientId);
+                after = after + " - " + L("ExchangePartyClient") + " : " + _clientManager.GetClientNameById((int)input.ExchangePartyClientId);
+            }
+
+            if (treasuryAction.Amount != input.Amount)
+            {
+                before = before + " - " + L("Amount") + " : " + treasuryAction.Amount;
+                after = after + " - " + L("Amount") + " : " + input.Amount;
+            }
+
+            if (treasuryAction.MainAccountCompanyId != input.MainAccountCompanyId)
+            {
+                before = before + " - " + L("MainAccountCompany") + " : " + _companyManager.GetCompanyNameById((int)treasuryAction.MainAccountCompanyId);
+                after = after + " - " + L("MainAccountCompany") + " : " + _companyManager.GetCompanyNameById((int)input.MainAccountCompanyId);
+            }
+
+            if (treasuryAction.MainAccountClientId != input.MainAccountClientId)
+            {
+                before = before + " - " + L("MainAccountClient") + " : " + _clientManager.GetClientNameById((int)treasuryAction.MainAccountClientId);
+                after = after + " - " + L("MainAccountClient") + " : " + _clientManager.GetClientNameById((int)input.MainAccountClientId);
+            }
+
+            if (treasuryAction.ExpenseId != input.ExpenseId)
+            {
+                before = before + " - " + L("Expense") + " : " + _expenseManager.GetExpenseNameById((int)treasuryAction.ExpenseId);
+                after = after + " - " + L("Expense") + " : " + _expenseManager.GetExpenseNameById((int)input.ExpenseId);
+            }
+
+            if (treasuryAction.IncomeId != input.IncomeId)
+            {
+                before = before + " - " + L("Income") + " : " + _incomeManager.GetIncomeNameById((int)treasuryAction.IncomeId);
+                after = after + " - " + L("Income") + " : " + _incomeManager.GetIncomeNameById((int)input.IncomeId);
+            }
+
+            if ((int)treasuryAction.MainAccount != input.MainAccount)
+            {
+                before = before + " - " + L("MainAccount") + " : " + treasuryAction.MainAccount;
+                after = after + " - " + L("MainAccount") + " : " + input.MainAccount;
+            }
+
+            if ((int)treasuryAction.ActionType != input.ActionType)
+            {
+                before = before + " - " + L("PaymentType") + " : " + ((PaymentType)treasuryAction.ActionType);
+                after = after + " - " + L("PaymentType") + " : " + ((PaymentType)input.ActionType);
+            }
+            #endregion
+
+
+            await _treasuryActionManager.DeleteAsync(treasuryAction);
+            EventBus.Default.Trigger(
+            new CreateManagementEventData(
+                2, treasuryAction.Amount, treasuryAction.Date, null, DateTime.Now,0, treasuryAction.Number,
+                (int?)treasuryAction.ActionType, treasuryAction.MainAccount.ToString(), before, after, null, null, null, null, null,
+                null, null, null, null, treasuryAction.CurrencyId, treasuryAction.MainAccountClientId, AbpSession.GetUserId(),
+                treasuryAction.MainAccountCompanyId, null, null, treasuryAction.ExchangePartyCompanyId, null
+                )
+            );
+
             var date = DateTime.Parse(input.Date);
             date = new DateTime
                     (
@@ -193,6 +296,14 @@ namespace Bwr.Exchange.TreasuryActions
             if(treasuryAction != null)
             {
                 await _treasuryActionManager.DeleteAsync(treasuryAction);
+                EventBus.Default.Trigger(
+                new CreateManagementEventData(
+                    2,treasuryAction.Amount,treasuryAction.Date,null,DateTime.Now,1,treasuryAction.Number,
+                    (int?)treasuryAction.ActionType,treasuryAction.MainAccount.ToString(),null,null,null,null,null,null,null,
+                    null,null,null,null,treasuryAction.CurrencyId,treasuryAction.MainAccountClientId,AbpSession.GetUserId(),
+                    treasuryAction.MainAccountCompanyId,null,null,treasuryAction.ExchangePartyCompanyId,null
+                    )
+                );
             }
         }
 

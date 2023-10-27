@@ -17,7 +17,7 @@ namespace Bwr.Exchange.Identity
             SignInManager signInManager,
             ISystemClock systemClock,
             ILoggerFactory loggerFactory,
-            IUnitOfWorkManager unitOfWorkManager) 
+            IUnitOfWorkManager unitOfWorkManager)
             : base(options, signInManager, systemClock, loggerFactory, unitOfWorkManager)
         {
         }
