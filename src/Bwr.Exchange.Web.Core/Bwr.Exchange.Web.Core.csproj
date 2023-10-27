@@ -29,5 +29,6 @@
     <PackageReference Include="Abp.AspNetCore" Version="7.3.0" />
     <PackageReference Include="Abp.ZeroCore" Version="7.3.0" />
     <PackageReference Include="Abp.AspNetCore.SignalR" Version="7.3.0" />
+    <PackageReference Include="Wisej-3-Html2Canvas" Version="3.2.5" />
   </ItemGroup>
 </Project>

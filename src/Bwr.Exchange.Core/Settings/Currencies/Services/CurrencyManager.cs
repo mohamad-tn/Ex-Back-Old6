@@ -105,6 +105,10 @@ namespace Bwr.Exchange.Settings.Currencies.Services
             return await _currencyRepository.UpdateAsync(currency);
         }
 
-
+        public string GetCurrencyNameById(int id)
+        {
+            var currency = _currencyRepository.Get(id);
+            return currency.Name;
+        }
     }
 }

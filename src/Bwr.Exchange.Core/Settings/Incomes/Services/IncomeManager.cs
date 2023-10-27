@@ -47,6 +47,12 @@ namespace Bwr.Exchange.Settings.Incomes.Services
             return await _incomeRepository.GetAsync(id);
         }
 
+        public string GetIncomeNameById(int id)
+        {
+            var income = _incomeRepository.Get(id);
+            return income.Name;
+        }
+
         public async Task<Income> InsertAndGetAsync(Income income)
         {
             return await _incomeRepository.InsertAsync(income);

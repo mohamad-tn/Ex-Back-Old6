@@ -18,5 +18,7 @@ namespace Bwr.Exchange.Settings.Clients.Services
         Task DeleteAsync(int id);
         bool CheckIfNameAlreadyExist(string name);
         bool CheckIfNameAlreadyExist(int id, string name);
+        string GetClientNameById(int id);
+
     }
 }

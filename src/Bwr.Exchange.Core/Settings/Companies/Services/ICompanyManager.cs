@@ -17,5 +17,6 @@ namespace Bwr.Exchange.Settings.Companies.Services
         Task DeleteAsync(int id);
         bool CheckIfNameAlreadyExist(string name);
         bool CheckIfNameAlreadyExist(int id, string name);
+        string GetCompanyNameById(int id);
     }
 }
