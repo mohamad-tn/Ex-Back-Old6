@@ -112,20 +112,20 @@ namespace Bwr.Exchange.Transfers.IncomeTransfers
 
                 if (incomeTransfer.IncomeTransferDetails[i].CurrencyId != input.IncomeTransferDetails[i].CurrencyId)
                 {
-                    before = before + " - " + L("Currency") + " : " + _currencyManager.GetCurrencyNameById(incomeTransfer.IncomeTransferDetails[i].CurrencyId);
-                    after = after + " - " + L("Currency") + " : " + _currencyManager.GetCurrencyNameById(input.IncomeTransferDetails[i].CurrencyId);
+                    before = before + " - " + L("Currency") + " : " + (incomeTransfer.IncomeTransferDetails[i].CurrencyId != null ? _currencyManager.GetCurrencyNameById(incomeTransfer.IncomeTransferDetails[i].CurrencyId) : " ");
+                    after = after + " - " + L("Currency") + " : " + (input.IncomeTransferDetails[i].CurrencyId != null ? _currencyManager.GetCurrencyNameById(input.IncomeTransferDetails[i].CurrencyId) : " ");
                 }
 
                 if (incomeTransfer.IncomeTransferDetails[i].BeneficiaryId != input.IncomeTransferDetails[i].BeneficiaryId)
                 {
-                    before = before + " - " + L("Beneficiary") + " : " + _customerManager.GetCustomerNameById((int)incomeTransfer.IncomeTransferDetails[i].BeneficiaryId);
-                    after = after + " - " + L("Beneficiary") + " : " + _customerManager.GetCustomerNameById((int)input.IncomeTransferDetails[i].BeneficiaryId);
+                    before = before + " - " + L("Beneficiary") + " : " + (incomeTransfer.IncomeTransferDetails[i].BeneficiaryId != null ? _customerManager.GetCustomerNameById((int)incomeTransfer.IncomeTransferDetails[i].BeneficiaryId) : " ");
+                    after = after + " - " + L("Beneficiary") + " : " + (input.IncomeTransferDetails[i].BeneficiaryId != null ? _customerManager.GetCustomerNameById((int)input.IncomeTransferDetails[i].BeneficiaryId) : " ");
                 }
 
                 if (incomeTransfer.IncomeTransferDetails[i].SenderId != input.IncomeTransferDetails[i].SenderId)
                 {
-                    before = before + " - " + L("Sender") + " : " + _customerManager.GetCustomerNameById((int)incomeTransfer.IncomeTransferDetails[i].SenderId);
-                    after = after + " - " + L("Sender") + " : " + _customerManager.GetCustomerNameById((int)input.IncomeTransferDetails[i].SenderId);
+                    before = before + " - " + L("Sender") + " : " + (incomeTransfer.IncomeTransferDetails[i].SenderId != null ? _customerManager.GetCustomerNameById((int)incomeTransfer.IncomeTransferDetails[i].SenderId) : " ");
+                    after = after + " - " + L("Sender") + " : " + (input.IncomeTransferDetails[i].SenderId != null ? _customerManager.GetCustomerNameById((int)input.IncomeTransferDetails[i].SenderId) : " ");
                 }
 
                 if (incomeTransfer.IncomeTransferDetails[i].Amount != input.IncomeTransferDetails[i].Amount)
@@ -136,20 +136,20 @@ namespace Bwr.Exchange.Transfers.IncomeTransfers
 
                 if (incomeTransfer.CompanyId != input.CompanyId)
                 {
-                    before = before + " - " + L("Company") + " : " + _companyManager.GetCompanyNameById((int)incomeTransfer.CompanyId);
-                    after = after + " - " + L("Company") + " : " + _companyManager.GetCompanyNameById((int)input.CompanyId);
+                    before = before + " - " + L("Company") + " : " + (incomeTransfer.CompanyId != null ? _companyManager.GetCompanyNameById((int)incomeTransfer.CompanyId) : " ");
+                    after = after + " - " + L("Company") + " : " + (input.CompanyId != null ? _companyManager.GetCompanyNameById((int)input.CompanyId) : " ");
                 }
 
                 if (incomeTransfer.IncomeTransferDetails[i].ToClientId != input.IncomeTransferDetails[i].ToClientId)
                 {
-                    before = before + " - " + L("Client") + " : " + _clientManager.GetClientNameById((int)incomeTransfer.IncomeTransferDetails[i].ToClientId);
-                    after = after + " - " + L("Client") + " : " + _clientManager.GetClientNameById((int)input.IncomeTransferDetails[i].ToClientId);
+                    before = before + " - " + L("Client") + " : " + (incomeTransfer.IncomeTransferDetails[i].ToClientId != null ? _clientManager.GetClientNameById((int)incomeTransfer.IncomeTransferDetails[i].ToClientId) : " ");
+                    after = after + " - " + L("Client") + " : " + (input.IncomeTransferDetails[i].ToClientId != null ? _clientManager.GetClientNameById((int)input.IncomeTransferDetails[i].ToClientId) : " ");
                 }
 
                 if (incomeTransfer.IncomeTransferDetails[i].ToCompanyId != input.IncomeTransferDetails[i].ToCompanyId)
                 {
-                    before = before + " - " + L("ToCompany") + " : " + _companyManager.GetCompanyNameById((int)incomeTransfer.IncomeTransferDetails[i].ToCompanyId);
-                    after = after + " - " + L("ToCompany") + " : " + _companyManager.GetCompanyNameById((int)input.IncomeTransferDetails[i].ToCompanyId);
+                    before = before + " - " + L("ToCompany") + " : " + (incomeTransfer.IncomeTransferDetails[i].ToCompanyId != null ? _companyManager.GetCompanyNameById((int)incomeTransfer.IncomeTransferDetails[i].ToCompanyId) : " ");
+                    after = after + " - " + L("ToCompany") + " : " + (input.IncomeTransferDetails[i].ToCompanyId != null ? _companyManager.GetCompanyNameById((int)input.IncomeTransferDetails[i].ToCompanyId) : " ");
                 }
 
                 if ((int)incomeTransfer.IncomeTransferDetails[i].PaymentType != input.IncomeTransferDetails[i].PaymentType)

@@ -127,32 +127,32 @@ namespace Bwr.Exchange.ExchangeCurrencies
             
             if (exchangeCurrency.FirstCurrencyId != input.FirstCurrencyId)
             {
-                before = before + " - " + L("FirstCurrency") + " : " + _currencyManager.GetCurrencyNameById((int)exchangeCurrency.FirstCurrencyId);
-                after = after + " - " + L("FirstCurrency") + " : " + _currencyManager.GetCurrencyNameById((int)input.FirstCurrencyId);
+                before = before + " - " + L("FirstCurrency") + " : " + (exchangeCurrency.FirstCurrencyId != null ? _currencyManager.GetCurrencyNameById((int)exchangeCurrency.FirstCurrencyId) : " ");
+                after = after + " - " + L("FirstCurrency") + " : " + (input.FirstCurrencyId != null ? _currencyManager.GetCurrencyNameById((int)input.FirstCurrencyId) : " ");
             }
 
             if (exchangeCurrency.SecondCurrencyId != input.SecondCurrencyId)
             {
-                before = before + " - " + L("SecondCurrency") + " : " + _currencyManager.GetCurrencyNameById((int)exchangeCurrency.SecondCurrencyId);
-                after = after + " - " + L("SecondCurrency") + " : " + _currencyManager.GetCurrencyNameById((int)input.SecondCurrencyId);
+                before = before + " - " + L("SecondCurrency") + " : " + (exchangeCurrency.SecondCurrencyId != null ? _currencyManager.GetCurrencyNameById((int)exchangeCurrency.SecondCurrencyId) : " ");
+                after = after + " - " + L("SecondCurrency") + " : " + (input.SecondCurrencyId != null ? _currencyManager.GetCurrencyNameById((int)input.SecondCurrencyId) : " ");
             }
 
             if (exchangeCurrency.MainCurrencyId != input.MainCurrencyId)
             {
-                before = before + " - " + L("MainCurrency") + " : " + _currencyManager.GetCurrencyNameById((int)exchangeCurrency.MainCurrencyId);
-                after = after + " - " + L("MainCurrency") + " : " + _currencyManager.GetCurrencyNameById((int)input.MainCurrencyId);
+                before = before + " - " + L("MainCurrency") + " : " + (exchangeCurrency.MainCurrencyId != null ? _currencyManager.GetCurrencyNameById((int)exchangeCurrency.MainCurrencyId) : " ");
+                after = after + " - " + L("MainCurrency") + " : " + (input.MainCurrencyId != null ? _currencyManager.GetCurrencyNameById((int)input.MainCurrencyId) : " ");
             }
 
             if (exchangeCurrency.ClientId != input.ClientId)
             {
-                before = before + " - " + L("Client") + " : " + _clientManager.GetClientNameById((int)exchangeCurrency.ClientId);
-                after = after + " - " + L("Client") + " : " + _clientManager.GetClientNameById((int)input.ClientId);
+                before = before + " - " + L("Client") + " : " + (exchangeCurrency.ClientId != null ? _clientManager.GetClientNameById((int)exchangeCurrency.ClientId) : " ");
+                after = after + " - " + L("Client") + " : " + (input.ClientId != null ? _clientManager.GetClientNameById((int)input.ClientId) : " ");
             }
 
             if (exchangeCurrency.CompanyId != input.CompanyId)
             {
-                before = before + " - " + L("Company") + " : " + _companyManager.GetByIdWithDetail((int)exchangeCurrency.CompanyId);
-                after = after + " - " + L("Company") + " : " + _companyManager.GetByIdWithDetail((int)input.CompanyId);
+                before = before + " - " + L("Company") + " : " + (exchangeCurrency.CompanyId != null ? _companyManager.GetByIdWithDetail((int)exchangeCurrency.CompanyId): " ");
+                after = after + " - " + L("Company") + " : " + (input.CompanyId != null ? _companyManager.GetByIdWithDetail((int)input.CompanyId) : " ");
             }
             #endregion
 
