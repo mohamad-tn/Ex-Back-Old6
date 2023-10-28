@@ -195,20 +195,20 @@ namespace Bwr.Exchange.TreasuryActions
 
             if (treasuryAction.CurrencyId != input.CurrencyId)
             {
-                before = before + " - " + L("Currency") + " : " + _currencyManager.GetCurrencyNameById((int)treasuryAction.CurrencyId);
-                after = after + " - " + L("Currency") + " : " + _currencyManager.GetCurrencyNameById((int)input.CurrencyId);
+                before = before + " - " + L("Currency") + " : " + (treasuryAction.CurrencyId != null ? _currencyManager.GetCurrencyNameById((int)treasuryAction.CurrencyId) : " ");
+                after = after + " - " + L("Currency") + " : " + (input.CurrencyId != null ? _currencyManager.GetCurrencyNameById((int)input.CurrencyId) : " ");
             }
 
             if (treasuryAction.ExchangePartyCompanyId != input.ExchangePartyCompanyId)
             {
-                before = before + " - " + L("ExchangePartyCompany") + " : " + _companyManager.GetCompanyNameById((int)treasuryAction.ExchangePartyCompanyId);
-                after = after + " - " + L("ExchangePartyCompany") + " : " + _companyManager.GetCompanyNameById((int)input.ExchangePartyCompanyId);
+                before = before + " - " + L("ExchangePartyCompany") + " : " + (treasuryAction.ExchangePartyCompanyId != null ? _companyManager.GetCompanyNameById((int)treasuryAction.ExchangePartyCompanyId) : " ");
+                after = after + " - " + L("ExchangePartyCompany") + " : " + (input.ExchangePartyCompanyId != null ? _companyManager.GetCompanyNameById((int)input.ExchangePartyCompanyId) : " ");
             }
 
             if (treasuryAction.ExchangePartyClientId != input.ExchangePartyClientId)
             {
-                before = before + " - " + L("ExchangePartyClient") + " : " + _clientManager.GetClientNameById((int)treasuryAction.ExchangePartyClientId);
-                after = after + " - " + L("ExchangePartyClient") + " : " + _clientManager.GetClientNameById((int)input.ExchangePartyClientId);
+                before = before + " - " + L("ExchangePartyClient") + " : " + (treasuryAction.ExchangePartyClientId != null ? _clientManager.GetClientNameById((int)treasuryAction.ExchangePartyClientId) : " ");
+                after = after + " - " + L("ExchangePartyClient") + " : " + (input.ExchangePartyClientId != null ? _clientManager.GetClientNameById((int)input.ExchangePartyClientId): " ");
             }
 
             if (treasuryAction.Amount != input.Amount)
@@ -219,26 +219,26 @@ namespace Bwr.Exchange.TreasuryActions
 
             if (treasuryAction.MainAccountCompanyId != input.MainAccountCompanyId)
             {
-                before = before + " - " + L("MainAccountCompany") + " : " + _companyManager.GetCompanyNameById((int)treasuryAction.MainAccountCompanyId);
-                after = after + " - " + L("MainAccountCompany") + " : " + _companyManager.GetCompanyNameById((int)input.MainAccountCompanyId);
+                before = before + " - " + L("MainAccountCompany") + " : " + (treasuryAction.MainAccountCompanyId != null ? _companyManager.GetCompanyNameById((int)treasuryAction.MainAccountCompanyId) : " ");
+                after = after + " - " + L("MainAccountCompany") + " : " + (input.MainAccountCompanyId != null ? _companyManager.GetCompanyNameById((int)input.MainAccountCompanyId) : " ");
             }
 
             if (treasuryAction.MainAccountClientId != input.MainAccountClientId)
             {
-                before = before + " - " + L("MainAccountClient") + " : " + _clientManager.GetClientNameById((int)treasuryAction.MainAccountClientId);
-                after = after + " - " + L("MainAccountClient") + " : " + _clientManager.GetClientNameById((int)input.MainAccountClientId);
+                before = before + " - " + L("MainAccountClient") + " : " + (treasuryAction.MainAccountClientId != null ? _clientManager.GetClientNameById((int)treasuryAction.MainAccountClientId) : " ");
+                after = after + " - " + L("MainAccountClient") + " : " + (input.MainAccountClientId != null ? _clientManager.GetClientNameById((int)input.MainAccountClientId) : " ");
             }
 
             if (treasuryAction.ExpenseId != input.ExpenseId)
             {
-                before = before + " - " + L("Expense") + " : " + _expenseManager.GetExpenseNameById((int)treasuryAction.ExpenseId);
-                after = after + " - " + L("Expense") + " : " + _expenseManager.GetExpenseNameById((int)input.ExpenseId);
+                before = before + " - " + L("Expense") + " : " + (treasuryAction.ExpenseId != null ? _expenseManager.GetExpenseNameById((int)treasuryAction.ExpenseId) : " ");
+                after = after + " - " + L("Expense") + " : " + (input.ExpenseId != null ? _expenseManager.GetExpenseNameById((int)input.ExpenseId) : " ");
             }
 
             if (treasuryAction.IncomeId != input.IncomeId)
             {
-                before = before + " - " + L("Income") + " : " + _incomeManager.GetIncomeNameById((int)treasuryAction.IncomeId);
-                after = after + " - " + L("Income") + " : " + _incomeManager.GetIncomeNameById((int)input.IncomeId);
+                before = before + " - " + L("Income") + " : " + (treasuryAction.IncomeId != null ? _incomeManager.GetIncomeNameById((int)treasuryAction.IncomeId) : " ");
+                after = after + " - " + L("Income") + " : " + (input.IncomeId != null ? _incomeManager.GetIncomeNameById((int)input.IncomeId) : " ");
             }
 
             if ((int)treasuryAction.MainAccount != input.MainAccount)

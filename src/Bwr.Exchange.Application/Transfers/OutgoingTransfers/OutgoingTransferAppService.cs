@@ -94,20 +94,20 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
 
             if (outgoingTransfer.CurrencyId != input.CurrencyId)
             {
-                before = before + " - " + L("Currency") + " : " + _currencyManager.GetCurrencyNameById(outgoingTransfer.CurrencyId);
-                after = after + " - " + L("Currency") + " : " + _currencyManager.GetCurrencyNameById(input.CurrencyId);
+                before = before + " - " + L("Currency") + " : " + (outgoingTransfer.CurrencyId != null ? _currencyManager.GetCurrencyNameById(outgoingTransfer.CurrencyId) : " ");
+                after = after + " - " + L("Currency") + " : " + (input.CurrencyId != null ? _currencyManager.GetCurrencyNameById(input.CurrencyId) : " ");
             }
 
             if (outgoingTransfer.BeneficiaryId != input.BeneficiaryId)
             {
-                before = before + " - " + L("Beneficiary") + " : " + _customerManager.GetCustomerNameById((int)outgoingTransfer.BeneficiaryId);
-                after = after + " - " + L("Beneficiary") + " : " + _customerManager.GetCustomerNameById((int)input.BeneficiaryId);
+                before = before + " - " + L("Beneficiary") + " : " + (outgoingTransfer.BeneficiaryId != null ? _customerManager.GetCustomerNameById((int)outgoingTransfer.BeneficiaryId) : " ");
+                after = after + " - " + L("Beneficiary") + " : " + (input.BeneficiaryId != null ?_customerManager.GetCustomerNameById((int)input.BeneficiaryId) : " ");
             }
 
             if (outgoingTransfer.SenderId != input.SenderId)
             {
-                before = before + " - " + L("Sender") + " : " + _customerManager.GetCustomerNameById((int)outgoingTransfer.SenderId);
-                after = after + " - " + L("Sender") + " : " + _customerManager.GetCustomerNameById((int)input.SenderId);
+                before = before + " - " + L("Sender") + " : " + (outgoingTransfer.SenderId != null ? _customerManager.GetCustomerNameById((int)outgoingTransfer.SenderId) : " ");
+                after = after + " - " + L("Sender") + " : " + (input.SenderId != null ? _customerManager.GetCustomerNameById((int)input.SenderId) : " ");
             }
 
             if (outgoingTransfer.Amount != input.Amount)
@@ -118,14 +118,14 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
 
             if (outgoingTransfer.ToCompanyId != input.ToCompanyId)
             {
-                before = before + " - " + L("ToCompany") + " : " + _companyManager.GetCompanyNameById((int)outgoingTransfer.ToCompanyId);
-                after = after + " - " + L("ToCompany") + " : " + _companyManager.GetCompanyNameById((int)input.ToCompanyId);
+                before = before + " - " + L("ToCompany") + " : " + (outgoingTransfer.ToCompanyId != null ? _companyManager.GetCompanyNameById((int)outgoingTransfer.ToCompanyId) : " ");
+                after = after + " - " + L("ToCompany") + " : " + (input.ToCompanyId != null ? _companyManager.GetCompanyNameById((int)input.ToCompanyId) : " ");
             }
 
             if (outgoingTransfer.FromCompanyId != input.FromCompanyId)
             {
-                before = before + " - " + L("FromCompany") + " : " + _companyManager.GetCompanyNameById((int)outgoingTransfer.FromCompanyId);
-                after = after + " - " + L("FromCompany") + " : " + _companyManager.GetCompanyNameById((int)input.FromCompanyId);
+                before = before + " - " + L("FromCompany") + " : " + (outgoingTransfer.FromCompanyId != null ? _companyManager.GetCompanyNameById((int)outgoingTransfer.FromCompanyId) : " ");
+                after = after + " - " + L("FromCompany") + " : " + (input.FromCompanyId != null ? _companyManager.GetCompanyNameById((int)input.FromCompanyId) : " ");
             }
 
             if ((int)outgoingTransfer.PaymentType != input.PaymentType)
@@ -136,8 +136,8 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
 
             if (outgoingTransfer.FromClientId != input.FromClientId)
             {
-                before = before + " - " + L("FromClient") + " : " + _clientManager.GetClientNameById((int)outgoingTransfer.FromClientId);
-                after = after + " - " + L("FromClient") + " : " + _clientManager.GetClientNameById((int)input.FromClientId);
+                before = before + " - " + L("FromClient") + " : " + (outgoingTransfer.FromClientId != null ? _clientManager.GetClientNameById((int)outgoingTransfer.FromClientId) : " ");
+                after = after + " - " + L("FromClient") + " : " + (input.FromClientId != null ? _clientManager.GetClientNameById((int)input.FromClientId) : " ");
             }
 
             if (outgoingTransfer.ReceivedAmount != input.ReceivedAmount)
