@@ -49,5 +49,6 @@ namespace Bwr.Exchange.Transfers
         public string InstrumentNo { get; set; } //رقم الصك
         public string Reason { get; set; }
         public string Note { get; set; }
+        public bool IsCopied { get; set; }
     }
 }

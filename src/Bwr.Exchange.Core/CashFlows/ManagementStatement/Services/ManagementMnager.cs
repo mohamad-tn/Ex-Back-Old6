@@ -47,7 +47,7 @@ namespace Bwr.Exchange.CashFlows.ManagementStatement.Services
         {
             IEnumerable<Management> managements = _managementRepository.GetAllIncluding(
                 c=>c.Currency,cl=>cl.Client,s=>s.Sender,b=>b.Beneficiary,fc=>fc.FirstCurrency,
-                sc=>sc.SecondCurrency,co=>co.Company,tc=>tc.ToCompany);
+                sc=>sc.SecondCurrency,co=>co.Company,tc=>tc.ToCompany, u=>u.User);
 
             if (managements != null && managements.Any())
             {

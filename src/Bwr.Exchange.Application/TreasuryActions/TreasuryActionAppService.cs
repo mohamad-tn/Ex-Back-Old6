@@ -255,7 +255,7 @@ namespace Bwr.Exchange.TreasuryActions
             #endregion
 
 
-            await _treasuryActionManager.DeleteAsync(treasuryAction);
+            //await _treasuryActionManager.DeleteAsync(treasuryAction);
             EventBus.Default.Trigger(
             new CreateManagementEventData(
                 2, treasuryAction.Amount, treasuryAction.Date, null, DateTime.Now,0, treasuryAction.Number,

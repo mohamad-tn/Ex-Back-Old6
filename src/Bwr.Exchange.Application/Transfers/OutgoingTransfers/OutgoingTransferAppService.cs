@@ -101,7 +101,7 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
             if (outgoingTransfer.BeneficiaryId != input.BeneficiaryId)
             {
                 before = before + " - " + L("Beneficiary") + " : " + (outgoingTransfer.BeneficiaryId != null ? _customerManager.GetCustomerNameById((int)outgoingTransfer.BeneficiaryId) : " ");
-                after = after + " - " + L("Beneficiary") + " : " + (input.BeneficiaryId != null ?_customerManager.GetCustomerNameById((int)input.BeneficiaryId) : " ");
+                after = after + " - " + L("Beneficiary") + " : " + (input.BeneficiaryId != null ? _customerManager.GetCustomerNameById((int)input.BeneficiaryId) : " ");
             }
 
             if (outgoingTransfer.SenderId != input.SenderId)
@@ -205,17 +205,17 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
         public async Task DeleteAsync(int id)
         {
             var outgoingTransfer = await _outgoingTransferManager.GetByIdAsync(id);
-            if(outgoingTransfer != null)
+            if (outgoingTransfer != null)
             {
                 await _outgoingTransferManager.DeleteAsync(outgoingTransfer);
 
                 EventBus.Default.Trigger(
                 new CreateManagementEventData(
-                    0,outgoingTransfer.Amount,outgoingTransfer.Date, (int?)outgoingTransfer.PaymentType,
-                    DateTime.Now,1,outgoingTransfer.Number,null,null,null,null,null,null,null,null,
-                    null,null,outgoingTransfer.Commission,null,null,outgoingTransfer.CurrencyId,
-                    outgoingTransfer.FromClientId,AbpSession.GetUserId(),outgoingTransfer.FromCompanyId
-                    ,outgoingTransfer.SenderId,outgoingTransfer.BeneficiaryId,outgoingTransfer.ToCompanyId,null
+                    0, outgoingTransfer.Amount, outgoingTransfer.Date, (int?)outgoingTransfer.PaymentType,
+                    DateTime.Now, 1, outgoingTransfer.Number, null, null, null, null, null, null, null, null,
+                    null, null, outgoingTransfer.Commission, null, null, outgoingTransfer.CurrencyId,
+                    outgoingTransfer.FromClientId, AbpSession.GetUserId(), outgoingTransfer.FromCompanyId
+                    , outgoingTransfer.SenderId, outgoingTransfer.BeneficiaryId, outgoingTransfer.ToCompanyId, null
                     )
                 );
             }
@@ -272,7 +272,7 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
             if (dm.Where != null)
             {
                 var numberFilter = GetWhereFilter(dm.Where, "number");
-                if(numberFilter != null)
+                if (numberFilter != null)
                 {
                     input.Number = int.Parse(numberFilter.value.ToString());
                 }
@@ -377,6 +377,63 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
             return new ReadGrudDto() { result = data, count = count, groupDs = groupDs };
         }
 
+        [HttpPost]
+        public ReadGrudDto GetForSendingGrid([FromBody] SendingOutgoingDataManagerRequest dm)
+        {
+            IList<OutgoingTransfer> outgoinTransfers = new List<OutgoingTransfer>();
+            var input = new SearchOutgoingTransferInputDto();
+
+            if (dm.fromDate != null)
+            {
+                DateTime fromDate;
+                DateTime.TryParse(dm.fromDate.ToString(), out fromDate);
+                fromDate = new DateTime(fromDate.Year, fromDate.Month, fromDate.Day, 12, 0, 0);
+                input.FromDate = fromDate.Date.ToString();
+            }
+
+            if (dm.toDate != null)
+            {
+                DateTime toDate;
+                DateTime.TryParse(dm.toDate.ToString(), out toDate);
+                toDate = new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59);
+                input.ToDate = toDate.ToString();
+            }
+
+            var dic = input.ToDictionary();
+
+            if ( dm.currencyId == 0 || dm.currencyId == 10 )
+            {
+                 outgoinTransfers = _outgoingTransferManager.Get(dic).Where(x => !x.IsCopied && x.ToCompanyId == int.Parse(dm.companyId)).ToList();
+            }
+            else
+            {
+                outgoinTransfers = _outgoingTransferManager.Get(dic).Where(x=>!x.IsCopied && x.ToCompanyId == int.Parse(dm.companyId) && x.CurrencyId == dm.currencyId).ToList();
+            }
+
+            IEnumerable<ReadOutgoingTransferDto> data = ObjectMapper.Map<List<ReadOutgoingTransferDto>>(outgoinTransfers);
+            var operations = new DataOperations();
+
+            IEnumerable groupDs = new List<ReadOutgoingTransferDto>();
+            if (dm.Group != null)
+            {
+                groupDs = operations.PerformSelect(data, dm.Group);
+            }
+
+            var count = data.Count();
+
+            if (dm.Skip != 0)
+            {
+                data = operations.PerformSkip(data, dm.Skip);
+            }
+
+            if (dm.Take != 0)
+            {
+                data = operations.PerformTake(data, dm.Take);
+            }
+
+            return new ReadGrudDto() { result = data, count = count, groupDs = groupDs };
+        }
+
         private async Task<Customer> CreateOrUpdateCustomer(CustomerDto customerDto)
         {
             var customer = ObjectMapper.Map<Customer>(customerDto);
@@ -401,6 +458,16 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
         public int GetLastNumber()
         {
             return _outgoingTransferManager.GetLastNumber();
+        }
+
+        public async Task SetAsCopiedAsync(List<int> ids)
+        {
+            await _outgoingTransferManager.SetAsCopied(ids);
+        }
+
+        public async Task<List<NotCopiedForCompany>> GetNotCopiedCount()
+        {
+            return await _outgoingTransferManager.GetNotCopiedCount();
         }
     }
 }
