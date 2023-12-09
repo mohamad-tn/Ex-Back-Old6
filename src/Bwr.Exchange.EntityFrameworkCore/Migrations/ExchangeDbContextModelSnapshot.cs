@@ -3058,6 +3058,9 @@ namespace Bwr.Exchange.Migrations
                     b.Property<string>("InstrumentNo")
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("IsCopied")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime(6)");
 

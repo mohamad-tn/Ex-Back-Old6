@@ -16,7 +16,10 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
         Task<IList<OutgoingTransferDto>> Get(SearchOutgoingTransferInputDto input);
         IList<ReadOutgoingTransferDto> GetForStatment(SearchOutgoingTransferInputDto input);
         ReadGrudDto GetForGrid([FromBody] DataManagerRequest dm);
+        ReadGrudDto GetForSendingGrid([FromBody] SendingOutgoingDataManagerRequest dm);
         OutgoingTransferDto GetById(int id);
+        Task SetAsCopiedAsync(List<int> ids);
+        Task<List<NotCopiedForCompany>> GetNotCopiedCount();
         int GetLastNumber();
     }
 }

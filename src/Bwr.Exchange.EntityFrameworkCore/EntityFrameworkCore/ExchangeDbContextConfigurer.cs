@@ -25,6 +25,6 @@ namespace Bwr.Exchange.EntityFrameworkCore
         //public static void Configure(DbContextOptionsBuilder<ExchangeDbContext> builder, DbConnection connection)
         //{
         //    builder.UseSqlServer(connection);
-        //}
     }
+    
 }

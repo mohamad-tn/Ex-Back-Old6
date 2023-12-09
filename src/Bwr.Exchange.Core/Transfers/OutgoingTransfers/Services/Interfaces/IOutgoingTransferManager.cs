@@ -15,6 +15,8 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers.Services
         Task<IList<OutgoingTransfer>> GetAsync(Dictionary<string, object> dic);
         IList<OutgoingTransfer> Get(Dictionary<string, object> dic);
         OutgoingTransfer GetById(int id);
+        Task SetAsCopied(List<int> ids);
+        Task<List<NotCopiedForCompany>> GetNotCopiedCount();
         int GetLastNumber();
     }
 }

@@ -1,10 +1,12 @@
 ﻿using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.Events.Bus;
+using Bwr.Exchange.Settings.Companies.Services;
 using Bwr.Exchange.Transfers.OutgoingTransfers.Factories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace Bwr.Exchange.Transfers.OutgoingTransfers.Services
@@ -12,6 +14,7 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers.Services
     public class OutgoingTransferManager : IOutgoingTransferManager
     {
         private readonly IRepository<OutgoingTransfer> _outgoingTransferRepository;
+        private readonly ICompanyManager _companyManager;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IOutgoingTransferFactory _outgoingTransferFactory;
         public IEventBus EventBus { get; set; }
@@ -20,12 +23,14 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers.Services
             IRepository<OutgoingTransfer> outgoingTransferRepository,
             IUnitOfWorkManager unitOfWorkManager,
             IOutgoingTransferFactory outgoingTransferFactory
-            )
+,
+            ICompanyManager companyManager)
         {
             _outgoingTransferRepository = outgoingTransferRepository;
             _unitOfWorkManager = unitOfWorkManager;
             _outgoingTransferFactory = outgoingTransferFactory;
             EventBus = NullEventBus.Instance;
+            _companyManager = companyManager;
         }
 
         //public async Task<OutgoingTransfer> CreateAsync(OutgoingTransfer input)
@@ -262,5 +267,90 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers.Services
             var last = _outgoingTransferRepository.GetAll().OrderByDescending(x => x.Number).FirstOrDefault();
             return last == null ? 0 : last.Number;
         }
+
+        public async Task SetAsCopied(List<int> ids)
+        {
+            foreach (var id in ids)
+            {
+                var outgoingTransfer = await _outgoingTransferRepository.GetAsync(id);
+                outgoingTransfer.IsCopied = true;
+
+                await _outgoingTransferRepository.UpdateAsync(outgoingTransfer);
+            }            
+        }
+
+        public async Task<List<NotCopiedForCompany>> GetNotCopiedCount()
+        {
+            var all = GetAllNotCopiedWithDetails();
+            var companies = await _companyManager.GetAllAsync();
+
+            List<NotCopiedForCompany> data = new List<NotCopiedForCompany>();
+
+            foreach (var company in companies)
+            {               
+
+                var allNotCopied = all.Where(x =>x.ToCompanyId == company.Id).ToList();
+                var allNotCopiedCount = allNotCopied.Count;
+
+                var message = string.IsNullOrEmpty(initialTransferCuurenyCountForCompany(allNotCopied)) ? "0" : initialTransferCuurenyCountForCompany(allNotCopied);
+                
+                var companyTranfer = new NotCopiedForCompany() { Name = company.Name + "   " + message, Id = company.Id };
+                data.Add(companyTranfer);
+            }
+            return data;
+        }
+
+
+        #region Helper Methods
+        private string initialTransferCuurenyCountForCompany(List<OutgoingTransfer> transfers)
+        {
+            string message = "";
+            Dictionary<string, int> transferCurrencies = new Dictionary<string, int>();
+
+            foreach (var item in transfers)
+            {
+                if (item.Currency != null)
+                {
+                    if (transferCurrencies.ContainsKey(item.Currency.Name))
+                    {
+                        transferCurrencies[item.Currency.Name] = transferCurrencies[item.Currency.Name] + 1;
+                    }
+                    else
+                    {
+                        transferCurrencies.Add(item.Currency.Name, 1);
+                    }
+                }
+            }
+
+            foreach (var currencyCount in transferCurrencies)
+            {
+                if (string.IsNullOrEmpty(message))
+                {
+                    message = "(" + currencyCount.Value.ToString() + " " + currencyCount.Key + ")";
+                }
+                else
+                {
+                    message = message + "  " + "(" + currencyCount.Value.ToString() + " " + currencyCount.Key + ")";
+                }
+            }
+
+            return message;
+        }
+
+        private IQueryable<OutgoingTransfer> GetAllNotCopiedWithDetails()
+        {
+            return _outgoingTransferRepository
+                .GetAllIncluding(cu => cu.Currency).Where(x=>x.IsCopied == false);
+        }
+        #endregion
+
     }
+}
+
+
+public class NotCopiedForCompany
+{
+    public string Name { get; set; }
+    public int Id { get; set; }
+    
 }

@@ -331,7 +331,15 @@
 		<text name="ChangeDate">تاريخ التعديل</text>
 		<text name="Update">تعديل</text>
 		<text name="ChangeType">الإجراء</text>
-		
+
+		<text name="SendTransfers">إرسال الحوالات</text>
+		<text name="Customer">الزبون</text>
+		<text name="Customers">الزبائن</text>
+
+		<text name="Action">العمليات</text>
+
+		<text name="Close">إغلاق</text>
+		<text name="User">المستخدم</text>
 
 	</texts>
 </localizationDictionary>
