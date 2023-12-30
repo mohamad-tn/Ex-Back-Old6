@@ -34,7 +34,7 @@ namespace Bwr.Exchange.Settings.Incomes.Services
 
         public IList<Income> GetAll()
         {
-            return _incomeRepository.GetAll().ToList();
+           return _incomeRepository.GetAll().ToList();
         }
 
         public async Task<IList<Income>> GetAllAsync()

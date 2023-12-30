@@ -1,4 +1,5 @@
-﻿using Abp.Domain.Entities.Auditing;
+﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
 using Bwr.Exchange.Authorization.Users;
 using Bwr.Exchange.Customers;
 using Bwr.Exchange.ExchangeCurrencies;
@@ -12,8 +13,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Bwr.Exchange.CashFlows.ManagementStatement
 {
-    public class Management : FullAuditedEntity
+    public class Management : FullAuditedEntity, IMayHaveTenant
     {
+        public int? TenantId { get; set; }
         public ManagementItemType Type { get; set; }
         public double? Amount { get; set; }
         public DateTime Date { get; set; } 

@@ -5,6 +5,7 @@ using Bwr.Exchange.Settings.Companies.Dto.CompanyBalance;
 using Bwr.Exchange.Settings.Companies.Dto.CompanyBalances;
 using Bwr.Exchange.Settings.Companies.Services;
 using Bwr.Exchange.Settings.Currencies.Services;
+using Bwr.Exchange.Shared.DataManagerRequests;
 using Bwr.Exchange.Shared.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Syncfusion.EJ2.Base;
@@ -51,7 +52,7 @@ namespace Bwr.Exchange.Settings.Companies
         }
 
         [HttpPost]
-        public ReadGrudDto GetForGrid([FromBody] DataManagerRequest dm)
+        public ReadGrudDto GetForGrid([FromBody] BWireDataManagerRequest dm)
         {
             var data = _companyManager.GetAll();
             IEnumerable<ReadCompanyDto> companies = ObjectMapper.Map<List<ReadCompanyDto>>(data);

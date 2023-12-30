@@ -2,6 +2,7 @@
 using Abp.UI;
 using Bwr.Exchange.Settings.Currencies.Dto;
 using Bwr.Exchange.Settings.Currencies.Services;
+using Bwr.Exchange.Shared.DataManagerRequests;
 using Bwr.Exchange.Shared.Dto;
 using Bwr.Exchange.Shared.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +29,7 @@ namespace Bwr.Exchange.Settings.Currencies
             return ObjectMapper.Map<List<CurrencyDto>>(countries);
         }
         [HttpPost]
-        public ReadGrudDto GetForGrid([FromBody] DataManagerRequest dm)
+        public ReadGrudDto GetForGrid([FromBody] BWireDataManagerRequest dm)
         {
             var data = _currencyManager.GetAll();
             IEnumerable<ReadCurrencyDto> countries = ObjectMapper.Map<List<ReadCurrencyDto>>(data);

@@ -4,6 +4,6 @@ namespace Bwr.Exchange.Shared.DataManagerRequests
 {
     public class BWireDataManagerRequest : DataManagerRequest
     {
-        public int userId { get; set; }
+        public int? tenantId { get; set; }
     }
 }

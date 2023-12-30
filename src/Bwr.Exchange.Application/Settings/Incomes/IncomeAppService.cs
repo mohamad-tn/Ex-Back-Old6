@@ -1,7 +1,9 @@
 ﻿using Abp.Threading;
 using Abp.UI;
+using Bwr.Exchange.CashFlows.ManagementStatement;
 using Bwr.Exchange.Settings.Incomes.Dto;
 using Bwr.Exchange.Settings.Incomes.Services;
+using Bwr.Exchange.Shared.DataManagerRequests;
 using Bwr.Exchange.Shared.Dto;
 using Bwr.Exchange.Shared.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -28,9 +30,15 @@ namespace Bwr.Exchange.Settings.Incomes
             return ObjectMapper.Map<List<IncomeDto>>(incomes);
         }
         [HttpPost]
-        public ReadGrudDto GetForGrid([FromBody] DataManagerRequest dm)
+        public ReadGrudDto GetForGrid([FromBody] BWireDataManagerRequest dm)
         {
-            var data = _incomeManager.GetAll();
+            IList<Income> data = new List<Income>();
+
+            using (CurrentUnitOfWork.SetTenantId(dm.tenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                data = _incomeManager.GetAll();
+            }
             IEnumerable<ReadIncomeDto> incomes = ObjectMapper.Map<List<ReadIncomeDto>>(data);
 
             var operations = new DataOperations();
@@ -76,9 +84,20 @@ namespace Bwr.Exchange.Settings.Incomes
             var income = ObjectMapper.Map<Income>(input);
 
             var createdIncome = await _incomeManager.InsertAndGetAsync(income);
-
+            //CurrentUnitOfWork.Completed += CurrentUnitOfWork_Completed;       
             return ObjectMapper.Map<IncomeDto>(createdIncome);
         }
+
+        //private void CurrentUnitOfWork_Completed(object sender, System.EventArgs e)
+        //{
+        //    using (CurrentUnitOfWork.SetTenantId(5))
+        //    {
+        //        Income income = new Income("uuuuuu");
+        //        var createdIncomed = AsyncHelper.RunSync(() => _incomeManager.InsertAndGetAsync(income));
+        //        //CurrentUnitOfWork.SaveChanges();
+        //    }
+        //}
+
         public async Task<IncomeDto> UpdateAsync(UpdateIncomeDto input)
         {
             CheckBeforeUpdate(input);
@@ -93,7 +112,11 @@ namespace Bwr.Exchange.Settings.Incomes
         }
         public async Task DeleteAsync(int id)
         {
-            await _incomeManager.DeleteAsync(id);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                await _incomeManager.DeleteAsync(id);
+            }
         }
 
         #region Helper methods

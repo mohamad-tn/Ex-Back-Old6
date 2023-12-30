@@ -1,306 +1,246 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Bwr.Exchange.Migrations
 {
-    public partial class initial_mySql : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterDatabase()
-                .Annotation("MySql:CharSet", "utf8mb4");
-
             migrationBuilder.CreateTable(
                 name: "AbpAuditLogs",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TenantId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<long>(type: "bigint", nullable: true),
-                    ServiceName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    MethodName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Parameters = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ReturnValue = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ExecutionTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    ServiceName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    MethodName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Parameters = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: true),
+                    ReturnValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExecutionTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ExecutionDuration = table.Column<int>(type: "int", nullable: false),
-                    ClientIpAddress = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ClientName = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    BrowserInfo = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ExceptionMessage = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Exception = table.Column<string>(type: "varchar(2000)", maxLength: 2000, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ClientIpAddress = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    ClientName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    BrowserInfo = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    ExceptionMessage = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: true),
+                    Exception = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
                     ImpersonatorUserId = table.Column<long>(type: "bigint", nullable: true),
                     ImpersonatorTenantId = table.Column<int>(type: "int", nullable: true),
-                    CustomData = table.Column<string>(type: "varchar(2000)", maxLength: 2000, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    CustomData = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpAuditLogs", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpBackgroundJobs",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    JobType = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    JobArgs = table.Column<string>(type: "longtext", maxLength: 1048576, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    JobType = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
+                    JobArgs = table.Column<string>(type: "nvarchar(max)", maxLength: 1048576, nullable: false),
                     TryCount = table.Column<short>(type: "smallint", nullable: false),
-                    NextTryTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    LastTryTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    IsAbandoned = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    Priority = table.Column<byte>(type: "tinyint unsigned", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    NextTryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastTryTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsAbandoned = table.Column<bool>(type: "bit", nullable: false),
+                    Priority = table.Column<byte>(type: "tinyint", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpBackgroundJobs", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpDynamicProperties",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    PropertyName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DisplayName = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    InputType = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Permission = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PropertyName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InputType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Permission = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TenantId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpDynamicProperties", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpEditions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DisplayName = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpEditions", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpEntityChangeSets",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    BrowserInfo = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ClientIpAddress = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ClientName = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    ExtensionData = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BrowserInfo = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    ClientIpAddress = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    ClientName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExtensionData = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ImpersonatorTenantId = table.Column<int>(type: "int", nullable: true),
                     ImpersonatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    Reason = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Reason = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     TenantId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpEntityChangeSets", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpLanguages",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TenantId = table.Column<int>(type: "int", nullable: true),
-                    Name = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DisplayName = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Icon = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsDisabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Icon = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    IsDisabled = table.Column<bool>(type: "bit", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpLanguages", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpLanguageTexts",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TenantId = table.Column<int>(type: "int", nullable: true),
-                    LanguageName = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Source = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Key = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Value = table.Column<string>(type: "longtext", maxLength: 67108864, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    LanguageName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Source = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Key = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", maxLength: 67108864, nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpLanguageTexts", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpNotifications",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    NotificationName = table.Column<string>(type: "varchar(96)", maxLength: 96, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Data = table.Column<string>(type: "longtext", maxLength: 1048576, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DataTypeName = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EntityTypeName = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EntityTypeAssemblyQualifiedName = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EntityId = table.Column<string>(type: "varchar(96)", maxLength: 96, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Severity = table.Column<byte>(type: "tinyint unsigned", nullable: false),
-                    UserIds = table.Column<string>(type: "longtext", maxLength: 131072, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ExcludedUserIds = table.Column<string>(type: "longtext", maxLength: 131072, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    TenantIds = table.Column<string>(type: "longtext", maxLength: 131072, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    TargetNotifiers = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    NotificationName = table.Column<string>(type: "nvarchar(96)", maxLength: 96, nullable: false),
+                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 1048576, nullable: true),
+                    DataTypeName = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    EntityTypeName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    EntityTypeAssemblyQualifiedName = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    EntityId = table.Column<string>(type: "nvarchar(96)", maxLength: 96, nullable: true),
+                    Severity = table.Column<byte>(type: "tinyint", nullable: false),
+                    UserIds = table.Column<string>(type: "nvarchar(max)", maxLength: 131072, nullable: true),
+                    ExcludedUserIds = table.Column<string>(type: "nvarchar(max)", maxLength: 131072, nullable: true),
+                    TenantIds = table.Column<string>(type: "nvarchar(max)", maxLength: 131072, nullable: true),
+                    TargetNotifiers = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpNotifications", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpNotificationSubscriptions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TenantId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    NotificationName = table.Column<string>(type: "varchar(96)", maxLength: 96, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EntityTypeName = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EntityTypeAssemblyQualifiedName = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EntityId = table.Column<string>(type: "varchar(96)", maxLength: 96, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    NotificationName = table.Column<string>(type: "nvarchar(96)", maxLength: 96, nullable: true),
+                    EntityTypeName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    EntityTypeAssemblyQualifiedName = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    EntityId = table.Column<string>(type: "nvarchar(96)", maxLength: 96, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpNotificationSubscriptions", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpOrganizationUnitRoles",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TenantId = table.Column<int>(type: "int", nullable: true),
                     RoleId = table.Column<int>(type: "int", nullable: false),
                     OrganizationUnitId = table.Column<long>(type: "bigint", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpOrganizationUnitRoles", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpOrganizationUnits",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TenantId = table.Column<int>(type: "int", nullable: true),
                     ParentId = table.Column<long>(type: "bigint", nullable: true),
-                    Code = table.Column<string>(type: "varchar(95)", maxLength: 95, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DisplayName = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(95)", maxLength: 95, nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -310,176 +250,143 @@ namespace Bwr.Exchange.Migrations
                         column: x => x.ParentId,
                         principalTable: "AbpOrganizationUnits",
                         principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpTenantNotifications",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TenantId = table.Column<int>(type: "int", nullable: true),
-                    NotificationName = table.Column<string>(type: "varchar(96)", maxLength: 96, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Data = table.Column<string>(type: "longtext", maxLength: 1048576, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DataTypeName = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EntityTypeName = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EntityTypeAssemblyQualifiedName = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EntityId = table.Column<string>(type: "varchar(96)", maxLength: 96, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Severity = table.Column<byte>(type: "tinyint unsigned", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    NotificationName = table.Column<string>(type: "nvarchar(96)", maxLength: 96, nullable: false),
+                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 1048576, nullable: true),
+                    DataTypeName = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    EntityTypeName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    EntityTypeAssemblyQualifiedName = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    EntityId = table.Column<string>(type: "nvarchar(96)", maxLength: 96, nullable: true),
+                    Severity = table.Column<byte>(type: "tinyint", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpTenantNotifications", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpUserAccounts",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TenantId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
                     UserLinkId = table.Column<long>(type: "bigint", nullable: true),
-                    UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EmailAddress = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailAddress = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpUserAccounts", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpUserLoginAttempts",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TenantId = table.Column<int>(type: "int", nullable: true),
-                    TenancyName = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TenancyName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
                     UserId = table.Column<long>(type: "bigint", nullable: true),
-                    UserNameOrEmailAddress = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ClientIpAddress = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ClientName = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    BrowserInfo = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Result = table.Column<byte>(type: "tinyint unsigned", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    UserNameOrEmailAddress = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ClientIpAddress = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    ClientName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    BrowserInfo = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    Result = table.Column<byte>(type: "tinyint", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpUserLoginAttempts", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpUserNotifications",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TenantId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    TenantNotificationId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    TenantNotificationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     State = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    TargetNotifiers = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TargetNotifiers = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpUserNotifications", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpUserOrganizationUnits",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TenantId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
                     OrganizationUnitId = table.Column<long>(type: "bigint", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpUserOrganizationUnits", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpUsers",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    AuthenticationSource = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AuthenticationSource = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     TenantId = table.Column<int>(type: "int", nullable: true),
-                    EmailAddress = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Surname = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Password = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EmailConfirmationCode = table.Column<string>(type: "varchar(328)", maxLength: 328, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PasswordResetCode = table.Column<string>(type: "varchar(328)", maxLength: 328, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    LockoutEndDateUtc = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    EmailAddress = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Surname = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    EmailConfirmationCode = table.Column<string>(type: "nvarchar(328)", maxLength: 328, nullable: true),
+                    PasswordResetCode = table.Column<string>(type: "nvarchar(328)", maxLength: 328, nullable: true),
+                    LockoutEndDateUtc = table.Column<DateTime>(type: "datetime2", nullable: true),
                     AccessFailedCount = table.Column<int>(type: "int", nullable: false),
-                    IsLockoutEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsPhoneNumberConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    SecurityStamp = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsTwoFactorEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    IsEmailConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    NormalizedUserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    NormalizedEmailAddress = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ConcurrencyStamp = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    IsLockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: true),
+                    IsPhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    IsTwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    IsEmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    NormalizedEmailAddress = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -499,247 +406,221 @@ namespace Bwr.Exchange.Migrations
                         column: x => x.LastModifierUserId,
                         principalTable: "AbpUsers",
                         principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpWebhookEvents",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    WebhookName = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Data = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WebhookName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Data = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TenantId = table.Column<int>(type: "int", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpWebhookEvents", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpWebhookSubscriptions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TenantId = table.Column<int>(type: "int", nullable: true),
-                    WebhookUri = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Secret = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    Webhooks = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Headers = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    WebhookUri = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Secret = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    Webhooks = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Headers = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpWebhookSubscriptions", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "CashFlowMatchings",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    MatchingBy = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    MatchingWith = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    MatchingBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MatchingWith = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CashFlowMatchings", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Companies",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Phone = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Address = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Companies", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Countries",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Countries", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Currencies",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsMainCurrency = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsMainCurrency = table.Column<bool>(type: "bit", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Currencies", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Customers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Address = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PhoneNumber = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IdentificationNumber = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdentificationNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Customers", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Expenses",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Expenses", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "GeneralSettings",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CompanyName = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DbSuffex = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EditPassword = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DbSuffex = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EditPassword = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_GeneralSettings", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Incomes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Incomes", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Transaction",
@@ -751,39 +632,36 @@ namespace Bwr.Exchange.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Transaction", x => new { x.TransactionId, x.TransactionType });
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Treasuries",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Treasuries", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpDynamicEntityProperties",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    EntityFullName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EntityFullName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     DynamicPropertyId = table.Column<int>(type: "int", nullable: false),
                     TenantId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -791,22 +669,20 @@ namespace Bwr.Exchange.Migrations
                 {
                     table.PrimaryKey("PK_AbpDynamicEntityProperties", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AbpDynamicEntityProperties_AbpDynamicProperties_DynamicPrope~",
+                        name: "FK_AbpDynamicEntityProperties_AbpDynamicProperties_DynamicPropertyId",
                         column: x => x.DynamicPropertyId,
                         principalTable: "AbpDynamicProperties",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpDynamicPropertyValues",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Value = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TenantId = table.Column<int>(type: "int", nullable: true),
                     DynamicPropertyId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -814,29 +690,25 @@ namespace Bwr.Exchange.Migrations
                 {
                     table.PrimaryKey("PK_AbpDynamicPropertyValues", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AbpDynamicPropertyValues_AbpDynamicProperties_DynamicPropert~",
+                        name: "FK_AbpDynamicPropertyValues_AbpDynamicProperties_DynamicPropertyId",
                         column: x => x.DynamicPropertyId,
                         principalTable: "AbpDynamicProperties",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpFeatures",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TenantId = table.Column<int>(type: "int", nullable: true),
-                    Name = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Value = table.Column<string>(type: "varchar(2000)", maxLength: 2000, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Discriminator = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EditionId = table.Column<int>(type: "int", nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
@@ -848,22 +720,19 @@ namespace Bwr.Exchange.Migrations
                         principalTable: "AbpEditions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpEntityChanges",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ChangeTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    ChangeType = table.Column<byte>(type: "tinyint unsigned", nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ChangeTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ChangeType = table.Column<byte>(type: "tinyint", nullable: false),
                     EntityChangeSetId = table.Column<long>(type: "bigint", nullable: false),
-                    EntityId = table.Column<string>(type: "varchar(48)", maxLength: 48, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EntityTypeFullName = table.Column<string>(type: "varchar(192)", maxLength: 192, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    EntityId = table.Column<string>(type: "nvarchar(48)", maxLength: 48, nullable: true),
+                    EntityTypeFullName = table.Column<string>(type: "nvarchar(192)", maxLength: 192, nullable: true),
                     TenantId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -875,35 +744,29 @@ namespace Bwr.Exchange.Migrations
                         principalTable: "AbpEntityChangeSets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpRoles",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(type: "varchar(5000)", maxLength: 5000, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TenantId = table.Column<int>(type: "int", nullable: true),
-                    Name = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DisplayName = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsStatic = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    IsDefault = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    NormalizedName = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ConcurrencyStamp = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    Name = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    IsStatic = table.Column<bool>(type: "bit", nullable: false),
+                    IsDefault = table.Column<bool>(type: "bit", nullable: false),
+                    NormalizedName = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -923,24 +786,21 @@ namespace Bwr.Exchange.Migrations
                         column: x => x.LastModifierUserId,
                         principalTable: "AbpUsers",
                         principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpSettings",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TenantId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<long>(type: "bigint", nullable: true),
-                    Name = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Value = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
@@ -951,29 +811,25 @@ namespace Bwr.Exchange.Migrations
                         column: x => x.UserId,
                         principalTable: "AbpUsers",
                         principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpTenants",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    TenancyName = table.Column<string>(type: "varchar(64)", maxLength: 64, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ConnectionString = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TenancyName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ConnectionString = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     EditionId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -999,22 +855,19 @@ namespace Bwr.Exchange.Migrations
                         column: x => x.LastModifierUserId,
                         principalTable: "AbpUsers",
                         principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpUserClaims",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TenantId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    ClaimType = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ClaimValue = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
@@ -1026,21 +879,18 @@ namespace Bwr.Exchange.Migrations
                         principalTable: "AbpUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpUserLogins",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TenantId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    LoginProvider = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProviderKey = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1051,19 +901,18 @@ namespace Bwr.Exchange.Migrations
                         principalTable: "AbpUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpUserRoles",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TenantId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
                     RoleId = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
@@ -1075,24 +924,20 @@ namespace Bwr.Exchange.Migrations
                         principalTable: "AbpUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpUserTokens",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TenantId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    LoginProvider = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Value = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ExpireDate = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    Value = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    ExpireDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1103,21 +948,19 @@ namespace Bwr.Exchange.Migrations
                         principalTable: "AbpUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpWebhookSendAttempts",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    WebhookEventId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    WebhookSubscriptionId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    Response = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WebhookEventId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WebhookSubscriptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Response = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ResponseStatusCode = table.Column<int>(type: "int", nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TenantId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -1129,27 +972,26 @@ namespace Bwr.Exchange.Migrations
                         principalTable: "AbpWebhookEvents",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "IncomeTransfers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Number = table.Column<int>(type: "int", nullable: false),
                     CompanyId = table.Column<int>(type: "int", nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    Date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Note = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1159,25 +1001,24 @@ namespace Bwr.Exchange.Migrations
                         column: x => x.CompanyId,
                         principalTable: "Companies",
                         principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Provinces",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
                     CountryId = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1188,27 +1029,27 @@ namespace Bwr.Exchange.Migrations
                         principalTable: "Countries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Commisions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    From = table.Column<double>(type: "double", nullable: false),
-                    To = table.Column<double>(type: "double", nullable: false),
-                    Value = table.Column<double>(type: "double", nullable: false),
-                    Percentage = table.Column<double>(type: "double", nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    From = table.Column<double>(type: "float", nullable: false),
+                    To = table.Column<double>(type: "float", nullable: false),
+                    Value = table.Column<double>(type: "float", nullable: false),
+                    Percentage = table.Column<double>(type: "float", nullable: false),
                     CurrencyId = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1219,25 +1060,25 @@ namespace Bwr.Exchange.Migrations
                         principalTable: "Currencies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "CompanyBalances",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Balance = table.Column<double>(type: "double", nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    Balance = table.Column<double>(type: "float", nullable: false),
                     CurrencyId = table.Column<int>(type: "int", nullable: false),
                     CompanyId = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1254,42 +1095,36 @@ namespace Bwr.Exchange.Migrations
                         principalTable: "Currencies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "CompanyCashFlows",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     CompanyId = table.Column<int>(type: "int", nullable: false),
-                    CompanyCommission = table.Column<double>(type: "double", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CompanyCommission = table.Column<double>(type: "float", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    Date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Amount = table.Column<double>(type: "double", nullable: false),
-                    CurrentBalance = table.Column<double>(type: "double", nullable: false),
-                    PreviousBalance = table.Column<double>(type: "double", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Amount = table.Column<double>(type: "float", nullable: false),
+                    CurrentBalance = table.Column<double>(type: "float", nullable: false),
+                    PreviousBalance = table.Column<double>(type: "float", nullable: false),
                     TransactionId = table.Column<int>(type: "int", nullable: false),
                     TransactionType = table.Column<int>(type: "int", nullable: false),
-                    Matched = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    Shaded = table.Column<bool>(type: "tinyint(1)", nullable: true),
-                    Type = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Note = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    InstrumentNo = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Commission = table.Column<double>(type: "double", nullable: false),
-                    Destination = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Beneficiary = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Sender = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Matched = table.Column<bool>(type: "bit", nullable: false),
+                    Shaded = table.Column<bool>(type: "bit", nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InstrumentNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Commission = table.Column<double>(type: "float", nullable: false),
+                    Destination = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Beneficiary = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Sender = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CurrencyId = table.Column<int>(type: "int", nullable: false),
                     CashFlowMatchingId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -1313,26 +1148,26 @@ namespace Bwr.Exchange.Migrations
                         principalTable: "Currencies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "ExchangePrices",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    MainPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
-                    PurchasingPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
-                    SellingPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MainPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    PurchasingPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    SellingPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
                     CurrencyId = table.Column<int>(type: "int", nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1342,24 +1177,20 @@ namespace Bwr.Exchange.Migrations
                         column: x => x.CurrencyId,
                         principalTable: "Currencies",
                         principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "CustomerImages",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
                     CustomerId = table.Column<int>(type: "int", nullable: true),
-                    Name = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Size = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Type = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Path = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Size = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Path = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1369,25 +1200,24 @@ namespace Bwr.Exchange.Migrations
                         column: x => x.CustomerId,
                         principalTable: "Customers",
                         principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "TreasuryBalances",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    InitilBalance = table.Column<double>(type: "double", nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    InitilBalance = table.Column<double>(type: "float", nullable: false),
                     CurrencyId = table.Column<int>(type: "int", nullable: false),
                     TreasuryId = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1404,43 +1234,36 @@ namespace Bwr.Exchange.Migrations
                         principalTable: "Treasuries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "TreasuryCashFlows",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TreasuryId = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    Date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Amount = table.Column<double>(type: "double", nullable: false),
-                    CurrentBalance = table.Column<double>(type: "double", nullable: false),
-                    PreviousBalance = table.Column<double>(type: "double", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Amount = table.Column<double>(type: "float", nullable: false),
+                    CurrentBalance = table.Column<double>(type: "float", nullable: false),
+                    PreviousBalance = table.Column<double>(type: "float", nullable: false),
                     TransactionId = table.Column<int>(type: "int", nullable: false),
                     TransactionType = table.Column<int>(type: "int", nullable: false),
-                    Matched = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    Shaded = table.Column<bool>(type: "tinyint(1)", nullable: true),
-                    Type = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Note = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    InstrumentNo = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Commission = table.Column<double>(type: "double", nullable: false),
-                    Destination = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Beneficiary = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Sender = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Matched = table.Column<bool>(type: "bit", nullable: false),
+                    Shaded = table.Column<bool>(type: "bit", nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InstrumentNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Commission = table.Column<double>(type: "float", nullable: false),
+                    Destination = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Beneficiary = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Sender = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CurrencyId = table.Column<int>(type: "int", nullable: false),
                     CashFlowMatchingId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -1464,19 +1287,16 @@ namespace Bwr.Exchange.Migrations
                         principalTable: "Treasuries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpDynamicEntityPropertyValues",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Value = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EntityId = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EntityId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DynamicEntityPropertyId = table.Column<int>(type: "int", nullable: false),
                     TenantId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -1484,34 +1304,27 @@ namespace Bwr.Exchange.Migrations
                 {
                     table.PrimaryKey("PK_AbpDynamicEntityPropertyValues", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AbpDynamicEntityPropertyValues_AbpDynamicEntityProperties_Dy~",
+                        name: "FK_AbpDynamicEntityPropertyValues_AbpDynamicEntityProperties_DynamicEntityPropertyId",
                         column: x => x.DynamicEntityPropertyId,
                         principalTable: "AbpDynamicEntityProperties",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpEntityPropertyChanges",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     EntityChangeId = table.Column<long>(type: "bigint", nullable: false),
-                    NewValue = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    OriginalValue = table.Column<string>(type: "varchar(512)", maxLength: 512, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PropertyName = table.Column<string>(type: "varchar(96)", maxLength: 96, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PropertyTypeFullName = table.Column<string>(type: "varchar(192)", maxLength: 192, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NewValue = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    OriginalValue = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    PropertyName = table.Column<string>(type: "nvarchar(96)", maxLength: 96, nullable: true),
+                    PropertyTypeFullName = table.Column<string>(type: "nvarchar(192)", maxLength: 192, nullable: true),
                     TenantId = table.Column<int>(type: "int", nullable: true),
-                    NewValueHash = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    OriginalValueHash = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    NewValueHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OriginalValueHash = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1522,24 +1335,21 @@ namespace Bwr.Exchange.Migrations
                         principalTable: "AbpEntityChanges",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpPermissions",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TenantId = table.Column<int>(type: "int", nullable: true),
-                    Name = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IsGranted = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    Discriminator = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    IsGranted = table.Column<bool>(type: "bit", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RoleId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<long>(type: "bigint", nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
@@ -1557,22 +1367,19 @@ namespace Bwr.Exchange.Migrations
                         principalTable: "AbpUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "AbpRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TenantId = table.Column<int>(type: "int", nullable: true),
                     RoleId = table.Column<int>(type: "int", nullable: false),
-                    ClaimType = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ClaimValue = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
@@ -1584,28 +1391,26 @@ namespace Bwr.Exchange.Migrations
                         principalTable: "AbpRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Clients",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Address = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Activated = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Activated = table.Column<bool>(type: "bit", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
                     ProvinceId = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1616,25 +1421,25 @@ namespace Bwr.Exchange.Migrations
                         principalTable: "Provinces",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "ClientBalances",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Balance = table.Column<double>(type: "double", nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    Balance = table.Column<double>(type: "float", nullable: false),
                     CurrencyId = table.Column<int>(type: "int", nullable: false),
                     ClientId = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1651,42 +1456,36 @@ namespace Bwr.Exchange.Migrations
                         principalTable: "Currencies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "ClientCashFlows",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ClientId = table.Column<int>(type: "int", nullable: false),
-                    ClientCommission = table.Column<double>(type: "double", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    ClientCommission = table.Column<double>(type: "float", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    Date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Amount = table.Column<double>(type: "double", nullable: false),
-                    CurrentBalance = table.Column<double>(type: "double", nullable: false),
-                    PreviousBalance = table.Column<double>(type: "double", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Amount = table.Column<double>(type: "float", nullable: false),
+                    CurrentBalance = table.Column<double>(type: "float", nullable: false),
+                    PreviousBalance = table.Column<double>(type: "float", nullable: false),
                     TransactionId = table.Column<int>(type: "int", nullable: false),
                     TransactionType = table.Column<int>(type: "int", nullable: false),
-                    Matched = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    Shaded = table.Column<bool>(type: "tinyint(1)", nullable: true),
-                    Type = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Note = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    InstrumentNo = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Commission = table.Column<double>(type: "double", nullable: false),
-                    Destination = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Beneficiary = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Sender = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Matched = table.Column<bool>(type: "bit", nullable: false),
+                    Shaded = table.Column<bool>(type: "bit", nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InstrumentNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Commission = table.Column<double>(type: "float", nullable: false),
+                    Destination = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Beneficiary = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Sender = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CurrencyId = table.Column<int>(type: "int", nullable: false),
                     CashFlowMatchingId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -1710,25 +1509,24 @@ namespace Bwr.Exchange.Migrations
                         principalTable: "Currencies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "ClientPhones",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ClientId = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1739,49 +1537,48 @@ namespace Bwr.Exchange.Migrations
                         principalTable: "Clients",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "ExchangeCurrencies",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
                     Number = table.Column<int>(type: "int", nullable: false),
-                    AmountOfFirstCurrency = table.Column<double>(type: "double", nullable: false),
-                    AmoutOfSecondCurrency = table.Column<double>(type: "double", nullable: false),
-                    PaidAmountOfFirstCurrency = table.Column<double>(type: "double", nullable: false),
-                    ReceivedAmountOfFirstCurrency = table.Column<double>(type: "double", nullable: false),
-                    PaidAmountOfSecondCurrency = table.Column<double>(type: "double", nullable: false),
-                    ReceivedAmountOfSecondCurrency = table.Column<double>(type: "double", nullable: false),
-                    Commission = table.Column<double>(type: "double", nullable: false),
-                    ExchangePrice = table.Column<double>(type: "double", nullable: false),
+                    AmountOfFirstCurrency = table.Column<double>(type: "float", nullable: false),
+                    AmoutOfSecondCurrency = table.Column<double>(type: "float", nullable: false),
+                    PaidAmountOfFirstCurrency = table.Column<double>(type: "float", nullable: false),
+                    ReceivedAmountOfFirstCurrency = table.Column<double>(type: "float", nullable: false),
+                    PaidAmountOfSecondCurrency = table.Column<double>(type: "float", nullable: false),
+                    ReceivedAmountOfSecondCurrency = table.Column<double>(type: "float", nullable: false),
+                    Commission = table.Column<double>(type: "float", nullable: false),
+                    ExchangePrice = table.Column<double>(type: "float", nullable: false),
                     PaymentType = table.Column<int>(type: "int", nullable: false),
                     ActionType = table.Column<int>(type: "int", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Note = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FirstCurrencyId = table.Column<int>(type: "int", nullable: true),
                     SecondCurrencyId = table.Column<int>(type: "int", nullable: true),
                     MainCurrencyId = table.Column<int>(type: "int", nullable: true),
                     ClientId = table.Column<int>(type: "int", nullable: true),
                     CompanyId = table.Column<int>(type: "int", nullable: true),
-                    FirstMainPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
-                    FirstPurchasingPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
-                    FirstSellingPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
-                    FirstIsMainCurrency = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    SecondMainPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
-                    SecondPurchasingPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
-                    SecondSellingPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
-                    SecondIsMainCurrency = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    FirstMainPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    FirstPurchasingPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    FirstSellingPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    FirstIsMainCurrency = table.Column<bool>(type: "bit", nullable: false),
+                    SecondMainPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    SecondPurchasingPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    SecondSellingPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    SecondIsMainCurrency = table.Column<bool>(type: "bit", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1811,32 +1608,32 @@ namespace Bwr.Exchange.Migrations
                         column: x => x.SecondCurrencyId,
                         principalTable: "Currencies",
                         principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "IncomeTransferDetails",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Index = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     ToCompanyId = table.Column<int>(type: "int", nullable: true),
                     ToClientId = table.Column<int>(type: "int", nullable: true),
                     IncomeTransferId = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
                     CurrencyId = table.Column<int>(type: "int", nullable: false),
                     BeneficiaryId = table.Column<int>(type: "int", nullable: true),
                     SenderId = table.Column<int>(type: "int", nullable: true),
                     PaymentType = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<double>(type: "double", nullable: false),
-                    Commission = table.Column<double>(type: "double", nullable: false),
-                    CompanyCommission = table.Column<double>(type: "double", nullable: false),
-                    ClientCommission = table.Column<double>(type: "double", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    Amount = table.Column<double>(type: "float", nullable: false),
+                    Commission = table.Column<double>(type: "float", nullable: false),
+                    CompanyCommission = table.Column<double>(type: "float", nullable: false),
+                    ClientCommission = table.Column<double>(type: "float", nullable: false),
                     Number = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -1874,37 +1671,34 @@ namespace Bwr.Exchange.Migrations
                         principalTable: "IncomeTransfers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "ManagementStatement",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
                     Type = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<double>(type: "double", nullable: true),
-                    Date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Amount = table.Column<double>(type: "float", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PaymentType = table.Column<int>(type: "int", nullable: true),
-                    ChangeDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    ChangeDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ChangeType = table.Column<int>(type: "int", nullable: false),
-                    Number = table.Column<double>(type: "double", nullable: true),
+                    Number = table.Column<double>(type: "float", nullable: true),
                     TreasuryActionType = table.Column<int>(type: "int", nullable: true),
                     ActionType = table.Column<int>(type: "int", nullable: true),
-                    MainAccount = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    BeforChange = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    AfterChange = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    AmountOfFirstCurrency = table.Column<double>(type: "double", nullable: true),
-                    AmoutOfSecondCurrency = table.Column<double>(type: "double", nullable: true),
-                    PaidAmountOfFirstCurrency = table.Column<double>(type: "double", nullable: true),
-                    ReceivedAmountOfFirstCurrency = table.Column<double>(type: "double", nullable: true),
-                    PaidAmountOfSecondCurrency = table.Column<double>(type: "double", nullable: true),
-                    ReceivedAmountOfSecondCurrency = table.Column<double>(type: "double", nullable: true),
-                    Commission = table.Column<double>(type: "double", nullable: true),
+                    MainAccount = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BeforChange = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AfterChange = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AmountOfFirstCurrency = table.Column<double>(type: "float", nullable: true),
+                    AmoutOfSecondCurrency = table.Column<double>(type: "float", nullable: true),
+                    PaidAmountOfFirstCurrency = table.Column<double>(type: "float", nullable: true),
+                    ReceivedAmountOfFirstCurrency = table.Column<double>(type: "float", nullable: true),
+                    PaidAmountOfSecondCurrency = table.Column<double>(type: "float", nullable: true),
+                    ReceivedAmountOfSecondCurrency = table.Column<double>(type: "float", nullable: true),
+                    Commission = table.Column<double>(type: "float", nullable: true),
                     FirstCurrencyId = table.Column<int>(type: "int", nullable: true),
                     SecondCurrencyId = table.Column<int>(type: "int", nullable: true),
                     CurrencyId = table.Column<int>(type: "int", nullable: true),
@@ -1914,13 +1708,13 @@ namespace Bwr.Exchange.Migrations
                     ToCompanyId = table.Column<int>(type: "int", nullable: true),
                     SenderId = table.Column<int>(type: "int", nullable: true),
                     BeneficiaryId = table.Column<int>(type: "int", nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1971,40 +1765,38 @@ namespace Bwr.Exchange.Migrations
                         column: x => x.SenderId,
                         principalTable: "Customers",
                         principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "OutgoingTransfers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ToCompanyId = table.Column<int>(type: "int", nullable: false),
                     CountryId = table.Column<int>(type: "int", nullable: false),
                     FromCompanyId = table.Column<int>(type: "int", nullable: true),
                     FromClientId = table.Column<int>(type: "int", nullable: true),
                     TreasuryId = table.Column<int>(type: "int", nullable: true),
-                    ReceivedAmount = table.Column<double>(type: "double", nullable: false),
-                    InstrumentNo = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Reason = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Note = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    ReceivedAmount = table.Column<double>(type: "float", nullable: false),
+                    InstrumentNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsCopied = table.Column<bool>(type: "bit", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
                     CurrencyId = table.Column<int>(type: "int", nullable: false),
                     BeneficiaryId = table.Column<int>(type: "int", nullable: true),
                     SenderId = table.Column<int>(type: "int", nullable: true),
                     PaymentType = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<double>(type: "double", nullable: false),
-                    Commission = table.Column<double>(type: "double", nullable: false),
-                    CompanyCommission = table.Column<double>(type: "double", nullable: false),
-                    ClientCommission = table.Column<double>(type: "double", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    Amount = table.Column<double>(type: "float", nullable: false),
+                    Commission = table.Column<double>(type: "float", nullable: false),
+                    CompanyCommission = table.Column<double>(type: "float", nullable: false),
+                    ClientCommission = table.Column<double>(type: "float", nullable: false),
                     Number = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -2053,54 +1845,54 @@ namespace Bwr.Exchange.Migrations
                         column: x => x.TreasuryId,
                         principalTable: "Treasuries",
                         principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "ExchangeCurrencyHistories",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
                     FirstCurrencyId = table.Column<int>(type: "int", nullable: true),
-                    FirstMainPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
-                    FirstPurchasingPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
-                    FirstSellingPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
-                    FirstIsMainCurrency = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    FirstMainPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    FirstPurchasingPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    FirstSellingPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    FirstIsMainCurrency = table.Column<bool>(type: "bit", nullable: false),
                     SecondCurrencyId = table.Column<int>(type: "int", nullable: true),
-                    SecondMainPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
-                    SecondPurchasingPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
-                    SecondSellingPrice = table.Column<decimal>(type: "decimal(65,30)", nullable: true),
-                    SecondIsMainCurrency = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    SecondMainPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    SecondPurchasingPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    SecondSellingPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    SecondIsMainCurrency = table.Column<bool>(type: "bit", nullable: false),
                     ExchangeCurrencyId = table.Column<int>(type: "int", nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ExchangeCurrencyHistories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ExchangeCurrencyHistories_ExchangeCurrencies_ExchangeCurrenc~",
+                        name: "FK_ExchangeCurrencyHistories_ExchangeCurrencies_ExchangeCurrencyId",
                         column: x => x.ExchangeCurrencyId,
                         principalTable: "ExchangeCurrencies",
                         principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "TreasuryActions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
                     Number = table.Column<int>(type: "int", nullable: false),
                     ActionType = table.Column<int>(type: "int", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     MainAccount = table.Column<int>(type: "int", nullable: false),
                     CurrencyId = table.Column<int>(type: "int", nullable: true),
                     ExchangePartyCompanyId = table.Column<int>(type: "int", nullable: true),
@@ -2111,22 +1903,18 @@ namespace Bwr.Exchange.Migrations
                     ExpenseId = table.Column<int>(type: "int", nullable: true),
                     IncomeId = table.Column<int>(type: "int", nullable: true),
                     IncomeTransferDetailId = table.Column<int>(type: "int", nullable: true),
-                    Amount = table.Column<double>(type: "double", nullable: false),
-                    Note = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    InstrumentNo = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    IdentificationNumber = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Issuer = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Amount = table.Column<double>(type: "float", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InstrumentNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdentificationNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Issuer = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -2176,8 +1964,7 @@ namespace Bwr.Exchange.Migrations
                         column: x => x.TreasuryId,
                         principalTable: "Treasuries",
                         principalColumn: "Id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpAuditLogs_TenantId_ExecutionDuration",
@@ -2205,10 +1992,11 @@ namespace Bwr.Exchange.Migrations
                 column: "DynamicPropertyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpDynamicEntityProperties_EntityFullName_DynamicPropertyId_~",
+                name: "IX_AbpDynamicEntityProperties_EntityFullName_DynamicPropertyId_TenantId",
                 table: "AbpDynamicEntityProperties",
                 columns: new[] { "EntityFullName", "DynamicPropertyId", "TenantId" },
-                unique: true);
+                unique: true,
+                filter: "[EntityFullName] IS NOT NULL AND [TenantId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpDynamicEntityPropertyValues_DynamicEntityPropertyId",
@@ -2219,7 +2007,8 @@ namespace Bwr.Exchange.Migrations
                 name: "IX_AbpDynamicProperties_PropertyName_TenantId",
                 table: "AbpDynamicProperties",
                 columns: new[] { "PropertyName", "TenantId" },
-                unique: true);
+                unique: true,
+                filter: "[PropertyName] IS NOT NULL AND [TenantId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpDynamicPropertyValues_DynamicPropertyId",
@@ -2277,12 +2066,12 @@ namespace Bwr.Exchange.Migrations
                 columns: new[] { "TenantId", "Source", "LanguageName", "Key" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpNotificationSubscriptions_NotificationName_EntityTypeName~",
+                name: "IX_AbpNotificationSubscriptions_NotificationName_EntityTypeName_EntityId_UserId",
                 table: "AbpNotificationSubscriptions",
                 columns: new[] { "NotificationName", "EntityTypeName", "EntityId", "UserId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpNotificationSubscriptions_TenantId_NotificationName_Entit~",
+                name: "IX_AbpNotificationSubscriptions_TenantId_NotificationName_EntityTypeName_EntityId_UserId",
                 table: "AbpNotificationSubscriptions",
                 columns: new[] { "TenantId", "NotificationName", "EntityTypeName", "EntityId", "UserId" });
 
@@ -2428,7 +2217,7 @@ namespace Bwr.Exchange.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpUserLoginAttempts_TenancyName_UserNameOrEmailAddress_Resu~",
+                name: "IX_AbpUserLoginAttempts_TenancyName_UserNameOrEmailAddress_Result",
                 table: "AbpUserLoginAttempts",
                 columns: new[] { "TenancyName", "UserNameOrEmailAddress", "Result" });
 
@@ -2441,7 +2230,8 @@ namespace Bwr.Exchange.Migrations
                 name: "IX_AbpUserLogins_ProviderKey_TenantId",
                 table: "AbpUserLogins",
                 columns: new[] { "ProviderKey", "TenantId" },
-                unique: true);
+                unique: true,
+                filter: "[TenantId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUserLogins_TenantId_LoginProvider_ProviderKey",

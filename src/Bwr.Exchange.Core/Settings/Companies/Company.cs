@@ -1,9 +1,10 @@
-﻿using Abp.Domain.Entities.Auditing;
+﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
 using System.Collections.Generic;
 
 namespace Bwr.Exchange.Settings.Companies
 {
-    public class Company : FullAuditedEntity
+    public class Company : FullAuditedEntity, IMayHaveTenant
     {
         public Company()
         {
@@ -12,7 +13,7 @@ namespace Bwr.Exchange.Settings.Companies
         public string Name { get; set; }
         public string Phone { get; set; }
         public string Address { get; set; }
-
+        public int? TenantId { get; set; }
         public virtual IList<CompanyBalance> CompanyBalances { get; set; }
     }
 }

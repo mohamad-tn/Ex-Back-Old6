@@ -2,6 +2,7 @@
 using Abp.UI;
 using Bwr.Exchange.Settings.Expenses.Dto;
 using Bwr.Exchange.Settings.Expenses.Services;
+using Bwr.Exchange.Shared.DataManagerRequests;
 using Bwr.Exchange.Shared.Dto;
 using Bwr.Exchange.Shared.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +29,7 @@ namespace Bwr.Exchange.Settings.Expenses
             return ObjectMapper.Map<List<ExpenseDto>>(expenses);
         }
         [HttpPost]
-        public ReadGrudDto GetForGrid([FromBody] DataManagerRequest dm)
+        public ReadGrudDto GetForGrid([FromBody] BWireDataManagerRequest dm)
         {
             var data = _expenseManager.GetAll();
             IEnumerable<ReadExpenseDto> expenses = ObjectMapper.Map<List<ReadExpenseDto>>(data);
