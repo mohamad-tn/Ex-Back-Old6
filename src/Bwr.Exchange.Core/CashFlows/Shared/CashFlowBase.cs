@@ -1,4 +1,5 @@
-﻿using Abp.Domain.Entities.Auditing;
+﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
 using Bwr.Exchange.Authorization.Users;
 using Bwr.Exchange.CashFlows;
 using Bwr.Exchange.CashFlows.CashFlowMatchings;
@@ -8,8 +9,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Bwr.Exchange.Shared
 {
-    public class CashFlowBase : AuditedEntity
+    public class CashFlowBase : AuditedEntity, IMayHaveTenant
     {
+        public int? TenantId { get; set; }
         public DateTime Date { get; set; }
         public double Amount { get; set; }
         public double CurrentBalance { get; set; }

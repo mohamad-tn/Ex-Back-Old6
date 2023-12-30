@@ -1,6 +1,8 @@
 ﻿using Abp.UI;
 using Bwr.Exchange.Settings.Countries.Dto;
 using Bwr.Exchange.Settings.Countries.Services;
+using Bwr.Exchange.Settings.Incomes;
+using Bwr.Exchange.Shared.DataManagerRequests;
 using Bwr.Exchange.Shared.Dto;
 using Bwr.Exchange.Shared.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -35,9 +37,15 @@ namespace Bwr.Exchange.Settings.Countries
         }
 
         [HttpPost]
-        public ReadGrudDto GetForGrid([FromBody] DataManagerRequest dm)
+        public ReadGrudDto GetForGrid([FromBody] BWireDataManagerRequest dm)
         {
-            var data = _countryManager.GetAll();
+            IList<Country> data = new List<Country>();
+
+            using (CurrentUnitOfWork.SetTenantId(dm.tenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                data = _countryManager.GetAll();
+            }
             IEnumerable<ReadCountryDto> countries = ObjectMapper.Map<List<ReadCountryDto>>(data);
 
             var operations = new DataOperations();

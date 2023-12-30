@@ -1,11 +1,13 @@
-﻿using Abp.Domain.Entities.Auditing;
+﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
 using Bwr.Exchange.Settings.Currencies;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Bwr.Exchange.Settings.Companies
 {
-    public class CompanyBalance: FullAuditedEntity
+    public class CompanyBalance: FullAuditedEntity, IMayHaveTenant
     {
+        public int? TenantId { get; set; }
         public double Balance { get; set; }
 
         #region Currency

@@ -1,4 +1,5 @@
-﻿using Abp.Domain.Entities.Auditing;
+﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
 using Bwr.Exchange.Settings.Commisions;
 using Bwr.Exchange.Settings.Currencies;
 using System;
@@ -8,8 +9,9 @@ using System.Text;
 
 namespace Bwr.Exchange.Settings
 {
-    public class Commision : FullAuditedEntity
+    public class Commision : FullAuditedEntity, IMayHaveTenant
     {
+        public int? TenantId { get; set; }
         public double From { get; set; }
         public double To { get; set; }
         public double Value { get; set; }

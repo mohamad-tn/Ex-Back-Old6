@@ -1,4 +1,5 @@
-﻿using Abp.Domain.Entities.Auditing;
+﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
 using Bwr.Exchange.Settings.Clients;
 using Bwr.Exchange.Settings.Companies;
 using Bwr.Exchange.Settings.Currencies;
@@ -8,8 +9,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Bwr.Exchange.ExchangeCurrencies
 {
-    public class ExchangeCurrency : FullAuditedEntity
+    public class ExchangeCurrency : FullAuditedEntity, IMayHaveTenant
     {
+        public int? TenantId { get; set; }
         public int Number { get; set; }
         public double AmountOfFirstCurrency { get; set; }
         public double AmoutOfSecondCurrency { get; set; }

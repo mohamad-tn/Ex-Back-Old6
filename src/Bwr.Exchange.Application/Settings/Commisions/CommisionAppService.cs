@@ -2,6 +2,7 @@
 using Abp.UI;
 using Bwr.Exchange.Settings.Commisions.Dto;
 using Bwr.Exchange.Settings.Commisions.Services;
+using Bwr.Exchange.Shared.DataManagerRequests;
 using Bwr.Exchange.Shared.Dto;
 using Bwr.Exchange.Shared.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +29,7 @@ namespace Bwr.Exchange.Settings.Commisions
             return ObjectMapper.Map<List<CommisionDto>>(commisions);
         }
         [HttpPost]
-        public ReadGrudDto GetForGrid([FromBody] DataManagerRequest dm)
+        public ReadGrudDto GetForGrid([FromBody] BWireDataManagerRequest dm)
         {
             var data = _commisionManager.GetAllWithDetails();
             IEnumerable<ReadCommisionDto> commisions = ObjectMapper.Map<List<ReadCommisionDto>>(data);

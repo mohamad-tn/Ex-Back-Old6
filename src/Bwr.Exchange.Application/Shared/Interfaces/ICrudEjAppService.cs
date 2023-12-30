@@ -1,4 +1,6 @@
-﻿using Bwr.Exchange.Shared.Dto;
+﻿using Bwr.Exchange.CashFlows.ManagementStatement;
+using Bwr.Exchange.Shared.DataManagerRequests;
+using Bwr.Exchange.Shared.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Syncfusion.EJ2.Base;
 using System.Collections.Generic;
@@ -12,7 +14,7 @@ namespace Bwr.Exchange.Shared.Interfaces
         where IUpdateDto : class
     {
         Task<IList<IReadDto>> GetAllAsync();
-        ReadGrudDto GetForGrid([FromBody] DataManagerRequest dm);
+        ReadGrudDto GetForGrid([FromBody] BWireDataManagerRequest dm);
         IUpdateDto GetForEdit(int id);
         Task<IReadDto> CreateAsync(ICreateDto input);
         Task<IReadDto> UpdateAsync(IUpdateDto input);

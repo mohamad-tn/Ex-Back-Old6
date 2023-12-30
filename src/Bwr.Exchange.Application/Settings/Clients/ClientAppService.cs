@@ -3,6 +3,7 @@ using Bwr.Exchange.CashFlows.ClientCashFlows.Services;
 using Bwr.Exchange.Settings.Clients.Dto;
 using Bwr.Exchange.Settings.Clients.Dto.ClientBalances;
 using Bwr.Exchange.Settings.Clients.Services;
+using Bwr.Exchange.Shared.DataManagerRequests;
 using Bwr.Exchange.Shared.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Syncfusion.EJ2.Base;
@@ -46,7 +47,7 @@ namespace Bwr.Exchange.Settings.Clients
         }
 
         [HttpPost]
-        public ReadGrudDto GetForGrid([FromBody] DataManagerRequest dm)
+        public ReadGrudDto GetForGrid([FromBody] BWireDataManagerRequest dm)
         {
             var data = _clientManager.GetAllWithDetail();
             IEnumerable<ReadClientDto> countries = ObjectMapper.Map<List<ReadClientDto>>(data);
