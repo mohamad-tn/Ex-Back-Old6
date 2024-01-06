@@ -11,6 +11,7 @@ using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 using QuestPDF.Helpers;
 using Bwr.Exchange.TreasuryActions.Dto;
+using Bwr.Exchange.Shared.DataManagerRequests;
 
 namespace Bwr.Exchange.Controllers.Statements
 {
@@ -27,7 +28,7 @@ namespace Bwr.Exchange.Controllers.Statements
         [HttpPost]
         public PdfResultOutput GetTreasuryCashFlow(GetTreasuryCashFlowPdfInput input)
         {
-            var dm = new DataManagerRequest();
+            var dm = new BWireDataManagerRequest();
             dm.Skip = 0;
             dm.Take = 1000;
             var filters = new List<WhereFilter>()
