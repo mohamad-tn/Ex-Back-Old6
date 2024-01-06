@@ -4,6 +4,7 @@ using Bwr.Exchange.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bwr.Exchange.Migrations
 {
     [DbContext(typeof(ExchangeDbContext))]
-    partial class ExchangeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240106100354_modify_external_transfer")]
+    partial class modify_external_transfer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3147,17 +3149,14 @@ namespace Bwr.Exchange.Migrations
                     b.Property<long?>("CreatorUserId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("CurrencyName")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CurrencyId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("FromTenantId")
                         .HasColumnType("int");
-
-                    b.Property<string>("FromTenantName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2");
@@ -3167,9 +3166,6 @@ namespace Bwr.Exchange.Migrations
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("OutgoingTransferId")
-                        .HasColumnType("int");
 
                     b.Property<int>("PaymentType")
                         .HasColumnType("int");
@@ -3181,6 +3177,8 @@ namespace Bwr.Exchange.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CurrencyId");
 
                     b.ToTable("ExtrenalTransfers");
                 });
@@ -4072,6 +4070,17 @@ namespace Bwr.Exchange.Migrations
                     b.Navigation("Currency");
 
                     b.Navigation("Treasury");
+                });
+
+            modelBuilder.Entity("Bwr.Exchange.Transfers.ExternalTransfers.ExtrenalTransfer", b =>
+                {
+                    b.HasOne("Bwr.Exchange.Settings.Currencies.Currency", "Currency")
+                        .WithMany()
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Currency");
                 });
 
             modelBuilder.Entity("Bwr.Exchange.Transfers.IncomeTransfers.IncomeTransfer", b =>

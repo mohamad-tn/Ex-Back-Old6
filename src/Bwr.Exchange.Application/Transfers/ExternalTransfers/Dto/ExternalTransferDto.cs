@@ -1,22 +1,16 @@
-﻿using Abp.Domain.Entities.Auditing;
-using Abp.Domain.Entities;
-using Bwr.Exchange.Settings.Clients;
-using Bwr.Exchange.Settings.Companies;
-using Bwr.Exchange.Settings.Currencies;
+﻿using Abp.Application.Services.Dto;
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Bwr.Exchange.Transfers.ExternalTransfers
+namespace Bwr.Exchange.Transfers.ExternalTransfers.Dto
 {
-    public class ExtrenalTransfer : AuditedEntity, IMayHaveTenant
+    public class ExternalTransferDto: EntityDto
     {
-        public int? TenantId { get; set; }
         public PaymentType PaymentType { get; set; }
         public double Amount { get; set; }
         public double Commission { get; set; }
         public double CompanyCommission { get; set; }
         public double ClientCommission { get; set; }
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
         public string Note { get; set; }
         public int? FromTenantId { get; set; }
         public string FromTenantName { get; set; }

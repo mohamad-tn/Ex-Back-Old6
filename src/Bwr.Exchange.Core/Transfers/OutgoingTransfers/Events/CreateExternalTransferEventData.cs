@@ -7,9 +7,9 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers.Events
     {
         public CreateExternalTransferEventData(DateTime date, string note,
             PaymentType paymentType, double amount, double commission,
-            double companyCommission, double clientCommission, int currencyId,
-            int? beneficiaryId, int? senderId, int? fromCompanyId, int? toCompanyId,
-            int? fromClientId, int? toTenantId)
+            double companyCommission, double clientCommission, string currencyName,
+            string beneficiaryName, string senderName,
+            int? fromTenantId, int? toTenantId, string fromTenantName, int outgoingTransferId)
         {
             Date = date;
             Note = note;
@@ -18,16 +18,19 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers.Events
             Commission = commission;
             CompanyCommission = companyCommission;
             ClientCommission = clientCommission;
-            CurrencyId = currencyId;
-            BeneficiaryId = beneficiaryId;
-            SenderId = senderId;
-            FromCompanyId = fromCompanyId;
-            ToCompanyId = toCompanyId;
-            FromClientId = fromClientId;
+            CurrencyName = currencyName;
+            BeneficiaryName = beneficiaryName;
+            SenderName = senderName;
+            FromTenantId = fromTenantId;
             ToTenantId = toTenantId;
+            FromTenantName = fromTenantName;
+            OutgoingTransferId = outgoingTransferId;
         }
 
         public int? ToTenantId { get; set; }
+        public int? FromTenantId { get; set; }
+        public string FromTenantName { get; set; }
+        public int OutgoingTransferId { get; set; }
         public DateTime Date { get; set; }
         public string Note { get; set; }
         public PaymentType PaymentType { get; set; }
@@ -35,13 +38,8 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers.Events
         public double Commission { get; set; }
         public double CompanyCommission { get; set; }
         public double ClientCommission { get; set; }
-        //public int Number { get; set; }
-
-        public int CurrencyId { get; set; }
-        public int? BeneficiaryId { get; set; }
-        public int? SenderId { get; set; }
-        public int? FromCompanyId { get; set; }
-        public int? ToCompanyId { get; set; }
-        public int? FromClientId { get; set; }
+        public string CurrencyName { get; set; }
+        public string SenderName { get; set; }
+        public string BeneficiaryName { get; set; }
     }
 }

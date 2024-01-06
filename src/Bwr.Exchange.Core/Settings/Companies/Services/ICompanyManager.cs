@@ -18,5 +18,6 @@ namespace Bwr.Exchange.Settings.Companies.Services
         bool CheckIfNameAlreadyExist(string name);
         bool CheckIfNameAlreadyExist(int id, string name);
         string GetCompanyNameById(int id);
+        Company GetByCompanyTenantId(int companyTenantId);
     }
 }

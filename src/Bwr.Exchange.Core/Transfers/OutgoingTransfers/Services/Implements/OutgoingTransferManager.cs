@@ -203,7 +203,7 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers.Services
                 .FirstOrDefault(x => x.Id == id);
         }
 
-        public async Task<OutgoingTransfer> CreateAsync(OutgoingTransfer input)
+        public async Task<OutgoingTransfer> CreateAsync(OutgoingTransfer input,int? currentTenantId)
         {
             var createdOutgoingTransfer = new OutgoingTransfer();
             var toCompany = await _companyManager.GetByIdAsync(input.ToCompanyId);
@@ -250,14 +250,13 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers.Services
 
                 input.Status = OutgoingTransferStatus.Pending;
                 var id = await _outgoingTransferRepository.InsertAndGetIdAsync(input);
-                createdOutgoingTransfer = await _outgoingTransferRepository.GetAsync(id);
+                createdOutgoingTransfer = await _outgoingTransferRepository.GetAsync(id);                
 
                 var data = new CreateExternalTransferEventData(
                     createdOutgoingTransfer.Date,createdOutgoingTransfer.Note,createdOutgoingTransfer.PaymentType,
                     createdOutgoingTransfer.Amount,createdOutgoingTransfer.Commission,createdOutgoingTransfer.CompanyCommission,
-                    createdOutgoingTransfer.ClientCommission,createdOutgoingTransfer.CurrencyId,createdOutgoingTransfer.BeneficiaryId,
-                    createdOutgoingTransfer.SenderId,createdOutgoingTransfer.FromCompanyId,createdOutgoingTransfer.ToCompanyId,
-                    createdOutgoingTransfer.FromClientId,toCompany.TenantCompanyId
+                    createdOutgoingTransfer.ClientCommission,createdOutgoingTransfer.Currency.Name,createdOutgoingTransfer.Beneficiary.Name,
+                    createdOutgoingTransfer.Sender.Name,currentTenantId,toCompany.TenantCompanyId,null,id
                     );
 
                 await EventBus.Default.TriggerAsync(data);

@@ -75,7 +75,7 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
 
                 outgoingTransfer.TreasuryId = treasury.Id;
 
-                var createdOutgoingTransfer = await _outgoingTransferManager.CreateAsync(outgoingTransfer);
+                var createdOutgoingTransfer = await _outgoingTransferManager.CreateAsync(outgoingTransfer,AbpSession.TenantId);
                 return ObjectMapper.Map<OutgoingTransferDto>(createdOutgoingTransfer);
             }
         }

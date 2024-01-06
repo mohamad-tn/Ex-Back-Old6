@@ -118,6 +118,12 @@ namespace Bwr.Exchange.Settings.Companies.Services
             return company.Name;
         }
 
+        public Company GetByCompanyTenantId(int companyTenantId)
+        {
+            var company = _companyRepository.GetAll().FirstOrDefault(x => x.TenantCompanyId == companyTenantId);
+            return company;
+        }
+
         #region Helper Methods
         private async Task RemoveCompanyBalances(int companyId, IList<CompanyBalance> newCompanyBalances)
         {
@@ -144,9 +150,9 @@ namespace Bwr.Exchange.Settings.Companies.Services
                     await _companyBalanceRepository.InsertAsync(newCompanyBalance);
                 }
             }
-        }
+        }       
 
-        
+
         #endregion
     }
 }
