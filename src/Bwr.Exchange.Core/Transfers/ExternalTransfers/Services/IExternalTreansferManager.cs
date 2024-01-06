@@ -11,5 +11,6 @@ namespace Bwr.Exchange.Transfers.ExternalTransfers.Services
         Task<ExtrenalTransfer> InsertAndGetAsync(ExtrenalTransfer extrenalTransfer);
         Task<ExtrenalTransfer> GetByIdAsync(int id);
         Task DeleteAsync(int id);
+        Task AcceptExternalTransferAsync(int id);
     }
 }
