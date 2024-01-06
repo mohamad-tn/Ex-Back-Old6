@@ -15,13 +15,22 @@ namespace Bwr.Exchange.Settings.GeneralSettings
 
         public async Task<CheckPasswordOutput> CheckPassword(CheckPasswordInput input)
         {
-            var success = await _generalSettingManager.CheckPassword(input.password);
-            return new CheckPasswordOutput(success);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var success = await _generalSettingManager.CheckPassword(input.password);
+                return new CheckPasswordOutput(success);
+            }
         }
 
         public async Task<GeneralSettingDto> Get()
         {
-            var setting = await _generalSettingManager.Get();
+            GeneralSetting setting = new GeneralSetting();
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                setting = await _generalSettingManager.Get();
+            }
             if (setting != null)
             {
                 return new GeneralSettingDto()
@@ -44,7 +53,12 @@ namespace Bwr.Exchange.Settings.GeneralSettings
                 DbSuffex = input.DbSuffex,
                 EditPassword = input.EditPassword
             };
-            var setting = await _generalSettingManager.Update(generalSetting);
+            GeneralSetting setting = new GeneralSetting();
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                setting = await _generalSettingManager.Update(generalSetting);
+            }
             return new GeneralSettingDto()
             {
                 CompanyName = setting.CompanyName,

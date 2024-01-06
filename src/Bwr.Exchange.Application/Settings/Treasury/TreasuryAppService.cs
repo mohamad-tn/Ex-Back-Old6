@@ -17,7 +17,11 @@ namespace Bwr.Exchange.Settings.Treasury
 
         public async Task CreateMainTreasuryAsync()
         {
-            await _treasuryManager.CreateMainTreasuryAsync();
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                await _treasuryManager.CreateMainTreasuryAsync();
+            }
         }
     }
 }

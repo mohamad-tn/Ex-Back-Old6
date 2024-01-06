@@ -79,23 +79,24 @@ namespace Bwr.Exchange.Settings.Clients.Services
         public async Task<Client> InsertAndGetAsync(Client client)
         {
             int clientId = 0;
+            Client createdClient = new Client();
             using (var unitOfWork = _unitOfWorkManager.Begin())
             {
-                clientId = await _clientRepository.InsertAndGetIdAsync(client);
+                createdClient = await _clientRepository.InsertAsync(client);
 
                 //Update client phones
                 var clientPhones = client.ClientPhones.ToList();//Don't remove ToList()
-                await RemoveClientPhones(clientId, clientPhones);
-                await AddNewClientPhones(clientId, clientPhones);
+                await RemoveClientPhones(createdClient.Id, clientPhones);
+                await AddNewClientPhones(createdClient.Id, clientPhones);
 
                 ////Update client balances
                 var clientBalances = client.ClientBalances.ToList();//Don't remove ToList()
                 //await RemoveClientBalances(clientId, clientBalances);
-                await AddNewClientBalances(clientId, clientBalances);
+                await AddNewClientBalances(createdClient.Id, clientBalances);
 
                 unitOfWork.Complete();
             }
-            return await GetByIdAsync(clientId);
+            return createdClient;
         }
 
         public async Task<Client> UpdateAndGetAsync(Client client)

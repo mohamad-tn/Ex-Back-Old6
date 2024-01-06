@@ -1,11 +1,8 @@
-﻿using Abp.UI;
-using Bwr.Exchange.CashFlows.Shared.Dto;
+﻿using Bwr.Exchange.CashFlows.Shared.Dto;
 using Bwr.Exchange.Customers;
-using Bwr.Exchange.Customers.Dto;
-using Bwr.Exchange.Settings.Clients.Dto;
-using Bwr.Exchange.Settings.Companies.Dto;
 using Bwr.Exchange.Settings.Currencies.Dto;
 using Bwr.Exchange.Settings.Currencies.Services;
+using Bwr.Exchange.Shared.DataManagerRequests;
 using Bwr.Exchange.Shared.Dto;
 using Bwr.Exchange.Transfers.IncomeTransfers.Dto;
 using Bwr.Exchange.Transfers.IncomeTransfers.Services.Interfaces;
@@ -37,18 +34,26 @@ namespace Bwr.Exchange.Transfers.IncomeTransfers
 
         public async Task<IncomeTransferDetailDto> ChangeStatusAsync(IncomeTransferDetailChangeStatusInput input)
         {
-            var updatedIncomeTransferDetail = await _incomeTransferDetailManager.ChangeStatusAsync(input.Id, input.Status);
-            return ObjectMapper.Map<IncomeTransferDetailDto>(updatedIncomeTransferDetail);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var updatedIncomeTransferDetail = await _incomeTransferDetailManager.ChangeStatusAsync(input.Id, input.Status);
+                return ObjectMapper.Map<IncomeTransferDetailDto>(updatedIncomeTransferDetail);
+            }
         }
 
         public IList<IncomeTransferDetailDto> GetAllDirectTransfers()
         {
-            var transfers = _incomeTransferDetailManager.GetAllDirectTransfers().ToList();
-            return ObjectMapper.Map<List<IncomeTransferDetailDto>>(transfers);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var transfers = _incomeTransferDetailManager.GetAllDirectTransfers().ToList();
+                return ObjectMapper.Map<List<IncomeTransferDetailDto>>(transfers);
+            }
         }
 
         [HttpPost]
-        public ReadGrudDto GetDirectTransferForGrid([FromBody] DataManagerRequest dm)
+        public ReadGrudDto GetDirectTransferForGrid([FromBody] BWireDataManagerRequest dm)
         {
             int currencyId = 0;
             DateTime fromDate = DateTime.Now, toDate = DateTime.Now;
@@ -76,9 +81,13 @@ namespace Bwr.Exchange.Transfers.IncomeTransfers
             fromDate = new DateTime(fromDate.Year, fromDate.Month, fromDate.Day, 0, 0, 0);
             toDate = new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59);
 
-            IEnumerable<IncomeTransferDetail> directTransfers = _incomeTransferDetailManager.GetNotReceived()
+            IEnumerable<IncomeTransferDetail> directTransfers = new List<IncomeTransferDetail>();
+            using (CurrentUnitOfWork.SetTenantId(dm.tenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                directTransfers = _incomeTransferDetailManager.GetNotReceived()
                 .Where(x => x.IncomeTransfer.Date >= fromDate && x.IncomeTransfer.Date <= toDate).ToList();
-
+            }
             if(currencyId > 0)
             {
                 directTransfers = directTransfers.Where(x => x.CurrencyId == currencyId);
@@ -117,25 +126,37 @@ namespace Bwr.Exchange.Transfers.IncomeTransfers
 
         public async Task<IList<FileUploadDto>> GetDirectTransferImagesAsync(int incomeTransferDetailId)
         {
-            IList<FileUploadDto> images = new List<FileUploadDto>();
-            var incomeTransferDetail = await _incomeTransferDetailManager.GetByIdAsync(incomeTransferDetailId);
-            if(incomeTransferDetail != null && incomeTransferDetail.BeneficiaryId != null)
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
             {
-                images = await _customerAppService.GetCustomerImagesAsync(incomeTransferDetail.BeneficiaryId.Value);
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                IList<FileUploadDto> images = new List<FileUploadDto>();
+                var incomeTransferDetail = await _incomeTransferDetailManager.GetByIdAsync(incomeTransferDetailId);
+                if (incomeTransferDetail != null && incomeTransferDetail.BeneficiaryId != null)
+                {
+                    images = await _customerAppService.GetCustomerImagesAsync(incomeTransferDetail.BeneficiaryId.Value);
+                }
+                return images;
             }
-            return images;
         }
 
         public IList<IncomeTransferDetailDto> GetNotReceived(int currencyId)
         {
-            var transfers = _incomeTransferDetailManager.GetNotReceived().Where(x=>x.CurrencyId == currencyId).ToList();
-            return ObjectMapper.Map<List<IncomeTransferDetailDto>>(transfers);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var transfers = _incomeTransferDetailManager.GetNotReceived().Where(x => x.CurrencyId == currencyId).ToList();
+                return ObjectMapper.Map<List<IncomeTransferDetailDto>>(transfers);
+            }
         }
 
         public IList<IncomeTransferDetailDto> GetAllNotReceived()
         {
-            var transfers = _incomeTransferDetailManager.GetNotReceived().ToList();
-            return ObjectMapper.Map<List<IncomeTransferDetailDto>>(transfers);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var transfers = _incomeTransferDetailManager.GetNotReceived().ToList();
+                return ObjectMapper.Map<List<IncomeTransferDetailDto>>(transfers);
+            }
         }
 
         private WhereFilter GetWhereFilter(List<WhereFilter> filterOptions, string name)
@@ -154,34 +175,38 @@ namespace Bwr.Exchange.Transfers.IncomeTransfers
 
         public IList<SummaryCashFlowDto> Summary(string date)
         {
-            var toDate = DateTime.Now;
-            if (!string.IsNullOrEmpty(date))
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
             {
-                toDate = DateTime.Parse(date);
-            }
-            toDate = new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59);
-
-            var dtos = new List<SummaryCashFlowDto>();
-            var currencies = _currencyManager.GetAll();
-
-            var notReceivedTransfer = _incomeTransferDetailManager.GetNotReceivedToDate(toDate);
-            foreach (var currency in currencies)
-            {
-                var dto = new SummaryCashFlowDto()
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var toDate = DateTime.Now;
+                if (!string.IsNullOrEmpty(date))
                 {
-                    Currency = ObjectMapper.Map<CurrencyDto>(currency),
-                };
+                    toDate = DateTime.Parse(date);
+                }
+                toDate = new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59);
 
-                var result = notReceivedTransfer.Where(x => x.CurrencyId == currency.Id);
-                if (result.Any())
+                var dtos = new List<SummaryCashFlowDto>();
+                var currencies = _currencyManager.GetAll();
+
+                var notReceivedTransfer = _incomeTransferDetailManager.GetNotReceivedToDate(toDate);
+                foreach (var currency in currencies)
                 {
-                    dto.TotalBalance = result.Sum(x => x.Amount);
+                    var dto = new SummaryCashFlowDto()
+                    {
+                        Currency = ObjectMapper.Map<CurrencyDto>(currency),
+                    };
+
+                    var result = notReceivedTransfer.Where(x => x.CurrencyId == currency.Id);
+                    if (result.Any())
+                    {
+                        dto.TotalBalance = result.Sum(x => x.Amount);
+                    }
+
+                    dtos.Add(dto);
                 }
 
-                dtos.Add(dto);
+                return dtos;
             }
-
-            return dtos;
         }
     }
 }

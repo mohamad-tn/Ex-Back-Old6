@@ -1,0 +1,966 @@
+INFO  2024-01-06 11:22:05,504 [59   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:05,541 [59   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Bwr.Exchange.Sessions.SessionAppService.GetCurrentLoginInformations (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:22:05,552 [59   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetCurrentLoginInformations", controller = "Session"}. Executing controller action with signature System.Threading.Tasks.Task`1[Bwr.Exchange.Sessions.Dto.GetCurrentLoginInformationsOutput] GetCurrentLoginInformations() on controller Bwr.Exchange.Sessions.SessionAppService (Bwr.Exchange.Application).
+INFO  2024-01-06 11:22:05,564 [59   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:05,580 [56   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (7ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[ConnectionString], [a].[CreationTime], [a].[CreatorUserId], [a].[DeleterUserId], [a].[DeletionTime], [a].[EditionId], [a].[IsActive], [a].[IsDeleted], [a].[LastModificationTime], [a].[LastModifierUserId], [a].[Name], [a].[TenancyName]
+FROM [AbpTenants] AS [a]
+WHERE ((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))) AND ([a].[Id] = @__p_0)
+INFO  2024-01-06 11:22:05,590 [56   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:22:05,594 [56   ] c.Infrastructure.ControllerActionInvoker - Executed action Bwr.Exchange.Sessions.SessionAppService.GetCurrentLoginInformations (Bwr.Exchange.Application) in 38.6163ms
+INFO  2024-01-06 11:22:05,598 [56   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Bwr.Exchange.Sessions.SessionAppService.GetCurrentLoginInformations (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:22:05,602 [56   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/api/services/app/Session/GetCurrentLoginInformations - - - 200 264 application/json;+charset=utf-8 102.9648ms
+INFO  2024-01-06 11:22:09,781 [59   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:09,792 [59   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (5ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:22:12,831 [71   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/AbpUserConfiguration/GetAll - -
+INFO  2024-01-06 11:22:12,836 [71   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:12,840 [71   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/AbpUserConfiguration/GetAll - - - 204 - - 11.8549ms
+INFO  2024-01-06 11:22:12,845 [56   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/AbpUserConfiguration/GetAll - -
+INFO  2024-01-06 11:22:12,851 [56   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:12,856 [56   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Abp.AspNetCore.Mvc.Controllers.AbpUserConfigurationController.GetAll (Abp.AspNetCore)'
+INFO  2024-01-06 11:22:12,867 [56   ] c.Infrastructure.ControllerActionInvoker - Route matched with {action = "GetAll", controller = "AbpUserConfiguration", area = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.JsonResult] GetAll() on controller Abp.AspNetCore.Mvc.Controllers.AbpUserConfigurationController (Abp.AspNetCore).
+INFO  2024-01-06 11:22:12,883 [56   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:12,900 [56   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (7ms) [Parameters=[@p0='?' (Size = 512), @p1='?' (Size = 64), @p2='?' (Size = 128), @p3='?' (Size = 2000), @p4='?' (Size = 2000), @p5='?' (Size = 1024), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (DbType = Int32), @p9='?' (DbType = Int64), @p10='?' (Size = 256), @p11='?' (Size = 1024), @p12='?' (Size = 4000), @p13='?' (Size = 256), @p14='?' (DbType = Int32), @p15='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AbpAuditLogs] ([BrowserInfo], [ClientIpAddress], [ClientName], [CustomData], [Exception], [ExceptionMessage], [ExecutionDuration], [ExecutionTime], [ImpersonatorTenantId], [ImpersonatorUserId], [MethodName], [Parameters], [ReturnValue], [ServiceName], [TenantId], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [AbpAuditLogs]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+INFO  2024-01-06 11:22:12,912 [56   ] tonsoftJson.NewtonsoftJsonResultExecutor - Executing JsonResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:22:12,918 [56   ] c.Infrastructure.ControllerActionInvoker - Executed action Abp.AspNetCore.Mvc.Controllers.AbpUserConfigurationController.GetAll (Abp.AspNetCore) in 47.8101ms
+INFO  2024-01-06 11:22:12,922 [56   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Abp.AspNetCore.Mvc.Controllers.AbpUserConfigurationController.GetAll (Abp.AspNetCore)'
+INFO  2024-01-06 11:22:12,928 [71   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/AbpUserConfiguration/GetAll - - - 200 - application/json;+charset=utf-8 83.7947ms
+INFO  2024-01-06 11:22:12,939 [71   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Session/GetCurrentLoginInformations - -
+INFO  2024-01-06 11:22:12,944 [71   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:12,949 [71   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Session/GetCurrentLoginInformations - - - 204 - - 12.8334ms
+INFO  2024-01-06 11:22:12,953 [59   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/Session/GetCurrentLoginInformations - -
+INFO  2024-01-06 11:22:12,958 [59   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:12,963 [59   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Bwr.Exchange.Sessions.SessionAppService.GetCurrentLoginInformations (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:22:12,973 [59   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetCurrentLoginInformations", controller = "Session"}. Executing controller action with signature System.Threading.Tasks.Task`1[Bwr.Exchange.Sessions.Dto.GetCurrentLoginInformationsOutput] GetCurrentLoginInformations() on controller Bwr.Exchange.Sessions.SessionAppService (Bwr.Exchange.Application).
+INFO  2024-01-06 11:22:12,982 [59   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:22:12,987 [59   ] c.Infrastructure.ControllerActionInvoker - Executed action Bwr.Exchange.Sessions.SessionAppService.GetCurrentLoginInformations (Bwr.Exchange.Application) in 10.4037ms
+INFO  2024-01-06 11:22:12,991 [59   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Bwr.Exchange.Sessions.SessionAppService.GetCurrentLoginInformations (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:22:12,995 [59   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/api/services/app/Session/GetCurrentLoginInformations - - - 200 223 application/json;+charset=utf-8 43.7732ms
+INFO  2024-01-06 11:22:14,809 [59   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:14,821 [59   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (4ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:22:18,181 [59   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/TokenAuth/Authenticate - -
+INFO  2024-01-06 11:22:18,188 [59   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:18,194 [59   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/api/TokenAuth/Authenticate - - - 204 - - 11.8224ms
+INFO  2024-01-06 11:22:18,198 [54   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 POST http://localhost:21021/api/TokenAuth/Authenticate application/json-patch+json 77
+INFO  2024-01-06 11:22:18,204 [54   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:18,210 [54   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Bwr.Exchange.Controllers.TokenAuthController.Authenticate (Bwr.Exchange.Web.Core)'
+INFO  2024-01-06 11:22:18,219 [54   ] c.Infrastructure.ControllerActionInvoker - Route matched with {action = "Authenticate", controller = "TokenAuth", area = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Bwr.Exchange.Models.TokenAuth.AuthenticateResultModel] Authenticate(Bwr.Exchange.Models.TokenAuth.AuthenticateModel) on controller Bwr.Exchange.Controllers.TokenAuthController (Bwr.Exchange.Web.Core).
+INFO  2024-01-06 11:22:18,235 [54   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:18,256 [71   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (11ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__ef_filter__p_1='?' (DbType = Boolean), @__normalizedUserNameOrEmailAddress_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[AuthenticationSource], [a].[ConcurrencyStamp], [a].[CreationTime], [a].[CreatorUserId], [a].[DeleterUserId], [a].[DeletionTime], [a].[EmailAddress], [a].[EmailConfirmationCode], [a].[IsActive], [a].[IsDeleted], [a].[IsEmailConfirmed], [a].[IsLockoutEnabled], [a].[IsPhoneNumberConfirmed], [a].[IsTwoFactorEnabled], [a].[LastModificationTime], [a].[LastModifierUserId], [a].[LockoutEndDateUtc], [a].[Name], [a].[NormalizedEmailAddress], [a].[NormalizedUserName], [a].[Password], [a].[PasswordResetCode], [a].[PhoneNumber], [a].[SecurityStamp], [a].[Surname], [a].[TenantId], [a].[UserName]
+FROM [AbpUsers] AS [a]
+WHERE (((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))) AND ((@__ef_filter__p_1 = CAST(1 AS bit)) OR ([a].[TenantId] IS NULL))) AND (([a].[NormalizedUserName] = @__normalizedUserNameOrEmailAddress_0) OR ([a].[NormalizedEmailAddress] = @__normalizedUserNameOrEmailAddress_0))
+INFO  2024-01-06 11:22:18,279 [57   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (8ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__p_0='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SELECT [a].[Id], [a].[ClaimType], [a].[ClaimValue], [a].[CreationTime], [a].[CreatorUserId], [a].[TenantId], [a].[UserId]
+FROM [AbpUserClaims] AS [a]
+WHERE ((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[TenantId] IS NULL)) AND ([a].[UserId] = @__p_0)
+INFO  2024-01-06 11:22:18,293 [59   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (8ms) [Parameters=[@__ef_filter__p_2='?' (DbType = Boolean), @__ef_filter__p_3='?' (DbType = Boolean), @__ef_filter__p_0='?' (DbType = Boolean), @__user_Id_0='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Name]
+FROM [AbpUserRoles] AS [a]
+INNER JOIN (
+    SELECT [a0].[Id], [a0].[Name]
+    FROM [AbpRoles] AS [a0]
+    WHERE ((@__ef_filter__p_2 = CAST(1 AS bit)) OR ([a0].[IsDeleted] = CAST(0 AS bit))) AND ((@__ef_filter__p_3 = CAST(1 AS bit)) OR ([a0].[TenantId] IS NULL))
+) AS [t] ON [a].[RoleId] = [t].[Id]
+WHERE ((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[TenantId] IS NULL)) AND ([a].[UserId] = @__user_Id_0)
+INFO  2024-01-06 11:22:18,311 [59   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (12ms) [Parameters=[@__ef_filter__p_3='?' (DbType = Boolean), @__ef_filter__p_4='?' (DbType = Boolean), @__ef_filter__p_6='?' (DbType = Boolean), @__ef_filter__p_7='?' (DbType = Boolean), @__ef_filter__p_0='?' (DbType = Boolean), @__ef_filter__p_1='?' (DbType = Boolean), @__user_Id_0='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SELECT [t0].[Name]
+FROM [AbpUserOrganizationUnits] AS [a]
+INNER JOIN (
+    SELECT [a0].[OrganizationUnitId], [a0].[RoleId]
+    FROM [AbpOrganizationUnitRoles] AS [a0]
+    WHERE ((@__ef_filter__p_3 = CAST(1 AS bit)) OR ([a0].[IsDeleted] = CAST(0 AS bit))) AND ((@__ef_filter__p_4 = CAST(1 AS bit)) OR ([a0].[TenantId] IS NULL))
+) AS [t] ON [a].[OrganizationUnitId] = [t].[OrganizationUnitId]
+INNER JOIN (
+    SELECT [a1].[Id], [a1].[Name]
+    FROM [AbpRoles] AS [a1]
+    WHERE ((@__ef_filter__p_6 = CAST(1 AS bit)) OR ([a1].[IsDeleted] = CAST(0 AS bit))) AND ((@__ef_filter__p_7 = CAST(1 AS bit)) OR ([a1].[TenantId] IS NULL))
+) AS [t0] ON [t].[RoleId] = [t0].[Id]
+WHERE (((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))) AND ((@__ef_filter__p_1 = CAST(1 AS bit)) OR ([a].[TenantId] IS NULL))) AND ([a].[UserId] = @__user_Id_0)
+INFO  2024-01-06 11:22:18,324 [59   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (7ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__ef_filter__p_1='?' (DbType = Boolean), @__normalizedName_0='?' (Size = 32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[ConcurrencyStamp], [a].[CreationTime], [a].[CreatorUserId], [a].[DeleterUserId], [a].[DeletionTime], [a].[Description], [a].[DisplayName], [a].[IsDefault], [a].[IsDeleted], [a].[IsStatic], [a].[LastModificationTime], [a].[LastModifierUserId], [a].[Name], [a].[NormalizedName], [a].[TenantId]
+FROM [AbpRoles] AS [a]
+WHERE (((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))) AND ((@__ef_filter__p_1 = CAST(1 AS bit)) OR ([a].[TenantId] IS NULL))) AND ([a].[NormalizedName] = @__normalizedName_0)
+INFO  2024-01-06 11:22:18,341 [59   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (10ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [a].[Id], [a].[ClaimType], [a].[ClaimValue], [a].[CreationTime], [a].[CreatorUserId], [a].[RoleId], [a].[TenantId]
+FROM [AbpRoleClaims] AS [a]
+WHERE ((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[TenantId] IS NULL)) AND ([a].[RoleId] = @__p_0)
+INFO  2024-01-06 11:22:18,349 [59   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:18,369 [71   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (5ms) [Parameters=[@p0='?' (Size = 512), @p1='?' (Size = 64), @p2='?' (Size = 128), @p3='?' (DbType = DateTime2), @p4='?' (Size = 1) (DbType = Byte), @p5='?' (Size = 64), @p6='?' (DbType = Int32), @p7='?' (DbType = Int64), @p8='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AbpUserLoginAttempts] ([BrowserInfo], [ClientIpAddress], [ClientName], [CreationTime], [Result], [TenancyName], [TenantId], [UserId], [UserNameOrEmailAddress])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8);
+SELECT [Id]
+FROM [AbpUserLoginAttempts]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+INFO  2024-01-06 11:22:18,382 [71   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:18,393 [71   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (2ms) [Parameters=[@p0='?' (Size = 512), @p1='?' (Size = 64), @p2='?' (Size = 128), @p3='?' (Size = 2000), @p4='?' (Size = 2000), @p5='?' (Size = 1024), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (DbType = Int32), @p9='?' (DbType = Int64), @p10='?' (Size = 256), @p11='?' (Size = 1024), @p12='?' (Size = 4000), @p13='?' (Size = 256), @p14='?' (DbType = Int32), @p15='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AbpAuditLogs] ([BrowserInfo], [ClientIpAddress], [ClientName], [CustomData], [Exception], [ExceptionMessage], [ExecutionDuration], [ExecutionTime], [ImpersonatorTenantId], [ImpersonatorUserId], [MethodName], [Parameters], [ReturnValue], [ServiceName], [TenantId], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [AbpAuditLogs]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+INFO  2024-01-06 11:22:18,400 [71   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:22:18,404 [71   ] c.Infrastructure.ControllerActionInvoker - Executed action Bwr.Exchange.Controllers.TokenAuthController.Authenticate (Bwr.Exchange.Web.Core) in 181.457ms
+INFO  2024-01-06 11:22:18,407 [71   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Bwr.Exchange.Controllers.TokenAuthController.Authenticate (Bwr.Exchange.Web.Core)'
+INFO  2024-01-06 11:22:18,411 [71   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 POST http://localhost:21021/api/TokenAuth/Authenticate application/json-patch+json 77 - 200 2007 application/json;+charset=utf-8 216.2733ms
+INFO  2024-01-06 11:22:19,282 [71   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/AbpUserConfiguration/GetAll - -
+INFO  2024-01-06 11:22:19,287 [71   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:19,291 [71   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/AbpUserConfiguration/GetAll - - - 204 - - 9.6072ms
+INFO  2024-01-06 11:22:19,294 [56   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/AbpUserConfiguration/GetAll - -
+INFO  2024-01-06 11:22:19,300 [56   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:19,305 [56   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:19,314 [57   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (4ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__userId_0='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SELECT [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[LastModificationTime], [a].[LastModifierUserId], [a].[Name], [a].[TenantId], [a].[UserId], [a].[Value]
+FROM [AbpSettings] AS [a]
+WHERE ((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[TenantId] IS NULL)) AND (([a].[UserId] = @__userId_0) AND ([a].[TenantId] IS NULL))
+INFO  2024-01-06 11:22:19,318 [57   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Abp.AspNetCore.Mvc.Controllers.AbpUserConfigurationController.GetAll (Abp.AspNetCore)'
+INFO  2024-01-06 11:22:19,326 [57   ] c.Infrastructure.ControllerActionInvoker - Route matched with {action = "GetAll", controller = "AbpUserConfiguration", area = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.JsonResult] GetAll() on controller Abp.AspNetCore.Mvc.Controllers.AbpUserConfigurationController (Abp.AspNetCore).
+INFO  2024-01-06 11:22:19,344 [57   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:19,356 [59   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (4ms) [Parameters=[@p0='?' (Size = 512), @p1='?' (Size = 64), @p2='?' (Size = 128), @p3='?' (Size = 2000), @p4='?' (Size = 2000), @p5='?' (Size = 1024), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (DbType = Int32), @p9='?' (DbType = Int64), @p10='?' (Size = 256), @p11='?' (Size = 1024), @p12='?' (Size = 4000), @p13='?' (Size = 256), @p14='?' (DbType = Int32), @p15='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AbpAuditLogs] ([BrowserInfo], [ClientIpAddress], [ClientName], [CustomData], [Exception], [ExceptionMessage], [ExecutionDuration], [ExecutionTime], [ImpersonatorTenantId], [ImpersonatorUserId], [MethodName], [Parameters], [ReturnValue], [ServiceName], [TenantId], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [AbpAuditLogs]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+INFO  2024-01-06 11:22:19,364 [59   ] tonsoftJson.NewtonsoftJsonResultExecutor - Executing JsonResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:22:19,369 [59   ] c.Infrastructure.ControllerActionInvoker - Executed action Abp.AspNetCore.Mvc.Controllers.AbpUserConfigurationController.GetAll (Abp.AspNetCore) in 40.2772ms
+INFO  2024-01-06 11:22:19,373 [59   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Abp.AspNetCore.Mvc.Controllers.AbpUserConfigurationController.GetAll (Abp.AspNetCore)'
+INFO  2024-01-06 11:22:19,378 [59   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/AbpUserConfiguration/GetAll - - - 200 - application/json;+charset=utf-8 84.2956ms
+INFO  2024-01-06 11:22:19,383 [59   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Session/GetCurrentLoginInformations - -
+INFO  2024-01-06 11:22:19,387 [59   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:19,390 [59   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Session/GetCurrentLoginInformations - - - 204 - - 6.8312ms
+INFO  2024-01-06 11:22:19,393 [71   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/Session/GetCurrentLoginInformations - -
+INFO  2024-01-06 11:22:19,396 [71   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:19,400 [71   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Bwr.Exchange.Sessions.SessionAppService.GetCurrentLoginInformations (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:22:19,406 [71   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetCurrentLoginInformations", controller = "Session"}. Executing controller action with signature System.Threading.Tasks.Task`1[Bwr.Exchange.Sessions.Dto.GetCurrentLoginInformationsOutput] GetCurrentLoginInformations() on controller Bwr.Exchange.Sessions.SessionAppService (Bwr.Exchange.Application).
+INFO  2024-01-06 11:22:19,414 [71   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:19,432 [59   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (5ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__ef_filter__p_1='?' (DbType = Boolean), @__p_0='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[AuthenticationSource], [a].[ConcurrencyStamp], [a].[CreationTime], [a].[CreatorUserId], [a].[DeleterUserId], [a].[DeletionTime], [a].[EmailAddress], [a].[EmailConfirmationCode], [a].[IsActive], [a].[IsDeleted], [a].[IsEmailConfirmed], [a].[IsLockoutEnabled], [a].[IsPhoneNumberConfirmed], [a].[IsTwoFactorEnabled], [a].[LastModificationTime], [a].[LastModifierUserId], [a].[LockoutEndDateUtc], [a].[Name], [a].[NormalizedEmailAddress], [a].[NormalizedUserName], [a].[Password], [a].[PasswordResetCode], [a].[PhoneNumber], [a].[SecurityStamp], [a].[Surname], [a].[TenantId], [a].[UserName]
+FROM [AbpUsers] AS [a]
+WHERE (((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))) AND ((@__ef_filter__p_1 = CAST(1 AS bit)) OR ([a].[TenantId] IS NULL))) AND ([a].[Id] = @__p_0)
+INFO  2024-01-06 11:22:19,436 [59   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:22:19,440 [59   ] c.Infrastructure.ControllerActionInvoker - Executed action Bwr.Exchange.Sessions.SessionAppService.GetCurrentLoginInformations (Bwr.Exchange.Application) in 30.7251ms
+INFO  2024-01-06 11:22:19,444 [59   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Bwr.Exchange.Sessions.SessionAppService.GetCurrentLoginInformations (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:22:19,447 [59   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/api/services/app/Session/GetCurrentLoginInformations - - - 200 324 application/json;+charset=utf-8 54.8345ms
+INFO  2024-01-06 11:22:19,837 [71   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:19,843 [71   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:22:20,273 [71   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/signalr/negotiate?enc_auth_token=wNYmO41%2F48SHNstaLVXxHCCre29BZQl1NhC6NM3R3rzpXtPQxVzH6jEzA%2FQhXFN5tu6Fk7pO53uppm1mVXMZgxbyRVz26dnepi%2FFyB6axBY%2B6gq1GL%2BuRQgoiFUCjRN2p8w6LevViwKlHyWZZJZO1DGVSjAi1m2U%2Bog9pkHw9%2FQR4Nl%2FDPnoP9JYDMpZ1zxx09u6s0GZ9%2FQ5Sjk%2BL0UfcSCbl38X8he5w9UIn%2FHvxh7ysM1CiPLsoOwtbiieSRVmrmt0JjnipAn4%2FK283F8GrGwzwgehWsqefmUnM0ckMwNfOaJqxA4FdQOAkJd5W%2BXxvn0EW4DBPN18ygT5%2BVHg%2FBfrxQkJ4UKKwiuVhh2SKEoUj%2BsWMTcim5KzmTV5hgWiwaZNep8bK%2FjqBz4S%2FwGeE91KUq37jJprzeWe0QJ5CQu8i7cFzbvTf7kikmp2KOq%2BV2qEiECQkP1wf3jgQxfoYgzoufnBo1%2BZGZV5cwWl3RajG7ZvqJvB2Exhw%2BTPvD9r4rUIuwG0AOadYyQ%2BAPNCzi1tV9RzVGv1QSd1BFhkvfIb9E6AViZCYHWgR8tZ06nYq%2Fq1Bi8xJ%2B%2B3KkrpKjZPd7OWStY1E1K0PHLwqPJj6wuA41qEssUYzuwXkXD%2BxydhUwxG66qGbzH8%2FY%2FeGzdCeYUTGdHaBkQHEf0%2BvIHC1MeF0NsF%2BVk6%2F1FWYGfBoHMSteMXH4%2BGbOSqqdMrylU%2FteSoxVqMVJEAwT4H%2F7cmfoNO4sE7ZkQY6psZwnjycyCBqamGijd%2B1ATePy6IXoermR8rU0KRSSotE3t01%2BCuIJU4mggeP4maaSBdijCOldt4CrxG8BsDHJAhPm2SlQuUB3NH5Z8grxrpDLkxQQZqyhoCidsH%2B2r2xSyN5%2F1HQHef6cXb0H%2FEEF98njWABCy72%2FBvz8BezHa02GuYt28Ro8owUSHot29kOgDLaBlLI48PG8h0AYaVYqeHya0wAzj5XrIW6n5LBreomkdESYi1Tho64uKPqw6ad6rffbWYoW8leuu5t33LajuCHFG%2FB32cAA%3D%3D - -
+INFO  2024-01-06 11:22:20,278 [71   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:20,285 [71   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/signalr/negotiate?enc_auth_token=wNYmO41%2F48SHNstaLVXxHCCre29BZQl1NhC6NM3R3rzpXtPQxVzH6jEzA%2FQhXFN5tu6Fk7pO53uppm1mVXMZgxbyRVz26dnepi%2FFyB6axBY%2B6gq1GL%2BuRQgoiFUCjRN2p8w6LevViwKlHyWZZJZO1DGVSjAi1m2U%2Bog9pkHw9%2FQR4Nl%2FDPnoP9JYDMpZ1zxx09u6s0GZ9%2FQ5Sjk%2BL0UfcSCbl38X8he5w9UIn%2FHvxh7ysM1CiPLsoOwtbiieSRVmrmt0JjnipAn4%2FK283F8GrGwzwgehWsqefmUnM0ckMwNfOaJqxA4FdQOAkJd5W%2BXxvn0EW4DBPN18ygT5%2BVHg%2FBfrxQkJ4UKKwiuVhh2SKEoUj%2BsWMTcim5KzmTV5hgWiwaZNep8bK%2FjqBz4S%2FwGeE91KUq37jJprzeWe0QJ5CQu8i7cFzbvTf7kikmp2KOq%2BV2qEiECQkP1wf3jgQxfoYgzoufnBo1%2BZGZV5cwWl3RajG7ZvqJvB2Exhw%2BTPvD9r4rUIuwG0AOadYyQ%2BAPNCzi1tV9RzVGv1QSd1BFhkvfIb9E6AViZCYHWgR8tZ06nYq%2Fq1Bi8xJ%2B%2B3KkrpKjZPd7OWStY1E1K0PHLwqPJj6wuA41qEssUYzuwXkXD%2BxydhUwxG66qGbzH8%2FY%2FeGzdCeYUTGdHaBkQHEf0%2BvIHC1MeF0NsF%2BVk6%2F1FWYGfBoHMSteMXH4%2BGbOSqqdMrylU%2FteSoxVqMVJEAwT4H%2F7cmfoNO4sE7ZkQY6psZwnjycyCBqamGijd%2B1ATePy6IXoermR8rU0KRSSotE3t01%2BCuIJU4mggeP4maaSBdijCOldt4CrxG8BsDHJAhPm2SlQuUB3NH5Z8grxrpDLkxQQZqyhoCidsH%2B2r2xSyN5%2F1HQHef6cXb0H%2FEEF98njWABCy72%2FBvz8BezHa02GuYt28Ro8owUSHot29kOgDLaBlLI48PG8h0AYaVYqeHya0wAzj5XrIW6n5LBreomkdESYi1Tho64uKPqw6ad6rffbWYoW8leuu5t33LajuCHFG%2FB32cAA%3D%3D - - - 204 - - 8.5976ms
+INFO  2024-01-06 11:22:20,289 [71   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 POST http://localhost:21021/signalr/negotiate?enc_auth_token=wNYmO41%2F48SHNstaLVXxHCCre29BZQl1NhC6NM3R3rzpXtPQxVzH6jEzA%2FQhXFN5tu6Fk7pO53uppm1mVXMZgxbyRVz26dnepi%2FFyB6axBY%2B6gq1GL%2BuRQgoiFUCjRN2p8w6LevViwKlHyWZZJZO1DGVSjAi1m2U%2Bog9pkHw9%2FQR4Nl%2FDPnoP9JYDMpZ1zxx09u6s0GZ9%2FQ5Sjk%2BL0UfcSCbl38X8he5w9UIn%2FHvxh7ysM1CiPLsoOwtbiieSRVmrmt0JjnipAn4%2FK283F8GrGwzwgehWsqefmUnM0ckMwNfOaJqxA4FdQOAkJd5W%2BXxvn0EW4DBPN18ygT5%2BVHg%2FBfrxQkJ4UKKwiuVhh2SKEoUj%2BsWMTcim5KzmTV5hgWiwaZNep8bK%2FjqBz4S%2FwGeE91KUq37jJprzeWe0QJ5CQu8i7cFzbvTf7kikmp2KOq%2BV2qEiECQkP1wf3jgQxfoYgzoufnBo1%2BZGZV5cwWl3RajG7ZvqJvB2Exhw%2BTPvD9r4rUIuwG0AOadYyQ%2BAPNCzi1tV9RzVGv1QSd1BFhkvfIb9E6AViZCYHWgR8tZ06nYq%2Fq1Bi8xJ%2B%2B3KkrpKjZPd7OWStY1E1K0PHLwqPJj6wuA41qEssUYzuwXkXD%2BxydhUwxG66qGbzH8%2FY%2FeGzdCeYUTGdHaBkQHEf0%2BvIHC1MeF0NsF%2BVk6%2F1FWYGfBoHMSteMXH4%2BGbOSqqdMrylU%2FteSoxVqMVJEAwT4H%2F7cmfoNO4sE7ZkQY6psZwnjycyCBqamGijd%2B1ATePy6IXoermR8rU0KRSSotE3t01%2BCuIJU4mggeP4maaSBdijCOldt4CrxG8BsDHJAhPm2SlQuUB3NH5Z8grxrpDLkxQQZqyhoCidsH%2B2r2xSyN5%2F1HQHef6cXb0H%2FEEF98njWABCy72%2FBvz8BezHa02GuYt28Ro8owUSHot29kOgDLaBlLI48PG8h0AYaVYqeHya0wAzj5XrIW6n5LBreomkdESYi1Tho64uKPqw6ad6rffbWYoW8leuu5t33LajuCHFG%2FB32cAA%3D%3D text/plain;charset=UTF-8 0
+INFO  2024-01-06 11:22:20,293 [71   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:20,302 [71   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint '/signalr/negotiate'
+INFO  2024-01-06 11:22:20,306 [71   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint '/signalr/negotiate'
+INFO  2024-01-06 11:22:20,311 [71   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 POST http://localhost:21021/signalr/negotiate?enc_auth_token=wNYmO41%2F48SHNstaLVXxHCCre29BZQl1NhC6NM3R3rzpXtPQxVzH6jEzA%2FQhXFN5tu6Fk7pO53uppm1mVXMZgxbyRVz26dnepi%2FFyB6axBY%2B6gq1GL%2BuRQgoiFUCjRN2p8w6LevViwKlHyWZZJZO1DGVSjAi1m2U%2Bog9pkHw9%2FQR4Nl%2FDPnoP9JYDMpZ1zxx09u6s0GZ9%2FQ5Sjk%2BL0UfcSCbl38X8he5w9UIn%2FHvxh7ysM1CiPLsoOwtbiieSRVmrmt0JjnipAn4%2FK283F8GrGwzwgehWsqefmUnM0ckMwNfOaJqxA4FdQOAkJd5W%2BXxvn0EW4DBPN18ygT5%2BVHg%2FBfrxQkJ4UKKwiuVhh2SKEoUj%2BsWMTcim5KzmTV5hgWiwaZNep8bK%2FjqBz4S%2FwGeE91KUq37jJprzeWe0QJ5CQu8i7cFzbvTf7kikmp2KOq%2BV2qEiECQkP1wf3jgQxfoYgzoufnBo1%2BZGZV5cwWl3RajG7ZvqJvB2Exhw%2BTPvD9r4rUIuwG0AOadYyQ%2BAPNCzi1tV9RzVGv1QSd1BFhkvfIb9E6AViZCYHWgR8tZ06nYq%2Fq1Bi8xJ%2B%2B3KkrpKjZPd7OWStY1E1K0PHLwqPJj6wuA41qEssUYzuwXkXD%2BxydhUwxG66qGbzH8%2FY%2FeGzdCeYUTGdHaBkQHEf0%2BvIHC1MeF0NsF%2BVk6%2F1FWYGfBoHMSteMXH4%2BGbOSqqdMrylU%2FteSoxVqMVJEAwT4H%2F7cmfoNO4sE7ZkQY6psZwnjycyCBqamGijd%2B1ATePy6IXoermR8rU0KRSSotE3t01%2BCuIJU4mggeP4maaSBdijCOldt4CrxG8BsDHJAhPm2SlQuUB3NH5Z8grxrpDLkxQQZqyhoCidsH%2B2r2xSyN5%2F1HQHef6cXb0H%2FEEF98njWABCy72%2FBvz8BezHa02GuYt28Ro8owUSHot29kOgDLaBlLI48PG8h0AYaVYqeHya0wAzj5XrIW6n5LBreomkdESYi1Tho64uKPqw6ad6rffbWYoW8leuu5t33LajuCHFG%2FB32cAA%3D%3D text/plain;charset=UTF-8 0 - 200 273 application/json 20.8183ms
+INFO  2024-01-06 11:22:20,316 [71   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/signalr?enc_auth_token=wNYmO41%2F48SHNstaLVXxHCCre29BZQl1NhC6NM3R3rzpXtPQxVzH6jEzA%2FQhXFN5tu6Fk7pO53uppm1mVXMZgxbyRVz26dnepi%2FFyB6axBY%2B6gq1GL%2BuRQgoiFUCjRN2p8w6LevViwKlHyWZZJZO1DGVSjAi1m2U%2Bog9pkHw9%2FQR4Nl%2FDPnoP9JYDMpZ1zxx09u6s0GZ9%2FQ5Sjk%2BL0UfcSCbl38X8he5w9UIn%2FHvxh7ysM1CiPLsoOwtbiieSRVmrmt0JjnipAn4%2FK283F8GrGwzwgehWsqefmUnM0ckMwNfOaJqxA4FdQOAkJd5W%2BXxvn0EW4DBPN18ygT5%2BVHg%2FBfrxQkJ4UKKwiuVhh2SKEoUj%2BsWMTcim5KzmTV5hgWiwaZNep8bK%2FjqBz4S%2FwGeE91KUq37jJprzeWe0QJ5CQu8i7cFzbvTf7kikmp2KOq%2BV2qEiECQkP1wf3jgQxfoYgzoufnBo1%2BZGZV5cwWl3RajG7ZvqJvB2Exhw%2BTPvD9r4rUIuwG0AOadYyQ%2BAPNCzi1tV9RzVGv1QSd1BFhkvfIb9E6AViZCYHWgR8tZ06nYq%2Fq1Bi8xJ%2B%2B3KkrpKjZPd7OWStY1E1K0PHLwqPJj6wuA41qEssUYzuwXkXD%2BxydhUwxG66qGbzH8%2FY%2FeGzdCeYUTGdHaBkQHEf0%2BvIHC1MeF0NsF%2BVk6%2F1FWYGfBoHMSteMXH4%2BGbOSqqdMrylU%2FteSoxVqMVJEAwT4H%2F7cmfoNO4sE7ZkQY6psZwnjycyCBqamGijd%2B1ATePy6IXoermR8rU0KRSSotE3t01%2BCuIJU4mggeP4maaSBdijCOldt4CrxG8BsDHJAhPm2SlQuUB3NH5Z8grxrpDLkxQQZqyhoCidsH%2B2r2xSyN5%2F1HQHef6cXb0H%2FEEF98njWABCy72%2FBvz8BezHa02GuYt28Ro8owUSHot29kOgDLaBlLI48PG8h0AYaVYqeHya0wAzj5XrIW6n5LBreomkdESYi1Tho64uKPqw6ad6rffbWYoW8leuu5t33LajuCHFG%2FB32cAA%3D%3D&id=aNJDHD5w1cCguaICrlqt7A - -
+INFO  2024-01-06 11:22:20,321 [71   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:20,327 [71   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint '/signalr'
+DEBUG 2024-01-06 11:22:20,344 [49   ] Abp.AspNetCore.SignalR.Hubs.AbpCommonHub - A client is connected: {"ConnectionId":"aNJDHD5w1cCguaICrlqt7A","IpAddress":"::1","TenantId":null,"UserId":1,"ConnectTime":"2024-01-06T11:22:20.3445107+03:00","Properties":{}}
+DEBUG 2024-01-06 11:22:20,345 [49   ] Abp.AspNetCore.SignalR.Hubs.AbpCommonHub - A client is registered: aNJDHD5w1cCguaICrlqt7A
+INFO  2024-01-06 11:22:23,133 [71   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Tenant/GetAll?Keyword=&SkipCount=0&MaxResultCount=10 - -
+INFO  2024-01-06 11:22:23,137 [71   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:23,142 [71   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Tenant/GetAll?Keyword=&SkipCount=0&MaxResultCount=10 - - - 204 - - 8.8498ms
+INFO  2024-01-06 11:22:23,147 [49   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/Tenant/GetAll?Keyword=&SkipCount=0&MaxResultCount=10 - -
+INFO  2024-01-06 11:22:23,151 [49   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:23,156 [49   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:22:23,162 [49   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetAll", controller = "Tenant"}. Executing controller action with signature System.Threading.Tasks.Task`1[Abp.Application.Services.Dto.PagedResultDto`1[Bwr.Exchange.MultiTenancy.Dto.TenantDto]] GetAllAsync(Bwr.Exchange.MultiTenancy.Dto.PagedTenantResultRequestDto) on controller Bwr.Exchange.MultiTenancy.TenantAppService (Bwr.Exchange.Application).
+INFO  2024-01-06 11:22:23,172 [49   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:23,183 [52   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (5ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean)], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [AbpTenants] AS [a]
+WHERE (@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))
+INFO  2024-01-06 11:22:23,191 [71   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (4ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [a].[Id], [a].[ConnectionString], [a].[CreationTime], [a].[CreatorUserId], [a].[DeleterUserId], [a].[DeletionTime], [a].[EditionId], [a].[IsActive], [a].[IsDeleted], [a].[LastModificationTime], [a].[LastModifierUserId], [a].[Name], [a].[TenancyName]
+FROM [AbpTenants] AS [a]
+WHERE (@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))
+ORDER BY [a].[Id] DESC
+OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+INFO  2024-01-06 11:22:23,199 [71   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:23,209 [59   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (3ms) [Parameters=[@p0='?' (Size = 512), @p1='?' (Size = 64), @p2='?' (Size = 128), @p3='?' (Size = 2000), @p4='?' (Size = 2000), @p5='?' (Size = 1024), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (DbType = Int32), @p9='?' (DbType = Int64), @p10='?' (Size = 256), @p11='?' (Size = 1024), @p12='?' (Size = 4000), @p13='?' (Size = 256), @p14='?' (DbType = Int32), @p15='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AbpAuditLogs] ([BrowserInfo], [ClientIpAddress], [ClientName], [CustomData], [Exception], [ExceptionMessage], [ExecutionDuration], [ExecutionTime], [ImpersonatorTenantId], [ImpersonatorUserId], [MethodName], [Parameters], [ReturnValue], [ServiceName], [TenantId], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [AbpAuditLogs]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+INFO  2024-01-06 11:22:23,216 [59   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:22:23,221 [59   ] c.Infrastructure.ControllerActionInvoker - Executed action Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application) in 54.2948ms
+INFO  2024-01-06 11:22:23,224 [59   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:22:23,230 [59   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/api/services/app/Tenant/GetAll?Keyword=&SkipCount=0&MaxResultCount=10 - - - 200 313 application/json;+charset=utf-8 82.4967ms
+INFO  2024-01-06 11:22:24,861 [56   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:24,872 [56   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (3ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:22:29,805 [56   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Tenant/GetAll?IsActive=true - -
+INFO  2024-01-06 11:22:29,809 [56   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:29,814 [56   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Tenant/GetAll?IsActive=true - - - 204 - - 9.2904ms
+INFO  2024-01-06 11:22:29,817 [54   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/Tenant/GetAll?IsActive=true - -
+INFO  2024-01-06 11:22:29,821 [54   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:29,826 [54   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:22:29,833 [54   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetAll", controller = "Tenant"}. Executing controller action with signature System.Threading.Tasks.Task`1[Abp.Application.Services.Dto.PagedResultDto`1[Bwr.Exchange.MultiTenancy.Dto.TenantDto]] GetAllAsync(Bwr.Exchange.MultiTenancy.Dto.PagedTenantResultRequestDto) on controller Bwr.Exchange.MultiTenancy.TenantAppService (Bwr.Exchange.Application).
+INFO  2024-01-06 11:22:29,840 [54   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:29,852 [56   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (5ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__input_IsActive_0='?' (DbType = Boolean)], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [AbpTenants] AS [a]
+WHERE ((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))) AND ([a].[IsActive] = @__input_IsActive_0)
+INFO  2024-01-06 11:22:29,869 [59   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (7ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__input_IsActive_0='?' (DbType = Boolean), @__p_1='?' (DbType = Int32), @__p_2='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [a].[Id], [a].[ConnectionString], [a].[CreationTime], [a].[CreatorUserId], [a].[DeleterUserId], [a].[DeletionTime], [a].[EditionId], [a].[IsActive], [a].[IsDeleted], [a].[LastModificationTime], [a].[LastModifierUserId], [a].[Name], [a].[TenancyName]
+FROM [AbpTenants] AS [a]
+WHERE ((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))) AND ([a].[IsActive] = @__input_IsActive_0)
+ORDER BY [a].[Id] DESC
+OFFSET @__p_1 ROWS FETCH NEXT @__p_2 ROWS ONLY
+INFO  2024-01-06 11:22:29,881 [59   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:29,894 [71   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 512), @p1='?' (Size = 64), @p2='?' (Size = 128), @p3='?' (Size = 2000), @p4='?' (Size = 2000), @p5='?' (Size = 1024), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (DbType = Int32), @p9='?' (DbType = Int64), @p10='?' (Size = 256), @p11='?' (Size = 1024), @p12='?' (Size = 4000), @p13='?' (Size = 256), @p14='?' (DbType = Int32), @p15='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AbpAuditLogs] ([BrowserInfo], [ClientIpAddress], [ClientName], [CustomData], [Exception], [ExceptionMessage], [ExecutionDuration], [ExecutionTime], [ImpersonatorTenantId], [ImpersonatorUserId], [MethodName], [Parameters], [ReturnValue], [ServiceName], [TenantId], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [AbpAuditLogs]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+INFO  2024-01-06 11:22:29,903 [71   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:22:29,908 [56   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:29,915 [71   ] c.Infrastructure.ControllerActionInvoker - Executed action Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application) in 76.0425ms
+INFO  2024-01-06 11:22:29,918 [71   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:22:29,921 [56   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (2ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:22:29,924 [71   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/api/services/app/Tenant/GetAll?IsActive=true - - - 200 313 application/json;+charset=utf-8 107.7687ms
+INFO  2024-01-06 11:22:29,929 [56   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/LinkTenantCompany/GetByFirstTenantId?firstTenantId=1 - -
+INFO  2024-01-06 11:22:29,934 [56   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:29,938 [56   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/LinkTenantCompany/GetByFirstTenantId?firstTenantId=1 - - - 204 - - 9.3076ms
+INFO  2024-01-06 11:22:29,942 [71   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/LinkTenantCompany/GetByFirstTenantId?firstTenantId=1 - -
+INFO  2024-01-06 11:22:29,947 [71   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:29,952 [71   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Bwr.Exchange.LinkTenantsCompanies.LinkTenantCompanyAppService.GetByFirstTenantId (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:22:29,960 [71   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetByFirstTenantId", controller = "LinkTenantCompany"}. Executing controller action with signature Bwr.Exchange.LinkTenantsCompanies.Dto.LinkTenantCompanyDto GetByFirstTenantId(Int32) on controller Bwr.Exchange.LinkTenantsCompanies.LinkTenantCompanyAppService (Bwr.Exchange.Application).
+INFO  2024-01-06 11:22:29,971 [71   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:29,980 [71   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (3ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__ef_filter__p_1='?' (DbType = Boolean), @__id_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [l].[Id], [l].[CompanyId], [l].[CreationTime], [l].[CreatorUserId], [l].[DeleterUserId], [l].[DeletionTime], [l].[FirstTenantId], [l].[IsDeleted], [l].[LastModificationTime], [l].[LastModifierUserId], [l].[SecondTenantId], [l].[TenantId]
+FROM [LinkTenantCompanies] AS [l]
+WHERE (((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([l].[IsDeleted] = CAST(0 AS bit))) AND ((@__ef_filter__p_1 = CAST(1 AS bit)) OR ([l].[TenantId] IS NULL))) AND ([l].[FirstTenantId] = @__id_0)
+INFO  2024-01-06 11:22:29,988 [71   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:30,004 [54   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (4ms) [Parameters=[@p0='?' (Size = 512), @p1='?' (Size = 64), @p2='?' (Size = 128), @p3='?' (Size = 2000), @p4='?' (Size = 2000), @p5='?' (Size = 1024), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (DbType = Int32), @p9='?' (DbType = Int64), @p10='?' (Size = 256), @p11='?' (Size = 1024), @p12='?' (Size = 4000), @p13='?' (Size = 256), @p14='?' (DbType = Int32), @p15='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AbpAuditLogs] ([BrowserInfo], [ClientIpAddress], [ClientName], [CustomData], [Exception], [ExceptionMessage], [ExecutionDuration], [ExecutionTime], [ImpersonatorTenantId], [ImpersonatorUserId], [MethodName], [Parameters], [ReturnValue], [ServiceName], [TenantId], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [AbpAuditLogs]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+INFO  2024-01-06 11:22:30,012 [54   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:22:30,017 [54   ] c.Infrastructure.ControllerActionInvoker - Executed action Bwr.Exchange.LinkTenantsCompanies.LinkTenantCompanyAppService.GetByFirstTenantId (Bwr.Exchange.Application) in 53.664ms
+INFO  2024-01-06 11:22:30,020 [54   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Bwr.Exchange.LinkTenantsCompanies.LinkTenantCompanyAppService.GetByFirstTenantId (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:22:30,025 [54   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/api/services/app/LinkTenantCompany/GetByFirstTenantId?firstTenantId=1 - - - 200 101 application/json;+charset=utf-8 82.9462ms
+INFO  2024-01-06 11:22:32,725 [54   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Tenant/GetAll?Keyword=&SkipCount=0&MaxResultCount=10 - -
+INFO  2024-01-06 11:22:32,730 [54   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:32,735 [54   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Tenant/GetAll?Keyword=&SkipCount=0&MaxResultCount=10 - - - 204 - - 10.4541ms
+INFO  2024-01-06 11:22:32,740 [59   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/Tenant/GetAll?Keyword=&SkipCount=0&MaxResultCount=10 - -
+INFO  2024-01-06 11:22:32,744 [59   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:32,752 [59   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:22:32,761 [59   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetAll", controller = "Tenant"}. Executing controller action with signature System.Threading.Tasks.Task`1[Abp.Application.Services.Dto.PagedResultDto`1[Bwr.Exchange.MultiTenancy.Dto.TenantDto]] GetAllAsync(Bwr.Exchange.MultiTenancy.Dto.PagedTenantResultRequestDto) on controller Bwr.Exchange.MultiTenancy.TenantAppService (Bwr.Exchange.Application).
+INFO  2024-01-06 11:22:32,772 [59   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:32,784 [56   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (2ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean)], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [AbpTenants] AS [a]
+WHERE (@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))
+INFO  2024-01-06 11:22:32,795 [71   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (2ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [a].[Id], [a].[ConnectionString], [a].[CreationTime], [a].[CreatorUserId], [a].[DeleterUserId], [a].[DeletionTime], [a].[EditionId], [a].[IsActive], [a].[IsDeleted], [a].[LastModificationTime], [a].[LastModifierUserId], [a].[Name], [a].[TenancyName]
+FROM [AbpTenants] AS [a]
+WHERE (@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))
+ORDER BY [a].[Id] DESC
+OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+INFO  2024-01-06 11:22:32,804 [71   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:32,819 [56   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (3ms) [Parameters=[@p0='?' (Size = 512), @p1='?' (Size = 64), @p2='?' (Size = 128), @p3='?' (Size = 2000), @p4='?' (Size = 2000), @p5='?' (Size = 1024), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (DbType = Int32), @p9='?' (DbType = Int64), @p10='?' (Size = 256), @p11='?' (Size = 1024), @p12='?' (Size = 4000), @p13='?' (Size = 256), @p14='?' (DbType = Int32), @p15='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AbpAuditLogs] ([BrowserInfo], [ClientIpAddress], [ClientName], [CustomData], [Exception], [ExceptionMessage], [ExecutionDuration], [ExecutionTime], [ImpersonatorTenantId], [ImpersonatorUserId], [MethodName], [Parameters], [ReturnValue], [ServiceName], [TenantId], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [AbpAuditLogs]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+INFO  2024-01-06 11:22:32,825 [56   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:22:32,830 [56   ] c.Infrastructure.ControllerActionInvoker - Executed action Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application) in 65.0815ms
+INFO  2024-01-06 11:22:32,833 [56   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:22:32,837 [56   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/api/services/app/Tenant/GetAll?Keyword=&SkipCount=0&MaxResultCount=10 - - - 200 313 application/json;+charset=utf-8 100.7613ms
+INFO  2024-01-06 11:22:34,956 [56   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:34,963 [56   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:22:39,982 [56   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:39,993 [56   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:22:45,016 [71   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:45,025 [71   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:22:50,043 [71   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:50,051 [71   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:22:53,509 [56   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Tenant/GetAll?IsActive=true - -
+INFO  2024-01-06 11:22:53,514 [56   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:53,520 [56   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Tenant/GetAll?IsActive=true - - - 204 - - 10.5633ms
+INFO  2024-01-06 11:22:53,524 [59   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/Tenant/GetAll?IsActive=true - -
+INFO  2024-01-06 11:22:53,528 [59   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:53,533 [59   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:22:53,540 [59   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetAll", controller = "Tenant"}. Executing controller action with signature System.Threading.Tasks.Task`1[Abp.Application.Services.Dto.PagedResultDto`1[Bwr.Exchange.MultiTenancy.Dto.TenantDto]] GetAllAsync(Bwr.Exchange.MultiTenancy.Dto.PagedTenantResultRequestDto) on controller Bwr.Exchange.MultiTenancy.TenantAppService (Bwr.Exchange.Application).
+INFO  2024-01-06 11:22:53,549 [59   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:53,564 [49   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (7ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__input_IsActive_0='?' (DbType = Boolean)], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [AbpTenants] AS [a]
+WHERE ((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))) AND ([a].[IsActive] = @__input_IsActive_0)
+INFO  2024-01-06 11:22:53,576 [49   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (2ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__input_IsActive_0='?' (DbType = Boolean), @__p_1='?' (DbType = Int32), @__p_2='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [a].[Id], [a].[ConnectionString], [a].[CreationTime], [a].[CreatorUserId], [a].[DeleterUserId], [a].[DeletionTime], [a].[EditionId], [a].[IsActive], [a].[IsDeleted], [a].[LastModificationTime], [a].[LastModifierUserId], [a].[Name], [a].[TenancyName]
+FROM [AbpTenants] AS [a]
+WHERE ((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))) AND ([a].[IsActive] = @__input_IsActive_0)
+ORDER BY [a].[Id] DESC
+OFFSET @__p_1 ROWS FETCH NEXT @__p_2 ROWS ONLY
+INFO  2024-01-06 11:22:53,587 [49   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:53,597 [56   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 512), @p1='?' (Size = 64), @p2='?' (Size = 128), @p3='?' (Size = 2000), @p4='?' (Size = 2000), @p5='?' (Size = 1024), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (DbType = Int32), @p9='?' (DbType = Int64), @p10='?' (Size = 256), @p11='?' (Size = 1024), @p12='?' (Size = 4000), @p13='?' (Size = 256), @p14='?' (DbType = Int32), @p15='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AbpAuditLogs] ([BrowserInfo], [ClientIpAddress], [ClientName], [CustomData], [Exception], [ExceptionMessage], [ExecutionDuration], [ExecutionTime], [ImpersonatorTenantId], [ImpersonatorUserId], [MethodName], [Parameters], [ReturnValue], [ServiceName], [TenantId], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [AbpAuditLogs]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+INFO  2024-01-06 11:22:53,604 [56   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:22:53,608 [56   ] c.Infrastructure.ControllerActionInvoker - Executed action Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application) in 65.1122ms
+INFO  2024-01-06 11:22:53,614 [56   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:22:53,616 [56   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/api/services/app/Tenant/GetAll?IsActive=true - - - 200 313 application/json;+charset=utf-8 95.7681ms
+INFO  2024-01-06 11:22:53,623 [56   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/LinkTenantCompany/GetByFirstTenantId?firstTenantId=5 - -
+INFO  2024-01-06 11:22:53,629 [56   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:53,633 [56   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/LinkTenantCompany/GetByFirstTenantId?firstTenantId=5 - - - 204 - - 9.2239ms
+INFO  2024-01-06 11:22:53,637 [73   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/LinkTenantCompany/GetByFirstTenantId?firstTenantId=5 - -
+INFO  2024-01-06 11:22:53,642 [73   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:53,647 [73   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Bwr.Exchange.LinkTenantsCompanies.LinkTenantCompanyAppService.GetByFirstTenantId (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:22:53,656 [73   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetByFirstTenantId", controller = "LinkTenantCompany"}. Executing controller action with signature Bwr.Exchange.LinkTenantsCompanies.Dto.LinkTenantCompanyDto GetByFirstTenantId(Int32) on controller Bwr.Exchange.LinkTenantsCompanies.LinkTenantCompanyAppService (Bwr.Exchange.Application).
+INFO  2024-01-06 11:22:53,667 [73   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:53,673 [73   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__ef_filter__p_1='?' (DbType = Boolean), @__id_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [l].[Id], [l].[CompanyId], [l].[CreationTime], [l].[CreatorUserId], [l].[DeleterUserId], [l].[DeletionTime], [l].[FirstTenantId], [l].[IsDeleted], [l].[LastModificationTime], [l].[LastModifierUserId], [l].[SecondTenantId], [l].[TenantId]
+FROM [LinkTenantCompanies] AS [l]
+WHERE (((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([l].[IsDeleted] = CAST(0 AS bit))) AND ((@__ef_filter__p_1 = CAST(1 AS bit)) OR ([l].[TenantId] IS NULL))) AND ([l].[FirstTenantId] = @__id_0)
+INFO  2024-01-06 11:22:53,746 [73   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:53,762 [59   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (3ms) [Parameters=[@p0='?' (Size = 512), @p1='?' (Size = 64), @p2='?' (Size = 128), @p3='?' (Size = 2000), @p4='?' (Size = 2000), @p5='?' (Size = 1024), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (DbType = Int32), @p9='?' (DbType = Int64), @p10='?' (Size = 256), @p11='?' (Size = 1024), @p12='?' (Size = 4000), @p13='?' (Size = 256), @p14='?' (DbType = Int32), @p15='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AbpAuditLogs] ([BrowserInfo], [ClientIpAddress], [ClientName], [CustomData], [Exception], [ExceptionMessage], [ExecutionDuration], [ExecutionTime], [ImpersonatorTenantId], [ImpersonatorUserId], [MethodName], [Parameters], [ReturnValue], [ServiceName], [TenantId], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [AbpAuditLogs]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+INFO  2024-01-06 11:22:53,769 [59   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:22:53,779 [59   ] c.Infrastructure.ControllerActionInvoker - Executed action Bwr.Exchange.LinkTenantsCompanies.LinkTenantCompanyAppService.GetByFirstTenantId (Bwr.Exchange.Application) in 117.9458ms
+INFO  2024-01-06 11:22:53,782 [59   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Bwr.Exchange.LinkTenantsCompanies.LinkTenantCompanyAppService.GetByFirstTenantId (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:22:53,785 [59   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/api/services/app/LinkTenantCompany/GetByFirstTenantId?firstTenantId=5 - - - 200 156 application/json;+charset=utf-8 149.8426ms
+INFO  2024-01-06 11:22:53,919 [59   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Company/GetAllCompaniesOfTenant?tenantId=6 - -
+INFO  2024-01-06 11:22:53,924 [59   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:53,930 [59   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Company/GetAllCompaniesOfTenant?tenantId=6 - - - 204 - - 7.7695ms
+INFO  2024-01-06 11:22:53,934 [49   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Company/GetAllCompaniesOfTenant?tenantId=6 - -
+INFO  2024-01-06 11:22:53,938 [59   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/Company/GetAllCompaniesOfTenant?tenantId=6 - -
+INFO  2024-01-06 11:22:53,942 [49   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:53,947 [59   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:53,951 [49   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Company/GetAllCompaniesOfTenant?tenantId=6 - - - 204 - - 15.5538ms
+INFO  2024-01-06 11:22:53,955 [53   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/Company/GetAllCompaniesOfTenant?tenantId=6 - -
+INFO  2024-01-06 11:22:53,960 [59   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Bwr.Exchange.Settings.Companies.CompanyAppService.GetAllCompaniesOfTenant (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:22:53,965 [53   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:22:53,970 [53   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Bwr.Exchange.Settings.Companies.CompanyAppService.GetAllCompaniesOfTenant (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:22:53,978 [59   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetAllCompaniesOfTenant", controller = "Company"}. Executing controller action with signature System.Collections.Generic.List`1[Bwr.Exchange.Settings.Companies.Dto.CompanyDto] GetAllCompaniesOfTenant(System.Nullable`1[System.Int32]) on controller Bwr.Exchange.Settings.Companies.CompanyAppService (Bwr.Exchange.Application).
+INFO  2024-01-06 11:22:53,982 [53   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetAllCompaniesOfTenant", controller = "Company"}. Executing controller action with signature System.Collections.Generic.List`1[Bwr.Exchange.Settings.Companies.Dto.CompanyDto] GetAllCompaniesOfTenant(System.Nullable`1[System.Int32]) on controller Bwr.Exchange.Settings.Companies.CompanyAppService (Bwr.Exchange.Application).
+INFO  2024-01-06 11:22:53,992 [59   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:53,996 [53   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:54,005 [59   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (5ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__ef_filter__p_1='?' (DbType = Boolean), @__ef_filter__CurrentTenantId_2='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [c].[Id], [c].[Address], [c].[CreationTime], [c].[CreatorUserId], [c].[DeleterUserId], [c].[DeletionTime], [c].[IsDeleted], [c].[LastModificationTime], [c].[LastModifierUserId], [c].[Name], [c].[Phone], [c].[TenantCompanyId], [c].[TenantId]
+FROM [Companies] AS [c]
+WHERE ((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([c].[IsDeleted] = CAST(0 AS bit))) AND ((@__ef_filter__p_1 = CAST(1 AS bit)) OR ([c].[TenantId] = @__ef_filter__CurrentTenantId_2))
+INFO  2024-01-06 11:22:54,010 [53   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (6ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__ef_filter__p_1='?' (DbType = Boolean), @__ef_filter__CurrentTenantId_2='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [c].[Id], [c].[Address], [c].[CreationTime], [c].[CreatorUserId], [c].[DeleterUserId], [c].[DeletionTime], [c].[IsDeleted], [c].[LastModificationTime], [c].[LastModifierUserId], [c].[Name], [c].[Phone], [c].[TenantCompanyId], [c].[TenantId]
+FROM [Companies] AS [c]
+WHERE ((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([c].[IsDeleted] = CAST(0 AS bit))) AND ((@__ef_filter__p_1 = CAST(1 AS bit)) OR ([c].[TenantId] = @__ef_filter__CurrentTenantId_2))
+INFO  2024-01-06 11:22:54,017 [53   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:54,020 [59   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:54,049 [73   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (7ms) [Parameters=[@p0='?' (Size = 512), @p1='?' (Size = 64), @p2='?' (Size = 128), @p3='?' (Size = 2000), @p4='?' (Size = 2000), @p5='?' (Size = 1024), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (DbType = Int32), @p9='?' (DbType = Int64), @p10='?' (Size = 256), @p11='?' (Size = 1024), @p12='?' (Size = 4000), @p13='?' (Size = 256), @p14='?' (DbType = Int32), @p15='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AbpAuditLogs] ([BrowserInfo], [ClientIpAddress], [ClientName], [CustomData], [Exception], [ExceptionMessage], [ExecutionDuration], [ExecutionTime], [ImpersonatorTenantId], [ImpersonatorUserId], [MethodName], [Parameters], [ReturnValue], [ServiceName], [TenantId], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [AbpAuditLogs]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+INFO  2024-01-06 11:22:54,054 [56   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (10ms) [Parameters=[@p0='?' (Size = 512), @p1='?' (Size = 64), @p2='?' (Size = 128), @p3='?' (Size = 2000), @p4='?' (Size = 2000), @p5='?' (Size = 1024), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (DbType = Int32), @p9='?' (DbType = Int64), @p10='?' (Size = 256), @p11='?' (Size = 1024), @p12='?' (Size = 4000), @p13='?' (Size = 256), @p14='?' (DbType = Int32), @p15='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AbpAuditLogs] ([BrowserInfo], [ClientIpAddress], [ClientName], [CustomData], [Exception], [ExceptionMessage], [ExecutionDuration], [ExecutionTime], [ImpersonatorTenantId], [ImpersonatorUserId], [MethodName], [Parameters], [ReturnValue], [ServiceName], [TenantId], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [AbpAuditLogs]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+INFO  2024-01-06 11:22:54,064 [73   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:22:54,068 [56   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:22:54,072 [73   ] c.Infrastructure.ControllerActionInvoker - Executed action Bwr.Exchange.Settings.Companies.CompanyAppService.GetAllCompaniesOfTenant (Bwr.Exchange.Application) in 86.5569ms
+INFO  2024-01-06 11:22:54,075 [56   ] c.Infrastructure.ControllerActionInvoker - Executed action Bwr.Exchange.Settings.Companies.CompanyAppService.GetAllCompaniesOfTenant (Bwr.Exchange.Application) in 91.275ms
+INFO  2024-01-06 11:22:54,077 [73   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Bwr.Exchange.Settings.Companies.CompanyAppService.GetAllCompaniesOfTenant (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:22:54,080 [56   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Bwr.Exchange.Settings.Companies.CompanyAppService.GetAllCompaniesOfTenant (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:22:54,083 [73   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/api/services/app/Company/GetAllCompaniesOfTenant?tenantId=6 - - - 200 329 application/json;+charset=utf-8 129.1854ms
+INFO  2024-01-06 11:22:54,087 [56   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/api/services/app/Company/GetAllCompaniesOfTenant?tenantId=6 - - - 200 329 application/json;+charset=utf-8 151.9686ms
+INFO  2024-01-06 11:22:55,074 [56   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:22:55,082 [56   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:23:00,099 [74   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:00,106 [74   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:23:05,126 [71   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:05,136 [71   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:23:10,157 [73   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:10,169 [73   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (5ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:23:14,890 [74   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Tenant/GetAll?Keyword=&SkipCount=0&MaxResultCount=10 - -
+INFO  2024-01-06 11:23:14,894 [74   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:23:14,899 [74   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Tenant/GetAll?Keyword=&SkipCount=0&MaxResultCount=10 - - - 204 - - 8.6182ms
+INFO  2024-01-06 11:23:14,902 [71   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/Tenant/GetAll?Keyword=&SkipCount=0&MaxResultCount=10 - -
+INFO  2024-01-06 11:23:14,908 [71   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:23:14,915 [71   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:23:14,924 [71   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetAll", controller = "Tenant"}. Executing controller action with signature System.Threading.Tasks.Task`1[Abp.Application.Services.Dto.PagedResultDto`1[Bwr.Exchange.MultiTenancy.Dto.TenantDto]] GetAllAsync(Bwr.Exchange.MultiTenancy.Dto.PagedTenantResultRequestDto) on controller Bwr.Exchange.MultiTenancy.TenantAppService (Bwr.Exchange.Application).
+INFO  2024-01-06 11:23:14,935 [71   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:14,960 [56   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (11ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean)], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [AbpTenants] AS [a]
+WHERE (@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))
+INFO  2024-01-06 11:23:14,976 [56   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (4ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [a].[Id], [a].[ConnectionString], [a].[CreationTime], [a].[CreatorUserId], [a].[DeleterUserId], [a].[DeletionTime], [a].[EditionId], [a].[IsActive], [a].[IsDeleted], [a].[LastModificationTime], [a].[LastModifierUserId], [a].[Name], [a].[TenancyName]
+FROM [AbpTenants] AS [a]
+WHERE (@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))
+ORDER BY [a].[Id] DESC
+OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+INFO  2024-01-06 11:23:14,986 [56   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:15,000 [73   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (4ms) [Parameters=[@p0='?' (Size = 512), @p1='?' (Size = 64), @p2='?' (Size = 128), @p3='?' (Size = 2000), @p4='?' (Size = 2000), @p5='?' (Size = 1024), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (DbType = Int32), @p9='?' (DbType = Int64), @p10='?' (Size = 256), @p11='?' (Size = 1024), @p12='?' (Size = 4000), @p13='?' (Size = 256), @p14='?' (DbType = Int32), @p15='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AbpAuditLogs] ([BrowserInfo], [ClientIpAddress], [ClientName], [CustomData], [Exception], [ExceptionMessage], [ExecutionDuration], [ExecutionTime], [ImpersonatorTenantId], [ImpersonatorUserId], [MethodName], [Parameters], [ReturnValue], [ServiceName], [TenantId], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [AbpAuditLogs]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+INFO  2024-01-06 11:23:15,007 [73   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:23:15,013 [73   ] c.Infrastructure.ControllerActionInvoker - Executed action Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application) in 85.128ms
+INFO  2024-01-06 11:23:15,016 [73   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:23:15,020 [73   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/api/services/app/Tenant/GetAll?Keyword=&SkipCount=0&MaxResultCount=10 - - - 200 313 application/json;+charset=utf-8 119.8815ms
+INFO  2024-01-06 11:23:15,186 [73   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:15,197 [73   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (4ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:23:18,472 [75   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Tenant/GetAll?IsActive=true - -
+INFO  2024-01-06 11:23:18,477 [75   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:23:18,481 [75   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Tenant/GetAll?IsActive=true - - - 204 - - 9.0771ms
+INFO  2024-01-06 11:23:18,485 [76   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/Tenant/GetAll?IsActive=true - -
+INFO  2024-01-06 11:23:18,489 [76   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:23:18,494 [76   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:23:18,502 [76   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetAll", controller = "Tenant"}. Executing controller action with signature System.Threading.Tasks.Task`1[Abp.Application.Services.Dto.PagedResultDto`1[Bwr.Exchange.MultiTenancy.Dto.TenantDto]] GetAllAsync(Bwr.Exchange.MultiTenancy.Dto.PagedTenantResultRequestDto) on controller Bwr.Exchange.MultiTenancy.TenantAppService (Bwr.Exchange.Application).
+INFO  2024-01-06 11:23:18,511 [76   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:18,525 [75   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (7ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__input_IsActive_0='?' (DbType = Boolean)], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [AbpTenants] AS [a]
+WHERE ((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))) AND ([a].[IsActive] = @__input_IsActive_0)
+INFO  2024-01-06 11:23:18,536 [75   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (5ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__input_IsActive_0='?' (DbType = Boolean), @__p_1='?' (DbType = Int32), @__p_2='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [a].[Id], [a].[ConnectionString], [a].[CreationTime], [a].[CreatorUserId], [a].[DeleterUserId], [a].[DeletionTime], [a].[EditionId], [a].[IsActive], [a].[IsDeleted], [a].[LastModificationTime], [a].[LastModifierUserId], [a].[Name], [a].[TenancyName]
+FROM [AbpTenants] AS [a]
+WHERE ((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))) AND ([a].[IsActive] = @__input_IsActive_0)
+ORDER BY [a].[Id] DESC
+OFFSET @__p_1 ROWS FETCH NEXT @__p_2 ROWS ONLY
+INFO  2024-01-06 11:23:18,545 [75   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:18,556 [74   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 512), @p1='?' (Size = 64), @p2='?' (Size = 128), @p3='?' (Size = 2000), @p4='?' (Size = 2000), @p5='?' (Size = 1024), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (DbType = Int32), @p9='?' (DbType = Int64), @p10='?' (Size = 256), @p11='?' (Size = 1024), @p12='?' (Size = 4000), @p13='?' (Size = 256), @p14='?' (DbType = Int32), @p15='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AbpAuditLogs] ([BrowserInfo], [ClientIpAddress], [ClientName], [CustomData], [Exception], [ExceptionMessage], [ExecutionDuration], [ExecutionTime], [ImpersonatorTenantId], [ImpersonatorUserId], [MethodName], [Parameters], [ReturnValue], [ServiceName], [TenantId], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [AbpAuditLogs]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+INFO  2024-01-06 11:23:18,563 [74   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:23:18,567 [74   ] c.Infrastructure.ControllerActionInvoker - Executed action Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application) in 62.4863ms
+INFO  2024-01-06 11:23:18,570 [74   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:23:18,573 [74   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/api/services/app/Tenant/GetAll?IsActive=true - - - 200 313 application/json;+charset=utf-8 89.3022ms
+INFO  2024-01-06 11:23:18,583 [74   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/LinkTenantCompany/GetByFirstTenantId?firstTenantId=6 - -
+INFO  2024-01-06 11:23:18,588 [74   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:23:18,592 [74   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/LinkTenantCompany/GetByFirstTenantId?firstTenantId=6 - - - 204 - - 8.4932ms
+INFO  2024-01-06 11:23:18,597 [76   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/LinkTenantCompany/GetByFirstTenantId?firstTenantId=6 - -
+INFO  2024-01-06 11:23:18,601 [76   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:23:18,607 [76   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Bwr.Exchange.LinkTenantsCompanies.LinkTenantCompanyAppService.GetByFirstTenantId (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:23:18,616 [76   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetByFirstTenantId", controller = "LinkTenantCompany"}. Executing controller action with signature Bwr.Exchange.LinkTenantsCompanies.Dto.LinkTenantCompanyDto GetByFirstTenantId(Int32) on controller Bwr.Exchange.LinkTenantsCompanies.LinkTenantCompanyAppService (Bwr.Exchange.Application).
+INFO  2024-01-06 11:23:18,625 [76   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:18,638 [76   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (5ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__ef_filter__p_1='?' (DbType = Boolean), @__id_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [l].[Id], [l].[CompanyId], [l].[CreationTime], [l].[CreatorUserId], [l].[DeleterUserId], [l].[DeletionTime], [l].[FirstTenantId], [l].[IsDeleted], [l].[LastModificationTime], [l].[LastModifierUserId], [l].[SecondTenantId], [l].[TenantId]
+FROM [LinkTenantCompanies] AS [l]
+WHERE (((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([l].[IsDeleted] = CAST(0 AS bit))) AND ((@__ef_filter__p_1 = CAST(1 AS bit)) OR ([l].[TenantId] IS NULL))) AND ([l].[FirstTenantId] = @__id_0)
+INFO  2024-01-06 11:23:18,648 [76   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:18,676 [75   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (5ms) [Parameters=[@p0='?' (Size = 512), @p1='?' (Size = 64), @p2='?' (Size = 128), @p3='?' (Size = 2000), @p4='?' (Size = 2000), @p5='?' (Size = 1024), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (DbType = Int32), @p9='?' (DbType = Int64), @p10='?' (Size = 256), @p11='?' (Size = 1024), @p12='?' (Size = 4000), @p13='?' (Size = 256), @p14='?' (DbType = Int32), @p15='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AbpAuditLogs] ([BrowserInfo], [ClientIpAddress], [ClientName], [CustomData], [Exception], [ExceptionMessage], [ExecutionDuration], [ExecutionTime], [ImpersonatorTenantId], [ImpersonatorUserId], [MethodName], [Parameters], [ReturnValue], [ServiceName], [TenantId], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [AbpAuditLogs]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+INFO  2024-01-06 11:23:18,682 [75   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:23:18,686 [75   ] c.Infrastructure.ControllerActionInvoker - Executed action Bwr.Exchange.LinkTenantsCompanies.LinkTenantCompanyAppService.GetByFirstTenantId (Bwr.Exchange.Application) in 68.0111ms
+INFO  2024-01-06 11:23:18,689 [75   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Bwr.Exchange.LinkTenantsCompanies.LinkTenantCompanyAppService.GetByFirstTenantId (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:23:18,694 [75   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/api/services/app/LinkTenantCompany/GetByFirstTenantId?firstTenantId=6 - - - 200 101 application/json;+charset=utf-8 96.9002ms
+INFO  2024-01-06 11:23:20,208 [77   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:20,212 [77   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:23:22,563 [75   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Company/GetAllCompaniesOfTenant?tenantId=5 - -
+INFO  2024-01-06 11:23:22,569 [75   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:23:22,575 [75   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Company/GetAllCompaniesOfTenant?tenantId=5 - - - 204 - - 10.5760ms
+INFO  2024-01-06 11:23:22,580 [77   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/Company/GetAllCompaniesOfTenant?tenantId=5 - -
+INFO  2024-01-06 11:23:22,588 [77   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:23:22,594 [77   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Bwr.Exchange.Settings.Companies.CompanyAppService.GetAllCompaniesOfTenant (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:23:22,604 [77   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetAllCompaniesOfTenant", controller = "Company"}. Executing controller action with signature System.Collections.Generic.List`1[Bwr.Exchange.Settings.Companies.Dto.CompanyDto] GetAllCompaniesOfTenant(System.Nullable`1[System.Int32]) on controller Bwr.Exchange.Settings.Companies.CompanyAppService (Bwr.Exchange.Application).
+INFO  2024-01-06 11:23:22,616 [77   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:22,632 [77   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (4ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__ef_filter__p_1='?' (DbType = Boolean), @__ef_filter__CurrentTenantId_2='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [c].[Id], [c].[Address], [c].[CreationTime], [c].[CreatorUserId], [c].[DeleterUserId], [c].[DeletionTime], [c].[IsDeleted], [c].[LastModificationTime], [c].[LastModifierUserId], [c].[Name], [c].[Phone], [c].[TenantCompanyId], [c].[TenantId]
+FROM [Companies] AS [c]
+WHERE ((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([c].[IsDeleted] = CAST(0 AS bit))) AND ((@__ef_filter__p_1 = CAST(1 AS bit)) OR ([c].[TenantId] = @__ef_filter__CurrentTenantId_2))
+INFO  2024-01-06 11:23:22,641 [77   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:22,659 [77   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (2ms) [Parameters=[@p0='?' (Size = 512), @p1='?' (Size = 64), @p2='?' (Size = 128), @p3='?' (Size = 2000), @p4='?' (Size = 2000), @p5='?' (Size = 1024), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (DbType = Int32), @p9='?' (DbType = Int64), @p10='?' (Size = 256), @p11='?' (Size = 1024), @p12='?' (Size = 4000), @p13='?' (Size = 256), @p14='?' (DbType = Int32), @p15='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AbpAuditLogs] ([BrowserInfo], [ClientIpAddress], [ClientName], [CustomData], [Exception], [ExceptionMessage], [ExecutionDuration], [ExecutionTime], [ImpersonatorTenantId], [ImpersonatorUserId], [MethodName], [Parameters], [ReturnValue], [ServiceName], [TenantId], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [AbpAuditLogs]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+INFO  2024-01-06 11:23:22,666 [77   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:23:22,670 [77   ] c.Infrastructure.ControllerActionInvoker - Executed action Bwr.Exchange.Settings.Companies.CompanyAppService.GetAllCompaniesOfTenant (Bwr.Exchange.Application) in 63.3479ms
+INFO  2024-01-06 11:23:22,673 [77   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Bwr.Exchange.Settings.Companies.CompanyAppService.GetAllCompaniesOfTenant (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:23:22,677 [77   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/api/services/app/Company/GetAllCompaniesOfTenant?tenantId=5 - - - 200 99 application/json;+charset=utf-8 97.9809ms
+INFO  2024-01-06 11:23:25,232 [75   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:25,241 [75   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:23:30,255 [75   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:30,264 [75   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:23:35,278 [75   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:35,286 [75   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:23:40,308 [77   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:40,316 [77   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:23:41,894 [75   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Tenant/GetAll?Keyword=&SkipCount=0&MaxResultCount=10 - -
+INFO  2024-01-06 11:23:41,898 [75   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:23:41,903 [75   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Tenant/GetAll?Keyword=&SkipCount=0&MaxResultCount=10 - - - 204 - - 8.2378ms
+INFO  2024-01-06 11:23:41,910 [56   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/Tenant/GetAll?Keyword=&SkipCount=0&MaxResultCount=10 - -
+INFO  2024-01-06 11:23:41,916 [56   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:23:41,924 [56   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:23:41,935 [56   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetAll", controller = "Tenant"}. Executing controller action with signature System.Threading.Tasks.Task`1[Abp.Application.Services.Dto.PagedResultDto`1[Bwr.Exchange.MultiTenancy.Dto.TenantDto]] GetAllAsync(Bwr.Exchange.MultiTenancy.Dto.PagedTenantResultRequestDto) on controller Bwr.Exchange.MultiTenancy.TenantAppService (Bwr.Exchange.Application).
+INFO  2024-01-06 11:23:41,947 [56   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:41,959 [75   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (2ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean)], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [AbpTenants] AS [a]
+WHERE (@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))
+INFO  2024-01-06 11:23:41,972 [77   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (2ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [a].[Id], [a].[ConnectionString], [a].[CreationTime], [a].[CreatorUserId], [a].[DeleterUserId], [a].[DeletionTime], [a].[EditionId], [a].[IsActive], [a].[IsDeleted], [a].[LastModificationTime], [a].[LastModifierUserId], [a].[Name], [a].[TenancyName]
+FROM [AbpTenants] AS [a]
+WHERE (@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))
+ORDER BY [a].[Id] DESC
+OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+INFO  2024-01-06 11:23:41,984 [77   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:41,994 [76   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 512), @p1='?' (Size = 64), @p2='?' (Size = 128), @p3='?' (Size = 2000), @p4='?' (Size = 2000), @p5='?' (Size = 1024), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (DbType = Int32), @p9='?' (DbType = Int64), @p10='?' (Size = 256), @p11='?' (Size = 1024), @p12='?' (Size = 4000), @p13='?' (Size = 256), @p14='?' (DbType = Int32), @p15='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AbpAuditLogs] ([BrowserInfo], [ClientIpAddress], [ClientName], [CustomData], [Exception], [ExceptionMessage], [ExecutionDuration], [ExecutionTime], [ImpersonatorTenantId], [ImpersonatorUserId], [MethodName], [Parameters], [ReturnValue], [ServiceName], [TenantId], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [AbpAuditLogs]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+INFO  2024-01-06 11:23:42,002 [76   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:23:42,006 [76   ] c.Infrastructure.ControllerActionInvoker - Executed action Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application) in 68.1609ms
+INFO  2024-01-06 11:23:42,010 [76   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:23:42,014 [76   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/api/services/app/Tenant/GetAll?Keyword=&SkipCount=0&MaxResultCount=10 - - - 200 313 application/json;+charset=utf-8 107.2425ms
+INFO  2024-01-06 11:23:44,099 [77   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Tenant/GetAll?IsActive=true - -
+INFO  2024-01-06 11:23:44,104 [77   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:23:44,110 [77   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Tenant/GetAll?IsActive=true - - - 204 - - 10.8510ms
+INFO  2024-01-06 11:23:44,114 [75   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/Tenant/GetAll?IsActive=true - -
+INFO  2024-01-06 11:23:44,119 [75   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:23:44,125 [75   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:23:44,134 [75   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetAll", controller = "Tenant"}. Executing controller action with signature System.Threading.Tasks.Task`1[Abp.Application.Services.Dto.PagedResultDto`1[Bwr.Exchange.MultiTenancy.Dto.TenantDto]] GetAllAsync(Bwr.Exchange.MultiTenancy.Dto.PagedTenantResultRequestDto) on controller Bwr.Exchange.MultiTenancy.TenantAppService (Bwr.Exchange.Application).
+INFO  2024-01-06 11:23:44,144 [75   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:44,168 [71   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (18ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__input_IsActive_0='?' (DbType = Boolean)], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [AbpTenants] AS [a]
+WHERE ((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))) AND ([a].[IsActive] = @__input_IsActive_0)
+INFO  2024-01-06 11:23:44,173 [77   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (2ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__input_IsActive_0='?' (DbType = Boolean), @__p_1='?' (DbType = Int32), @__p_2='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [a].[Id], [a].[ConnectionString], [a].[CreationTime], [a].[CreatorUserId], [a].[DeleterUserId], [a].[DeletionTime], [a].[EditionId], [a].[IsActive], [a].[IsDeleted], [a].[LastModificationTime], [a].[LastModifierUserId], [a].[Name], [a].[TenancyName]
+FROM [AbpTenants] AS [a]
+WHERE ((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))) AND ([a].[IsActive] = @__input_IsActive_0)
+ORDER BY [a].[Id] DESC
+OFFSET @__p_1 ROWS FETCH NEXT @__p_2 ROWS ONLY
+INFO  2024-01-06 11:23:44,181 [77   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:44,190 [76   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 512), @p1='?' (Size = 64), @p2='?' (Size = 128), @p3='?' (Size = 2000), @p4='?' (Size = 2000), @p5='?' (Size = 1024), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (DbType = Int32), @p9='?' (DbType = Int64), @p10='?' (Size = 256), @p11='?' (Size = 1024), @p12='?' (Size = 4000), @p13='?' (Size = 256), @p14='?' (DbType = Int32), @p15='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AbpAuditLogs] ([BrowserInfo], [ClientIpAddress], [ClientName], [CustomData], [Exception], [ExceptionMessage], [ExecutionDuration], [ExecutionTime], [ImpersonatorTenantId], [ImpersonatorUserId], [MethodName], [Parameters], [ReturnValue], [ServiceName], [TenantId], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [AbpAuditLogs]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+INFO  2024-01-06 11:23:44,196 [76   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:23:44,199 [76   ] c.Infrastructure.ControllerActionInvoker - Executed action Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application) in 62.0502ms
+INFO  2024-01-06 11:23:44,202 [76   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:23:44,205 [76   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/api/services/app/Tenant/GetAll?IsActive=true - - - 200 313 application/json;+charset=utf-8 94.0589ms
+INFO  2024-01-06 11:23:44,255 [76   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/LinkTenantCompany/GetByFirstTenantId?firstTenantId=5 - -
+INFO  2024-01-06 11:23:44,261 [76   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:23:44,264 [76   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/LinkTenantCompany/GetByFirstTenantId?firstTenantId=5 - - - 204 - - 9.5001ms
+INFO  2024-01-06 11:23:44,269 [76   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/LinkTenantCompany/GetByFirstTenantId?firstTenantId=5 - -
+INFO  2024-01-06 11:23:44,272 [76   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:23:44,277 [76   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Bwr.Exchange.LinkTenantsCompanies.LinkTenantCompanyAppService.GetByFirstTenantId (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:23:44,284 [76   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetByFirstTenantId", controller = "LinkTenantCompany"}. Executing controller action with signature Bwr.Exchange.LinkTenantsCompanies.Dto.LinkTenantCompanyDto GetByFirstTenantId(Int32) on controller Bwr.Exchange.LinkTenantsCompanies.LinkTenantCompanyAppService (Bwr.Exchange.Application).
+INFO  2024-01-06 11:23:44,292 [76   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:44,297 [76   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__ef_filter__p_1='?' (DbType = Boolean), @__id_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [l].[Id], [l].[CompanyId], [l].[CreationTime], [l].[CreatorUserId], [l].[DeleterUserId], [l].[DeletionTime], [l].[FirstTenantId], [l].[IsDeleted], [l].[LastModificationTime], [l].[LastModifierUserId], [l].[SecondTenantId], [l].[TenantId]
+FROM [LinkTenantCompanies] AS [l]
+WHERE (((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([l].[IsDeleted] = CAST(0 AS bit))) AND ((@__ef_filter__p_1 = CAST(1 AS bit)) OR ([l].[TenantId] IS NULL))) AND ([l].[FirstTenantId] = @__id_0)
+INFO  2024-01-06 11:23:44,302 [76   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:44,313 [77   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 512), @p1='?' (Size = 64), @p2='?' (Size = 128), @p3='?' (Size = 2000), @p4='?' (Size = 2000), @p5='?' (Size = 1024), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (DbType = Int32), @p9='?' (DbType = Int64), @p10='?' (Size = 256), @p11='?' (Size = 1024), @p12='?' (Size = 4000), @p13='?' (Size = 256), @p14='?' (DbType = Int32), @p15='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AbpAuditLogs] ([BrowserInfo], [ClientIpAddress], [ClientName], [CustomData], [Exception], [ExceptionMessage], [ExecutionDuration], [ExecutionTime], [ImpersonatorTenantId], [ImpersonatorUserId], [MethodName], [Parameters], [ReturnValue], [ServiceName], [TenantId], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [AbpAuditLogs]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+INFO  2024-01-06 11:23:44,318 [77   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:23:44,326 [77   ] c.Infrastructure.ControllerActionInvoker - Executed action Bwr.Exchange.LinkTenantsCompanies.LinkTenantCompanyAppService.GetByFirstTenantId (Bwr.Exchange.Application) in 35.5337ms
+INFO  2024-01-06 11:23:44,329 [77   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Bwr.Exchange.LinkTenantsCompanies.LinkTenantCompanyAppService.GetByFirstTenantId (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:23:44,332 [77   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/api/services/app/LinkTenantCompany/GetByFirstTenantId?firstTenantId=5 - - - 200 156 application/json;+charset=utf-8 63.9683ms
+INFO  2024-01-06 11:23:44,335 [76   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Company/GetAllCompaniesOfTenant?tenantId=6 - -
+INFO  2024-01-06 11:23:44,341 [74   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Company/GetAllCompaniesOfTenant?tenantId=6 - -
+INFO  2024-01-06 11:23:44,343 [76   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:23:44,346 [74   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:23:44,349 [76   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Company/GetAllCompaniesOfTenant?tenantId=6 - - - 204 - - 11.7668ms
+INFO  2024-01-06 11:23:44,352 [74   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Company/GetAllCompaniesOfTenant?tenantId=6 - - - 204 - - 12.4403ms
+INFO  2024-01-06 11:23:44,355 [56   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/Company/GetAllCompaniesOfTenant?tenantId=6 - -
+INFO  2024-01-06 11:23:44,359 [76   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/Company/GetAllCompaniesOfTenant?tenantId=6 - -
+INFO  2024-01-06 11:23:44,363 [56   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:23:44,366 [76   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:23:44,370 [56   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Bwr.Exchange.Settings.Companies.CompanyAppService.GetAllCompaniesOfTenant (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:23:44,376 [76   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Bwr.Exchange.Settings.Companies.CompanyAppService.GetAllCompaniesOfTenant (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:23:44,381 [56   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetAllCompaniesOfTenant", controller = "Company"}. Executing controller action with signature System.Collections.Generic.List`1[Bwr.Exchange.Settings.Companies.Dto.CompanyDto] GetAllCompaniesOfTenant(System.Nullable`1[System.Int32]) on controller Bwr.Exchange.Settings.Companies.CompanyAppService (Bwr.Exchange.Application).
+INFO  2024-01-06 11:23:44,390 [76   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetAllCompaniesOfTenant", controller = "Company"}. Executing controller action with signature System.Collections.Generic.List`1[Bwr.Exchange.Settings.Companies.Dto.CompanyDto] GetAllCompaniesOfTenant(System.Nullable`1[System.Int32]) on controller Bwr.Exchange.Settings.Companies.CompanyAppService (Bwr.Exchange.Application).
+INFO  2024-01-06 11:23:44,395 [56   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:44,401 [76   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:44,403 [56   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (4ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__ef_filter__p_1='?' (DbType = Boolean), @__ef_filter__CurrentTenantId_2='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [c].[Id], [c].[Address], [c].[CreationTime], [c].[CreatorUserId], [c].[DeleterUserId], [c].[DeletionTime], [c].[IsDeleted], [c].[LastModificationTime], [c].[LastModifierUserId], [c].[Name], [c].[Phone], [c].[TenantCompanyId], [c].[TenantId]
+FROM [Companies] AS [c]
+WHERE ((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([c].[IsDeleted] = CAST(0 AS bit))) AND ((@__ef_filter__p_1 = CAST(1 AS bit)) OR ([c].[TenantId] = @__ef_filter__CurrentTenantId_2))
+INFO  2024-01-06 11:23:44,409 [76   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__ef_filter__p_1='?' (DbType = Boolean), @__ef_filter__CurrentTenantId_2='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [c].[Id], [c].[Address], [c].[CreationTime], [c].[CreatorUserId], [c].[DeleterUserId], [c].[DeletionTime], [c].[IsDeleted], [c].[LastModificationTime], [c].[LastModifierUserId], [c].[Name], [c].[Phone], [c].[TenantCompanyId], [c].[TenantId]
+FROM [Companies] AS [c]
+WHERE ((@__ef_filter__p_0 = CAST(1 AS bit)) OR ([c].[IsDeleted] = CAST(0 AS bit))) AND ((@__ef_filter__p_1 = CAST(1 AS bit)) OR ([c].[TenantId] = @__ef_filter__CurrentTenantId_2))
+INFO  2024-01-06 11:23:44,413 [56   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:44,416 [76   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:44,437 [71   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (3ms) [Parameters=[@p0='?' (Size = 512), @p1='?' (Size = 64), @p2='?' (Size = 128), @p3='?' (Size = 2000), @p4='?' (Size = 2000), @p5='?' (Size = 1024), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (DbType = Int32), @p9='?' (DbType = Int64), @p10='?' (Size = 256), @p11='?' (Size = 1024), @p12='?' (Size = 4000), @p13='?' (Size = 256), @p14='?' (DbType = Int32), @p15='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AbpAuditLogs] ([BrowserInfo], [ClientIpAddress], [ClientName], [CustomData], [Exception], [ExceptionMessage], [ExecutionDuration], [ExecutionTime], [ImpersonatorTenantId], [ImpersonatorUserId], [MethodName], [Parameters], [ReturnValue], [ServiceName], [TenantId], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [AbpAuditLogs]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+INFO  2024-01-06 11:23:44,445 [76   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (5ms) [Parameters=[@p0='?' (Size = 512), @p1='?' (Size = 64), @p2='?' (Size = 128), @p3='?' (Size = 2000), @p4='?' (Size = 2000), @p5='?' (Size = 1024), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (DbType = Int32), @p9='?' (DbType = Int64), @p10='?' (Size = 256), @p11='?' (Size = 1024), @p12='?' (Size = 4000), @p13='?' (Size = 256), @p14='?' (DbType = Int32), @p15='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AbpAuditLogs] ([BrowserInfo], [ClientIpAddress], [ClientName], [CustomData], [Exception], [ExceptionMessage], [ExecutionDuration], [ExecutionTime], [ImpersonatorTenantId], [ImpersonatorUserId], [MethodName], [Parameters], [ReturnValue], [ServiceName], [TenantId], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [AbpAuditLogs]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+INFO  2024-01-06 11:23:44,448 [71   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:23:44,452 [71   ] c.Infrastructure.ControllerActionInvoker - Executed action Bwr.Exchange.Settings.Companies.CompanyAppService.GetAllCompaniesOfTenant (Bwr.Exchange.Application) in 67.5621ms
+INFO  2024-01-06 11:23:44,456 [76   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:23:44,461 [71   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Bwr.Exchange.Settings.Companies.CompanyAppService.GetAllCompaniesOfTenant (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:23:44,464 [71   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/api/services/app/Company/GetAllCompaniesOfTenant?tenantId=6 - - - 200 329 application/json;+charset=utf-8 113.0958ms
+INFO  2024-01-06 11:23:44,467 [76   ] c.Infrastructure.ControllerActionInvoker - Executed action Bwr.Exchange.Settings.Companies.CompanyAppService.GetAllCompaniesOfTenant (Bwr.Exchange.Application) in 72.2978ms
+INFO  2024-01-06 11:23:44,472 [76   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Bwr.Exchange.Settings.Companies.CompanyAppService.GetAllCompaniesOfTenant (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:23:44,477 [76   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/api/services/app/Company/GetAllCompaniesOfTenant?tenantId=6 - - - 200 329 application/json;+charset=utf-8 121.2877ms
+INFO  2024-01-06 11:23:45,347 [76   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:45,356 [76   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:23:50,366 [74   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:50,372 [74   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:23:55,392 [75   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:23:55,401 [75   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:24:00,412 [75   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:24:00,419 [75   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:24:05,437 [77   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:24:05,442 [77   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:24:10,466 [78   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:24:10,475 [78   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:24:15,488 [79   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:24:15,497 [79   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (4ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:24:20,508 [79   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:24:20,520 [79   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (4ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:24:25,542 [79   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:24:25,549 [79   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:24:30,570 [78   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:24:30,577 [78   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:24:35,596 [79   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:24:35,604 [79   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:24:40,612 [79   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:24:40,618 [79   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:24:45,618 [78   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:24:45,625 [78   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:24:50,644 [78   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:24:50,653 [78   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:24:55,666 [80   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:24:55,675 [80   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:25:00,702 [79   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:25:00,709 [79   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:25:05,728 [79   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:25:05,738 [79   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:25:10,758 [78   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:25:10,764 [78   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:25:15,784 [78   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:25:15,791 [78   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:25:20,799 [80   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:25:20,809 [80   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (3ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:25:25,824 [77   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:25:25,835 [77   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (4ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:25:30,852 [77   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:25:30,858 [77   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:25:35,871 [79   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:25:35,879 [79   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:25:36,238 [79   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Tenant/GetAll?Keyword=&SkipCount=0&MaxResultCount=10 - -
+INFO  2024-01-06 11:25:36,245 [79   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:25:36,253 [79   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 OPTIONS http://localhost:21021/api/services/app/Tenant/GetAll?Keyword=&SkipCount=0&MaxResultCount=10 - - - 204 - - 12.3466ms
+INFO  2024-01-06 11:25:36,260 [79   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request starting HTTP/1.1 GET http://localhost:21021/api/services/app/Tenant/GetAll?Keyword=&SkipCount=0&MaxResultCount=10 - -
+INFO  2024-01-06 11:25:36,266 [79   ] pNetCore.Cors.Infrastructure.CorsService - CORS policy execution successful.
+INFO  2024-01-06 11:25:36,273 [79   ] ft.AspNetCore.Routing.EndpointMiddleware - Executing endpoint 'Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:25:36,283 [79   ] c.Infrastructure.ControllerActionInvoker - Route matched with {area = "app", action = "GetAll", controller = "Tenant"}. Executing controller action with signature System.Threading.Tasks.Task`1[Abp.Application.Services.Dto.PagedResultDto`1[Bwr.Exchange.MultiTenancy.Dto.TenantDto]] GetAllAsync(Bwr.Exchange.MultiTenancy.Dto.PagedTenantResultRequestDto) on controller Bwr.Exchange.MultiTenancy.TenantAppService (Bwr.Exchange.Application).
+INFO  2024-01-06 11:25:36,315 [79   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:25:36,332 [77   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (11ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean)], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [AbpTenants] AS [a]
+WHERE (@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))
+INFO  2024-01-06 11:25:36,343 [77   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (4ms) [Parameters=[@__ef_filter__p_0='?' (DbType = Boolean), @__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [a].[Id], [a].[ConnectionString], [a].[CreationTime], [a].[CreatorUserId], [a].[DeleterUserId], [a].[DeletionTime], [a].[EditionId], [a].[IsActive], [a].[IsDeleted], [a].[LastModificationTime], [a].[LastModifierUserId], [a].[Name], [a].[TenancyName]
+FROM [AbpTenants] AS [a]
+WHERE (@__ef_filter__p_0 = CAST(1 AS bit)) OR ([a].[IsDeleted] = CAST(0 AS bit))
+ORDER BY [a].[Id] DESC
+OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+INFO  2024-01-06 11:25:36,353 [77   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:25:36,367 [81   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (4ms) [Parameters=[@p0='?' (Size = 512), @p1='?' (Size = 64), @p2='?' (Size = 128), @p3='?' (Size = 2000), @p4='?' (Size = 2000), @p5='?' (Size = 1024), @p6='?' (DbType = Int32), @p7='?' (DbType = DateTime2), @p8='?' (DbType = Int32), @p9='?' (DbType = Int64), @p10='?' (Size = 256), @p11='?' (Size = 1024), @p12='?' (Size = 4000), @p13='?' (Size = 256), @p14='?' (DbType = Int32), @p15='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AbpAuditLogs] ([BrowserInfo], [ClientIpAddress], [ClientName], [CustomData], [Exception], [ExceptionMessage], [ExecutionDuration], [ExecutionTime], [ImpersonatorTenantId], [ImpersonatorUserId], [MethodName], [Parameters], [ReturnValue], [ServiceName], [TenantId], [UserId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [AbpAuditLogs]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+INFO  2024-01-06 11:25:36,377 [81   ] .Mvc.Infrastructure.ObjectResultExecutor - Executing ObjectResult, writing value of type 'Abp.Web.Models.AjaxResponse'.
+INFO  2024-01-06 11:25:36,380 [81   ] c.Infrastructure.ControllerActionInvoker - Executed action Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application) in 94.281ms
+INFO  2024-01-06 11:25:36,385 [81   ] ft.AspNetCore.Routing.EndpointMiddleware - Executed endpoint 'Bwr.Exchange.MultiTenancy.TenantAppService.GetAllAsync (Bwr.Exchange.Application)'
+INFO  2024-01-06 11:25:36,390 [81   ] Microsoft.AspNetCore.Hosting.Diagnostics - Request finished HTTP/1.1 GET http://localhost:21021/api/services/app/Tenant/GetAll?Keyword=&SkipCount=0&MaxResultCount=10 - - - 200 313 application/json;+charset=utf-8 132.2959ms
+INFO  2024-01-06 11:25:40,900 [81   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:25:40,908 [81   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:25:45,933 [82   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:25:45,940 [82   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:25:50,950 [79   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:25:50,958 [79   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:25:55,986 [80   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:25:55,994 [80   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:26:01,017 [81   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:26:01,026 [81   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:26:06,051 [81   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:26:06,060 [81   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:26:11,072 [81   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:26:11,080 [81   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:26:16,090 [82   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:26:16,099 [82   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (4ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:26:21,117 [81   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:26:21,124 [81   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (0ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:26:26,134 [80   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:26:26,147 [80   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (5ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]
+INFO  2024-01-06 11:26:31,158 [81   ] osoft.EntityFrameworkCore.Infrastructure - Entity Framework Core 6.0.7 initialized 'ExchangeDbContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.4' with options: None
+INFO  2024-01-06 11:26:31,178 [81   ] oft.EntityFrameworkCore.Database.Command - Executed DbCommand (10ms) [Parameters=[@__p_1='?' (DbType = Int32), @__Now_0='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(@__p_1) [a].[Id], [a].[CreationTime], [a].[CreatorUserId], [a].[IsAbandoned], [a].[JobArgs], [a].[JobType], [a].[LastTryTime], [a].[NextTryTime], [a].[Priority], [a].[TryCount]
+FROM [AbpBackgroundJobs] AS [a]
+WHERE ([a].[IsAbandoned] = CAST(0 AS bit)) AND ([a].[NextTryTime] <= @__Now_0)
+ORDER BY [a].[Priority] DESC, [a].[TryCount], [a].[NextTryTime]

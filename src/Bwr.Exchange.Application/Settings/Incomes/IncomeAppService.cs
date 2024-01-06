@@ -1,4 +1,5 @@
-﻿using Abp.Threading;
+﻿using Abp.Domain.Uow;
+using Abp.Threading;
 using Abp.UI;
 using Bwr.Exchange.CashFlows.ManagementStatement;
 using Bwr.Exchange.Settings.Incomes.Dto;
@@ -25,8 +26,12 @@ namespace Bwr.Exchange.Settings.Incomes
 
         public async Task<IList<IncomeDto>> GetAllAsync()
         {
-            var incomes = await _incomeManager.GetAllAsync();
-
+            IList<Income> incomes = new List<Income>();
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                incomes = await _incomeManager.GetAllAsync();
+            }
             return ObjectMapper.Map<List<IncomeDto>>(incomes);
         }
         [HttpPost]
@@ -74,35 +79,33 @@ namespace Bwr.Exchange.Settings.Incomes
         }
         public UpdateIncomeDto GetForEdit(int id)
         {
-            var income = AsyncHelper.RunSync(() => _incomeManager.GetByIdAsync(id));
-            return ObjectMapper.Map<UpdateIncomeDto>(income);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+               var income = AsyncHelper.RunSync(() => _incomeManager.GetByIdAsync(id));
+                return ObjectMapper.Map<UpdateIncomeDto>(income);
+            }
         }
         public async Task<IncomeDto> CreateAsync(CreateIncomeDto input)
         {
-            CheckBeforeCreate(input);
-
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                CheckBeforeCreate(input);
+            }
             var income = ObjectMapper.Map<Income>(input);
-
-            var createdIncome = await _incomeManager.InsertAndGetAsync(income);
-            //CurrentUnitOfWork.Completed += CurrentUnitOfWork_Completed;       
+            var createdIncome = await _incomeManager.InsertAndGetAsync(income);            
             return ObjectMapper.Map<IncomeDto>(createdIncome);
         }
-
-        //private void CurrentUnitOfWork_Completed(object sender, System.EventArgs e)
-        //{
-        //    using (CurrentUnitOfWork.SetTenantId(5))
-        //    {
-        //        Income income = new Income("uuuuuu");
-        //        var createdIncomed = AsyncHelper.RunSync(() => _incomeManager.InsertAndGetAsync(income));
-        //        //CurrentUnitOfWork.SaveChanges();
-        //    }
-        //}
-
         public async Task<IncomeDto> UpdateAsync(UpdateIncomeDto input)
         {
-            CheckBeforeUpdate(input);
-
-            var income = await _incomeManager.GetByIdAsync(input.Id);
+            Income income = new Income("");
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                CheckBeforeUpdate(input);
+                income = await _incomeManager.GetByIdAsync(input.Id);
+            }
 
             ObjectMapper.Map<UpdateIncomeDto, Income>(input, income);
 

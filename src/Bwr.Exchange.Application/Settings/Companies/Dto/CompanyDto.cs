@@ -10,6 +10,8 @@ namespace Bwr.Exchange.Settings.Companies.Dto
         {
             CompanyBalances = new List<CompanyBalanceDto>();
         }
+        public int? TenantCompanyId { get; set; }
+        public int? TenantId { get; set; }
         public string Name { get; set; }
         public string Phone { get; set; }
         public string Address { get; set; }

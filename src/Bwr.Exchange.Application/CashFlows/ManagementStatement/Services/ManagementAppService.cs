@@ -24,17 +24,25 @@ namespace Bwr.Exchange.CashFlows.ManagementStatement.Services
 
         public async Task<ManagementDto> CreateAsync(CreateManagementDto input)
         {
-            var management = ObjectMapper.Map<Management>(input);
-            management.UserId = AbpSession.GetUserId();
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var management = ObjectMapper.Map<Management>(input);
+                management.UserId = AbpSession.GetUserId();
 
-            var createdManagement = await _managementManager.CreateAsync(management);
-            return ObjectMapper.Map<ManagementDto>(createdManagement);
+                var createdManagement = await _managementManager.CreateAsync(management);
+                return ObjectMapper.Map<ManagementDto>(createdManagement);
+            }
         }
 
         public async Task<Dictionary<int,double>> GetChangesCount()
         {
-            var changes = await _managementManager.getChangesCount();
-            return changes;
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var changes = await _managementManager.getChangesCount();
+                return changes;
+            }
         }
 
         [HttpPost]
@@ -60,8 +68,12 @@ namespace Bwr.Exchange.CashFlows.ManagementStatement.Services
 
 
             var dic = input.ToDictionary();
-            var managements = _managementManager.Get(dic,dm.type);
-
+            IList<Management> managements = new List<Management>();
+            using (CurrentUnitOfWork.SetTenantId(dm.tenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                managements = _managementManager.Get(dic, dm.type);
+            }
             IEnumerable<ManagementDto> data = ObjectMapper.Map<List<ManagementDto>>(managements);
             var operations = new DataOperations();
 

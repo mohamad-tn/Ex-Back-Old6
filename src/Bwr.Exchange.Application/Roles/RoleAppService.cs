@@ -12,6 +12,7 @@ using Bwr.Exchange.Authorization;
 using Bwr.Exchange.Authorization.Roles;
 using Bwr.Exchange.Authorization.Users;
 using Bwr.Exchange.Roles.Dto;
+using Bwr.Exchange.Shared.DataManagerRequests;
 using Bwr.Exchange.Shared.Dto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -35,26 +36,33 @@ namespace Bwr.Exchange.Roles
 
         public override async Task<RoleDto> CreateAsync(CreateRoleDto input)
         {
-            CheckCreatePermission();
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                CheckCreatePermission();
 
-            var role = ObjectMapper.Map<Role>(input);
-            role.SetNormalizedName();
+                var role = ObjectMapper.Map<Role>(input);
+                role.SetNormalizedName();
 
-            CheckErrors(await _roleManager.CreateAsync(role));
+                CheckErrors(await _roleManager.CreateAsync(role));
 
-            var grantedPermissions = PermissionManager
-                .GetAllPermissions()
-                .Where(p => input.GrantedPermissions.Contains(p.Name))
-                .ToList();
+                var grantedPermissions = PermissionManager
+                    .GetAllPermissions()
+                    .Where(p => input.GrantedPermissions.Contains(p.Name))
+                    .ToList();
 
-            await _roleManager.SetGrantedPermissionsAsync(role, grantedPermissions);
+                await _roleManager.SetGrantedPermissionsAsync(role, grantedPermissions);
 
-            return MapToEntityDto(role);
+                return MapToEntityDto(role);
+            }
         }
 
         public async Task<ListResultDto<RoleListDto>> GetRolesAsync(GetRolesInput input)
         {
-            var roles = await _roleManager
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var roles = await _roleManager
                 .Roles
                 .WhereIf(
                     !input.Permission.IsNullOrWhiteSpace(),
@@ -62,63 +70,84 @@ namespace Bwr.Exchange.Roles
                 )
                 .ToListAsync();
 
-            return new ListResultDto<RoleListDto>(ObjectMapper.Map<List<RoleListDto>>(roles));
+                return new ListResultDto<RoleListDto>(ObjectMapper.Map<List<RoleListDto>>(roles));
+            }
         }
 
         public override async Task<RoleDto> UpdateAsync(RoleDto input)
         {
-            CheckUpdatePermission();
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                CheckUpdatePermission();
 
-            var role = await _roleManager.GetRoleByIdAsync(input.Id);
+                var role = await _roleManager.GetRoleByIdAsync(input.Id);
 
-            ObjectMapper.Map(input, role);
+                ObjectMapper.Map(input, role);
 
-            CheckErrors(await _roleManager.UpdateAsync(role));
+                CheckErrors(await _roleManager.UpdateAsync(role));
 
-            var grantedPermissions = PermissionManager
-                .GetAllPermissions()
-                .Where(p => input.GrantedPermissions.Contains(p.Name))
-                .ToList();
+                var grantedPermissions = PermissionManager
+                    .GetAllPermissions()
+                    .Where(p => input.GrantedPermissions.Contains(p.Name))
+                    .ToList();
 
-            await _roleManager.SetGrantedPermissionsAsync(role, grantedPermissions);
+                await _roleManager.SetGrantedPermissionsAsync(role, grantedPermissions);
 
-            return MapToEntityDto(role);
+                return MapToEntityDto(role);
+            }
         }
 
         public override async Task DeleteAsync(EntityDto<int> input)
         {
-            CheckDeletePermission();
-
-            var role = await _roleManager.FindByIdAsync(input.Id.ToString());
-            var users = await _userManager.GetUsersInRoleAsync(role.NormalizedName);
-
-            foreach (var user in users)
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
             {
-                CheckErrors(await _userManager.RemoveFromRoleAsync(user, role.NormalizedName));
-            }
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                CheckDeletePermission();
 
-            CheckErrors(await _roleManager.DeleteAsync(role));
+                var role = await _roleManager.FindByIdAsync(input.Id.ToString());
+                var users = await _userManager.GetUsersInRoleAsync(role.NormalizedName);
+
+                foreach (var user in users)
+                {
+                    CheckErrors(await _userManager.RemoveFromRoleAsync(user, role.NormalizedName));
+                }
+
+                CheckErrors(await _roleManager.DeleteAsync(role));
+            }
         }
 
         public Task<ListResultDto<PermissionDto>> GetAllPermissions()
         {
-            var permissions = PermissionManager.GetAllPermissions();
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var permissions = PermissionManager.GetAllPermissions();
 
-            return Task.FromResult(new ListResultDto<PermissionDto>(
-                ObjectMapper.Map<List<PermissionDto>>(permissions).ToList()
-            ));
+                return Task.FromResult(new ListResultDto<PermissionDto>(
+                    ObjectMapper.Map<List<PermissionDto>>(permissions).ToList()
+                ));
+            }
         }
         protected override IQueryable<Role> CreateFilteredQuery(PagedRoleResultRequestDto input)
         {
-            return Repository.GetAllIncluding(x => x.Permissions)
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                return Repository.GetAllIncluding(x => x.Permissions)
                 .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Keyword)
                 || x.DisplayName.Contains(input.Keyword)
                 || x.Description.Contains(input.Keyword));
+            }
         }
 
         protected override async Task<Role> GetEntityByIdAsync(int id)
         {
-            return await Repository.GetAllIncluding(x => x.Permissions).FirstOrDefaultAsync(x => x.Id == id);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                return await Repository.GetAllIncluding(x => x.Permissions).FirstOrDefaultAsync(x => x.Id == id);
+            }
         }
 
         protected override IQueryable<Role> ApplySorting(IQueryable<Role> query, PagedRoleResultRequestDto input)
@@ -133,23 +162,32 @@ namespace Bwr.Exchange.Roles
 
         public async Task<GetRoleForEditOutput> GetRoleForEdit(EntityDto input)
         {
-            var permissions = PermissionManager.GetAllPermissions();
-            var role = await _roleManager.GetRoleByIdAsync(input.Id);
-            var grantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).ToArray();
-            var roleEditDto = ObjectMapper.Map<RoleEditDto>(role);
-
-            return new GetRoleForEditOutput
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
             {
-                Role = roleEditDto,
-                Permissions = ObjectMapper.Map<List<FlatPermissionDto>>(permissions).OrderBy(p => p.DisplayName).ToList(),
-                GrantedPermissionNames = grantedPermissions.Select(p => p.Name).ToList()
-            };
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var permissions = PermissionManager.GetAllPermissions();
+                var role = await _roleManager.GetRoleByIdAsync(input.Id);
+                var grantedPermissions = (await _roleManager.GetGrantedPermissionsAsync(role)).ToArray();
+                var roleEditDto = ObjectMapper.Map<RoleEditDto>(role);
+
+                return new GetRoleForEditOutput
+                {
+                    Role = roleEditDto,
+                    Permissions = ObjectMapper.Map<List<FlatPermissionDto>>(permissions).OrderBy(p => p.DisplayName).ToList(),
+                    GrantedPermissionNames = grantedPermissions.Select(p => p.Name).ToList()
+                };
+            }
         }
 
         [HttpPost]
-        public async Task<ReadGrudDto> GetForGrid([FromBody] DataManagerRequest dm)
+        public async Task<ReadGrudDto> GetForGrid([FromBody] BWireDataManagerRequest dm)
         {
-            var data = await this.Repository.GetAllListAsync();
+            IList<Role> data = new List<Role>();
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                data = await this.Repository.GetAllListAsync();
+            }
             IEnumerable<ReadRoleDto> users = ObjectMapper.Map<List<ReadRoleDto>>(data);
 
             var operations = new DataOperations();
@@ -180,9 +218,12 @@ namespace Bwr.Exchange.Roles
 
         public IList<FlatPermissionDto> GetPermissions()
         {
-            var permissions = PermissionManager.GetAllPermissions().ToList();
-
-            return ObjectMapper.Map<List<FlatPermissionDto>>(permissions);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var permissions = PermissionManager.GetAllPermissions().ToList();
+                return ObjectMapper.Map<List<FlatPermissionDto>>(permissions);
+            }
         }
 
 

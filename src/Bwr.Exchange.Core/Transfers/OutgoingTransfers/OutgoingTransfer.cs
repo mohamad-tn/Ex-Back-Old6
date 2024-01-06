@@ -2,6 +2,7 @@
 using Bwr.Exchange.Settings.Companies;
 using Bwr.Exchange.Settings.Countries;
 using Bwr.Exchange.Settings.Treasuries;
+using Bwr.Exchange.Transfers.OutgoingTransfers;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -50,5 +51,6 @@ namespace Bwr.Exchange.Transfers
         public string Reason { get; set; }
         public string Note { get; set; }
         public bool IsCopied { get; set; }
+        public OutgoingTransferStatus Status { get; set; }
     }
 }

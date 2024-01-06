@@ -29,7 +29,7 @@ namespace Bwr.Exchange.Settings.Treasuries.Services
             {
                 var treasury = new Treasury();
                 treasury.Name = "الصندوق الرئيسي";
-                var treasuryId = await _treasuryRepository.InsertAndGetIdAsync(treasury);
+                var createdTreasury = await _treasuryRepository.InsertAsync(treasury);
 
                 //var currencies = await _currencyRepository.GetAllListAsync();
 

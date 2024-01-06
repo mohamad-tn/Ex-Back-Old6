@@ -23,28 +23,32 @@ namespace Bwr.Exchange.Settings.ExchangePrices
         public async Task<IList<ExchangePriceDto>> GetAllAsync()
         {
             var exchangePrices = new List<ExchangePriceDto>();
-            var currencies = await _currencyManager.GetAllAsync();
-            foreach (var currency in currencies)
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
             {
-                var exchangePrice = await _exchangeManager.GetByCurrencyIdAsync(currency.Id);
-                if(exchangePrice == null)
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var currencies = await _currencyManager.GetAllAsync();
+                foreach (var currency in currencies)
                 {
-                    exchangePrices.Add(new ExchangePriceDto()
+                    var exchangePrice = await _exchangeManager.GetByCurrencyIdAsync(currency.Id);
+                    if (exchangePrice == null)
                     {
-                        Currency = ObjectMapper.Map<CurrencyDto>(currency),
-                        CurrencyId = currency.Id
-                    });
-                }
-                else
-                {
-                    exchangePrices.Add(new ExchangePriceDto()
+                        exchangePrices.Add(new ExchangePriceDto()
+                        {
+                            Currency = ObjectMapper.Map<CurrencyDto>(currency),
+                            CurrencyId = currency.Id
+                        });
+                    }
+                    else
                     {
-                        Currency = ObjectMapper.Map<CurrencyDto>(currency),
-                        CurrencyId = currency.Id,
-                        MainPrice = exchangePrice.MainPrice,
-                        PurchasingPrice = exchangePrice.PurchasingPrice,
-                        SellingPrice = exchangePrice.SellingPrice
-                    });
+                        exchangePrices.Add(new ExchangePriceDto()
+                        {
+                            Currency = ObjectMapper.Map<CurrencyDto>(currency),
+                            CurrencyId = currency.Id,
+                            MainPrice = exchangePrice.MainPrice,
+                            PurchasingPrice = exchangePrice.PurchasingPrice,
+                            SellingPrice = exchangePrice.SellingPrice
+                        });
+                    }
                 }
             }
             return exchangePrices;
@@ -52,13 +56,22 @@ namespace Bwr.Exchange.Settings.ExchangePrices
 
         public async Task<ExchangePriceDto> GetById(int id)
         {
-             var exPrice = await _exchangeManager.GetByCurrencyIdAsync(id);
-            return ObjectMapper.Map<ExchangePriceDto>(exPrice);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var exPrice = await _exchangeManager.GetByCurrencyIdAsync(id);
+                return ObjectMapper.Map<ExchangePriceDto>(exPrice);
+            }
         }
 
         public async Task<ExchangePriceDto> UpdateAsync(UpdateExchangePriceDto input)
         {
-            var exchangePrice = await _exchangeManager.GetByCurrencyIdAsync(input.CurrencyId);
+            ExchangePrice exchangePrice = new ExchangePrice();
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                exchangePrice = await _exchangeManager.GetByCurrencyIdAsync(input.CurrencyId);
+            }
             if (exchangePrice == null)
             {
                 exchangePrice = ObjectMapper.Map<ExchangePrice>(input);

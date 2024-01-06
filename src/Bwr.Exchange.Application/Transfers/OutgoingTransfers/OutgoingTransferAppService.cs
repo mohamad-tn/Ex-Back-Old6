@@ -24,6 +24,7 @@ using Bwr.Exchange.ExchangeCurrencies;
 using Bwr.Exchange.Settings.Clients.Services;
 using Bwr.Exchange.Settings.Companies.Services;
 using Bwr.Exchange.Settings.Currencies.Services;
+using Bwr.Exchange.Shared.DataManagerRequests;
 
 namespace Bwr.Exchange.Transfers.OutgoingTransfers
 {
@@ -57,19 +58,26 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
 
         public async Task<OutgoingTransferDto> CreateAsync(OutgoingTransferDto input)
         {
-            var treasury = await _treasuryManager.GetTreasuryAsync();
-            var outgoingTransfer = ObjectMapper.Map<OutgoingTransfer>(input);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var treasury = await _treasuryManager.GetTreasuryAsync();
+                var outgoingTransfer = ObjectMapper.Map<OutgoingTransfer>(input);
 
-            var sender = await CreateOrUpdateCustomer(input.Sender);
-            var beneficiary = await CreateOrUpdateCustomer(input.Beneficiary);
+                var sender = await CreateOrUpdateCustomer(input.Sender);
+                var beneficiary = await CreateOrUpdateCustomer(input.Beneficiary);
 
-            outgoingTransfer.SenderId = sender?.Id;
-            outgoingTransfer.BeneficiaryId = beneficiary?.Id;
+                outgoingTransfer.SenderId = sender?.Id;
+                outgoingTransfer.BeneficiaryId = beneficiary?.Id;
 
-            outgoingTransfer.TreasuryId = treasury.Id;
+                outgoingTransfer.Beneficiary = beneficiary;
+                outgoingTransfer.Sender = sender;
 
-            var createdOutgoingTransfer = await _outgoingTransferManager.CreateAsync(outgoingTransfer);
-            return ObjectMapper.Map<OutgoingTransferDto>(createdOutgoingTransfer);
+                outgoingTransfer.TreasuryId = treasury.Id;
+
+                var createdOutgoingTransfer = await _outgoingTransferManager.CreateAsync(outgoingTransfer);
+                return ObjectMapper.Map<OutgoingTransferDto>(createdOutgoingTransfer);
+            }
         }
 
         public async Task<OutgoingTransferDto> UpdateAsync(OutgoingTransferDto input)
@@ -77,155 +85,171 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
             string before = "";
             string after = "";
 
-            var outgoingTransfer = await _outgoingTransferManager.GetByIdAsync(input.Id);
-
-            #region Before & After
-            if (outgoingTransfer.Note != input.Note)
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
             {
-                before = L("Note") + " : " + outgoingTransfer.Note;
-                after = L("Note") + " : " + input.Note;
-            }
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var outgoingTransfer = await _outgoingTransferManager.GetByIdAsync(input.Id);
 
-            if (outgoingTransfer.Number != input.Number)
-            {
-                before = before + " - " + L("Number") + " : " + outgoingTransfer.Number;
-                after = after + " - " + L("Number") + " : " + input.Number;
-            }
+                #region Before & After
+                if (outgoingTransfer.Note != input.Note)
+                {
+                    before = L("Note") + " : " + outgoingTransfer.Note;
+                    after = L("Note") + " : " + input.Note;
+                }
 
-            if (outgoingTransfer.CurrencyId != input.CurrencyId)
-            {
-                before = before + " - " + L("Currency") + " : " + (outgoingTransfer.CurrencyId != null ? _currencyManager.GetCurrencyNameById(outgoingTransfer.CurrencyId) : " ");
-                after = after + " - " + L("Currency") + " : " + (input.CurrencyId != null ? _currencyManager.GetCurrencyNameById(input.CurrencyId) : " ");
-            }
+                if (outgoingTransfer.Number != input.Number)
+                {
+                    before = before + " - " + L("Number") + " : " + outgoingTransfer.Number;
+                    after = after + " - " + L("Number") + " : " + input.Number;
+                }
 
-            if (outgoingTransfer.BeneficiaryId != input.BeneficiaryId)
-            {
-                before = before + " - " + L("Beneficiary") + " : " + (outgoingTransfer.BeneficiaryId != null ? _customerManager.GetCustomerNameById((int)outgoingTransfer.BeneficiaryId) : " ");
-                after = after + " - " + L("Beneficiary") + " : " + (input.BeneficiaryId != null ? _customerManager.GetCustomerNameById((int)input.BeneficiaryId) : " ");
-            }
+                if (outgoingTransfer.CurrencyId != input.CurrencyId)
+                {
+                    before = before + " - " + L("Currency") + " : " + (outgoingTransfer.CurrencyId != null ? _currencyManager.GetCurrencyNameById(outgoingTransfer.CurrencyId) : " ");
+                    after = after + " - " + L("Currency") + " : " + (input.CurrencyId != null ? _currencyManager.GetCurrencyNameById(input.CurrencyId) : " ");
+                }
 
-            if (outgoingTransfer.SenderId != input.SenderId)
-            {
-                before = before + " - " + L("Sender") + " : " + (outgoingTransfer.SenderId != null ? _customerManager.GetCustomerNameById((int)outgoingTransfer.SenderId) : " ");
-                after = after + " - " + L("Sender") + " : " + (input.SenderId != null ? _customerManager.GetCustomerNameById((int)input.SenderId) : " ");
-            }
+                if (outgoingTransfer.BeneficiaryId != input.BeneficiaryId)
+                {
+                    before = before + " - " + L("Beneficiary") + " : " + (outgoingTransfer.BeneficiaryId != null ? _customerManager.GetCustomerNameById((int)outgoingTransfer.BeneficiaryId) : " ");
+                    after = after + " - " + L("Beneficiary") + " : " + (input.BeneficiaryId != null ? _customerManager.GetCustomerNameById((int)input.BeneficiaryId) : " ");
+                }
 
-            if (outgoingTransfer.Amount != input.Amount)
-            {
-                before = before + " - " + L("Amount") + " : " + outgoingTransfer.Amount;
-                after = after + " - " + L("Amount") + " : " + input.Amount;
-            }
+                if (outgoingTransfer.SenderId != input.SenderId)
+                {
+                    before = before + " - " + L("Sender") + " : " + (outgoingTransfer.SenderId != null ? _customerManager.GetCustomerNameById((int)outgoingTransfer.SenderId) : " ");
+                    after = after + " - " + L("Sender") + " : " + (input.SenderId != null ? _customerManager.GetCustomerNameById((int)input.SenderId) : " ");
+                }
 
-            if (outgoingTransfer.ToCompanyId != input.ToCompanyId)
-            {
-                before = before + " - " + L("ToCompany") + " : " + (outgoingTransfer.ToCompanyId != null ? _companyManager.GetCompanyNameById((int)outgoingTransfer.ToCompanyId) : " ");
-                after = after + " - " + L("ToCompany") + " : " + (input.ToCompanyId != null ? _companyManager.GetCompanyNameById((int)input.ToCompanyId) : " ");
-            }
+                if (outgoingTransfer.Amount != input.Amount)
+                {
+                    before = before + " - " + L("Amount") + " : " + outgoingTransfer.Amount;
+                    after = after + " - " + L("Amount") + " : " + input.Amount;
+                }
 
-            if (outgoingTransfer.FromCompanyId != input.FromCompanyId)
-            {
-                before = before + " - " + L("FromCompany") + " : " + (outgoingTransfer.FromCompanyId != null ? _companyManager.GetCompanyNameById((int)outgoingTransfer.FromCompanyId) : " ");
-                after = after + " - " + L("FromCompany") + " : " + (input.FromCompanyId != null ? _companyManager.GetCompanyNameById((int)input.FromCompanyId) : " ");
-            }
+                if (outgoingTransfer.ToCompanyId != input.ToCompanyId)
+                {
+                    before = before + " - " + L("ToCompany") + " : " + (outgoingTransfer.ToCompanyId != null ? _companyManager.GetCompanyNameById((int)outgoingTransfer.ToCompanyId) : " ");
+                    after = after + " - " + L("ToCompany") + " : " + (input.ToCompanyId != null ? _companyManager.GetCompanyNameById((int)input.ToCompanyId) : " ");
+                }
 
-            if ((int)outgoingTransfer.PaymentType != input.PaymentType)
-            {
-                before = before + " - " + L("PaymentType") + " : " + ((PaymentType)outgoingTransfer.PaymentType);
-                after = after + " - " + L("PaymentType") + " : " + ((PaymentType)input.PaymentType);
-            }
+                if (outgoingTransfer.FromCompanyId != input.FromCompanyId)
+                {
+                    before = before + " - " + L("FromCompany") + " : " + (outgoingTransfer.FromCompanyId != null ? _companyManager.GetCompanyNameById((int)outgoingTransfer.FromCompanyId) : " ");
+                    after = after + " - " + L("FromCompany") + " : " + (input.FromCompanyId != null ? _companyManager.GetCompanyNameById((int)input.FromCompanyId) : " ");
+                }
 
-            if (outgoingTransfer.FromClientId != input.FromClientId)
-            {
-                before = before + " - " + L("FromClient") + " : " + (outgoingTransfer.FromClientId != null ? _clientManager.GetClientNameById((int)outgoingTransfer.FromClientId) : " ");
-                after = after + " - " + L("FromClient") + " : " + (input.FromClientId != null ? _clientManager.GetClientNameById((int)input.FromClientId) : " ");
-            }
+                if ((int)outgoingTransfer.PaymentType != input.PaymentType)
+                {
+                    before = before + " - " + L("PaymentType") + " : " + ((PaymentType)outgoingTransfer.PaymentType);
+                    after = after + " - " + L("PaymentType") + " : " + ((PaymentType)input.PaymentType);
+                }
 
-            if (outgoingTransfer.ReceivedAmount != input.ReceivedAmount)
-            {
-                before = before + " - " + L("ReceivedAmount") + " : " + outgoingTransfer.ReceivedAmount;
-                after = after + " - " + L("ReceivedAmount") + " : " + input.ReceivedAmount;
-            }
+                if (outgoingTransfer.FromClientId != input.FromClientId)
+                {
+                    before = before + " - " + L("FromClient") + " : " + (outgoingTransfer.FromClientId != null ? _clientManager.GetClientNameById((int)outgoingTransfer.FromClientId) : " ");
+                    after = after + " - " + L("FromClient") + " : " + (input.FromClientId != null ? _clientManager.GetClientNameById((int)input.FromClientId) : " ");
+                }
 
-            if (outgoingTransfer.InstrumentNo != input.InstrumentNo)
-            {
-                before = before + " - " + L("InstrumentNo") + " : " + outgoingTransfer.InstrumentNo;
-                after = after + " - " + L("InstrumentNo") + " : " + input.InstrumentNo;
-            }
+                if (outgoingTransfer.ReceivedAmount != input.ReceivedAmount)
+                {
+                    before = before + " - " + L("ReceivedAmount") + " : " + outgoingTransfer.ReceivedAmount;
+                    after = after + " - " + L("ReceivedAmount") + " : " + input.ReceivedAmount;
+                }
 
-            if (outgoingTransfer.Reason != input.Reason)
-            {
-                before = before + " - " + L("Reason") + " : " + outgoingTransfer.Reason;
-                after = after + " - " + L("Reason") + " : " + input.Reason;
-            }
-            #endregion
+                if (outgoingTransfer.InstrumentNo != input.InstrumentNo)
+                {
+                    before = before + " - " + L("InstrumentNo") + " : " + outgoingTransfer.InstrumentNo;
+                    after = after + " - " + L("InstrumentNo") + " : " + input.InstrumentNo;
+                }
 
-
-            EventBus.Default.Trigger(
-                new CreateManagementEventData(
-                    0, outgoingTransfer.Amount, outgoingTransfer.Date, (int?)outgoingTransfer.PaymentType,
-                    DateTime.Now, 0, outgoingTransfer.Number, null, null, before, after, null, null, null, null,
-                    null, null, outgoingTransfer.Commission, null, null, outgoingTransfer.CurrencyId,
-                    outgoingTransfer.FromClientId, AbpSession.GetUserId(), outgoingTransfer.FromCompanyId
-                    , outgoingTransfer.SenderId, outgoingTransfer.BeneficiaryId, outgoingTransfer.ToCompanyId, null
-                    )
-                );
+                if (outgoingTransfer.Reason != input.Reason)
+                {
+                    before = before + " - " + L("Reason") + " : " + outgoingTransfer.Reason;
+                    after = after + " - " + L("Reason") + " : " + input.Reason;
+                }
+                #endregion
 
 
-            var date = DateTime.Parse(input.Date);
-            date = new DateTime
-                    (
-                        date.Year,
-                        date.Month,
-                        date.Day,
-                        outgoingTransfer.Date.Hour,
-                        outgoingTransfer.Date.Minute,
-                        outgoingTransfer.Date.Second
+                EventBus.Default.Trigger(
+                    new CreateManagementEventData(
+                        0, outgoingTransfer.Amount, outgoingTransfer.Date, (int?)outgoingTransfer.PaymentType,
+                        DateTime.Now, 0, outgoingTransfer.Number, null, null, before, after, null, null, null, null,
+                        null, null, outgoingTransfer.Commission, null, null, outgoingTransfer.CurrencyId,
+                        outgoingTransfer.FromClientId, AbpSession.GetUserId(), outgoingTransfer.FromCompanyId
+                        , outgoingTransfer.SenderId, outgoingTransfer.BeneficiaryId, outgoingTransfer.ToCompanyId, null
+                        )
                     );
-            var isDeleted = await _outgoingTransferManager.DeleteCashFlowAsync(outgoingTransfer);
-            if (isDeleted)
-            {
-                ObjectMapper.Map<OutgoingTransferDto, OutgoingTransfer>(input, outgoingTransfer);
 
-                outgoingTransfer.Date = date;
-                var sender = await CreateOrUpdateCustomer(input.Sender);
-                var beneficiary = await CreateOrUpdateCustomer(input.Beneficiary);
 
-                outgoingTransfer.SenderId = sender?.Id;
-                outgoingTransfer.BeneficiaryId = beneficiary?.Id;
+                var date = DateTime.Parse(input.Date);
+                date = new DateTime
+                        (
+                            date.Year,
+                            date.Month,
+                            date.Day,
+                            outgoingTransfer.Date.Hour,
+                            outgoingTransfer.Date.Minute,
+                            outgoingTransfer.Date.Second
+                        );
+                var isDeleted = await _outgoingTransferManager.DeleteCashFlowAsync(outgoingTransfer);
+                if (isDeleted)
+                {
+                    ObjectMapper.Map<OutgoingTransferDto, OutgoingTransfer>(input, outgoingTransfer);
 
-                var updatedOutgoingTransfer = await _outgoingTransferManager.UpdateAsync(outgoingTransfer);
-                return ObjectMapper.Map<OutgoingTransferDto>(updatedOutgoingTransfer);
-            }
-            else
-            {
-                throw new UserFriendlyException("حدث خطأ ما اثناء التعديل");
+                    outgoingTransfer.Date = date;
+                    var sender = await CreateOrUpdateCustomer(input.Sender);
+                    var beneficiary = await CreateOrUpdateCustomer(input.Beneficiary);
+
+                    outgoingTransfer.SenderId = sender?.Id;
+                    outgoingTransfer.BeneficiaryId = beneficiary?.Id;
+
+                    outgoingTransfer.Beneficiary = beneficiary;
+                    outgoingTransfer.Sender = sender;
+
+                    var updatedOutgoingTransfer = await _outgoingTransferManager.UpdateAsync(outgoingTransfer);
+                    return ObjectMapper.Map<OutgoingTransferDto>(updatedOutgoingTransfer);
+                }
+
+                else
+                {
+                    throw new UserFriendlyException("حدث خطأ ما اثناء التعديل");
+                }
             }
         }
 
         public async Task DeleteAsync(int id)
         {
-            var outgoingTransfer = await _outgoingTransferManager.GetByIdAsync(id);
-            if (outgoingTransfer != null)
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
             {
-                await _outgoingTransferManager.DeleteAsync(outgoingTransfer);
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var outgoingTransfer = await _outgoingTransferManager.GetByIdAsync(id);
+                if (outgoingTransfer != null)
+                {
+                    await _outgoingTransferManager.DeleteAsync(outgoingTransfer);
 
-                EventBus.Default.Trigger(
-                new CreateManagementEventData(
-                    0, outgoingTransfer.Amount, outgoingTransfer.Date, (int?)outgoingTransfer.PaymentType,
-                    DateTime.Now, 1, outgoingTransfer.Number, null, null, null, null, null, null, null, null,
-                    null, null, outgoingTransfer.Commission, null, null, outgoingTransfer.CurrencyId,
-                    outgoingTransfer.FromClientId, AbpSession.GetUserId(), outgoingTransfer.FromCompanyId
-                    , outgoingTransfer.SenderId, outgoingTransfer.BeneficiaryId, outgoingTransfer.ToCompanyId, null
-                    )
-                );
+                    EventBus.Default.Trigger(
+                    new CreateManagementEventData(
+                        0, outgoingTransfer.Amount, outgoingTransfer.Date, (int?)outgoingTransfer.PaymentType,
+                        DateTime.Now, 1, outgoingTransfer.Number, null, null, null, null, null, null, null, null,
+                        null, null, outgoingTransfer.Commission, null, null, outgoingTransfer.CurrencyId,
+                        outgoingTransfer.FromClientId, AbpSession.GetUserId(), outgoingTransfer.FromCompanyId
+                        , outgoingTransfer.SenderId, outgoingTransfer.BeneficiaryId, outgoingTransfer.ToCompanyId, null
+                        )
+                    );
+                }
             }
         }
 
         public async Task<IList<OutgoingTransferDto>> Get(SearchOutgoingTransferInputDto input)
         {
-            var dic = input.ToDictionary();
-            var outgoingTransfers = await _outgoingTransferManager.GetAsync(dic);
-            return ObjectMapper.Map<List<OutgoingTransferDto>>(outgoingTransfers);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var dic = input.ToDictionary();
+                var outgoingTransfers = await _outgoingTransferManager.GetAsync(dic);
+                return ObjectMapper.Map<List<OutgoingTransferDto>>(outgoingTransfers);
+            }
         }
 
         public IList<ReadOutgoingTransferDto> GetForStatment(SearchOutgoingTransferInputDto input)
@@ -248,24 +272,37 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
             }
 
             var dic = input.ToDictionary();
-            var outgoingTransfers = _outgoingTransferManager.Get(dic);
+            IList<OutgoingTransfer> outgoingTransfers = new List<OutgoingTransfer>();
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                outgoingTransfers = _outgoingTransferManager.Get(dic);
+            }
             return ObjectMapper.Map<List<ReadOutgoingTransferDto>>(outgoingTransfers);
         }
 
         public OutgoingTransferDto GetById(int id)
         {
-            var outgoingTransfer = _outgoingTransferManager.GetById(id);
-            return ObjectMapper.Map<OutgoingTransferDto>(outgoingTransfer);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var outgoingTransfer = _outgoingTransferManager.GetById(id);
+                return ObjectMapper.Map<OutgoingTransferDto>(outgoingTransfer);
+            }
         }
 
         public async Task<OutgoingTransferDto> GetForEditAsync(int id)
         {
-            var transfer = await _outgoingTransferManager.GetByIdAsync(id);
-            return ObjectMapper.Map<OutgoingTransferDto>(transfer);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var transfer = await _outgoingTransferManager.GetByIdAsync(id);
+                return ObjectMapper.Map<OutgoingTransferDto>(transfer);
+            }
         }
 
         [HttpPost]
-        public ReadGrudDto GetForGrid([FromBody] DataManagerRequest dm)
+        public ReadGrudDto GetForGrid([FromBody] BWireDataManagerRequest dm)
         {
             var input = new SearchOutgoingTransferInputDto();
 
@@ -351,8 +388,12 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
             }
 
             var dic = input.ToDictionary();
-            var outgoinTransfers = _outgoingTransferManager.Get(dic);
-
+            IList<OutgoingTransfer> outgoinTransfers = new List<OutgoingTransfer>();
+            using (CurrentUnitOfWork.SetTenantId(dm.tenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                outgoinTransfers = _outgoingTransferManager.Get(dic);
+            }
             IEnumerable<ReadOutgoingTransferDto> data = ObjectMapper.Map<List<ReadOutgoingTransferDto>>(outgoinTransfers);
             var operations = new DataOperations();
 
@@ -403,11 +444,19 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
 
             if ( dm.currencyId == 0 || dm.currencyId == 10 )
             {
-                 outgoinTransfers = _outgoingTransferManager.Get(dic).Where(x => !x.IsCopied && x.ToCompanyId == int.Parse(dm.companyId)).ToList();
+                using (CurrentUnitOfWork.SetTenantId(dm.tenantId))
+                {
+                    CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                    outgoinTransfers = _outgoingTransferManager.Get(dic).Where(x => !x.IsCopied && x.ToCompanyId == int.Parse(dm.companyId)).ToList();
+                }
             }
             else
             {
-                outgoinTransfers = _outgoingTransferManager.Get(dic).Where(x=>!x.IsCopied && x.ToCompanyId == int.Parse(dm.companyId) && x.CurrencyId == dm.currencyId).ToList();
+                using (CurrentUnitOfWork.SetTenantId(dm.tenantId))
+                {
+                    CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                    outgoinTransfers = _outgoingTransferManager.Get(dic).Where(x => !x.IsCopied && x.ToCompanyId == int.Parse(dm.companyId) && x.CurrencyId == dm.currencyId).ToList();
+                }
             }
 
             IEnumerable<ReadOutgoingTransferDto> data = ObjectMapper.Map<List<ReadOutgoingTransferDto>>(outgoinTransfers);
@@ -436,8 +485,12 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
 
         private async Task<Customer> CreateOrUpdateCustomer(CustomerDto customerDto)
         {
-            var customer = ObjectMapper.Map<Customer>(customerDto);
-            return await _customerManager.CreateOrUpdateAsync(customer);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var customer = ObjectMapper.Map<Customer>(customerDto);
+                return await _customerManager.CreateOrUpdateAsync(customer);
+            }
         }
 
         private WhereFilter GetWhereFilter(List<WhereFilter> filterOptions, string name)
@@ -457,17 +510,29 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
 
         public int GetLastNumber()
         {
-            return _outgoingTransferManager.GetLastNumber();
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                return _outgoingTransferManager.GetLastNumber();
+            }
         }
 
         public async Task SetAsCopiedAsync(List<int> ids)
         {
-            await _outgoingTransferManager.SetAsCopied(ids);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                await _outgoingTransferManager.SetAsCopied(ids);
+            }
         }
 
         public async Task<List<NotCopiedForCompany>> GetNotCopiedCount()
         {
-            return await _outgoingTransferManager.GetNotCopiedCount();
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                return await _outgoingTransferManager.GetNotCopiedCount();
+            }
         }
     }
 }

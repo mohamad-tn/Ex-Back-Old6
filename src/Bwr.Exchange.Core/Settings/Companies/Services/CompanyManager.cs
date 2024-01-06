@@ -70,18 +70,18 @@ namespace Bwr.Exchange.Settings.Companies.Services
 
         public async Task<Company> InsertAndGetAsync(Company company)
         {
-            using (var unitOfWork = _unitOfWorkManager.Begin())
-            {
-                var companyId = await _companyRepository.InsertAndGetIdAsync(company);
+            //using (var unitOfWork = _unitOfWorkManager.Begin())
+            //{
+                var createdCompany = await _companyRepository.InsertAsync(company);
 
                 //Update companyBalances
                 //var companyBalances = company.CompanyBalances.ToList();//Don't remove ToList()
                 //await RemoveCompanyBalances(companyId, companyBalances);
                 //await AddNewCompanyBalances(companyId, companyBalances);
 
-                unitOfWork.Complete();
-            }
-            return await GetByIdAsync(company.Id);
+            //    unitOfWork.Complete();
+            //}
+            return createdCompany;
         }
 
         public async Task<Company> UpdateAndGetAsync(Company company)

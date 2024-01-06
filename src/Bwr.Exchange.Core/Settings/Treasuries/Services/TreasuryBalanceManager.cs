@@ -37,9 +37,9 @@ namespace Bwr.Exchange.Settings.Treasuries.Services
 
         public async Task<TreasuryBalance> InsertAndGetAsync(TreasuryBalance treasuryBalance)
         {
-            
-            var id = await _treasuryBalanceRepository.InsertAndGetIdAsync(treasuryBalance);
-            return await _treasuryBalanceRepository.FirstOrDefaultAsync(id);
+            return await _treasuryBalanceRepository.InsertAsync(treasuryBalance);
+            //var id = await _treasuryBalanceRepository.InsertAndGetIdAsync(treasuryBalance);
+            //return await _treasuryBalanceRepository.FirstOrDefaultAsync(id);
         }
 
         public async Task<TreasuryBalance> UpdateAndGetAsync(TreasuryBalance treasuryBalance)

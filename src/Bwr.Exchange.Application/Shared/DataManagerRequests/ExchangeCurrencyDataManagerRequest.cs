@@ -2,7 +2,7 @@
 
 namespace Bwr.Exchange.Shared.DataManagerRequests
 {
-    public class ExchangeCurrencyDataManagerRequest : DataManagerRequest
+    public class ExchangeCurrencyDataManagerRequest : BWireDataManagerRequest
     {
         public string fromDate { get; set; }
         public string toDate { get; set; }

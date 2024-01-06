@@ -20,7 +20,7 @@ namespace Bwr.Exchange.Settings.Clients
         private readonly IClientManager _clientManager;
         private readonly IClientCashFlowManager _clientCashFlowManager;
         public ClientAppService(
-            IClientManager clientManager, 
+            IClientManager clientManager,
             IClientCashFlowManager clientCashFlowManager
             )
         {
@@ -30,26 +30,36 @@ namespace Bwr.Exchange.Settings.Clients
 
         public async Task<IList<ClientDto>> GetAllAsync()
         {
-            var countries = await _clientManager.GetAllAsync();
-
-            return ObjectMapper.Map<List<ClientDto>>(countries);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var countries = await _clientManager.GetAllAsync();
+                return ObjectMapper.Map<List<ClientDto>>(countries);
+            }
         }
-
         public async Task<ClientBalanceDto> GetBalanceForEdit(ClientBalanceForEditInputDto input)
         {
-            var outgoingTransfer = await _clientCashFlowManager.GetByTransctionInfo(input.Id, input.TransactionType);
-            return new ClientBalanceDto()
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
             {
-                Balance = outgoingTransfer.CurrentBalance,
-                ClientId = outgoingTransfer.ClientId,
-                CurrencyId = outgoingTransfer.CurrencyId
-            };
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var outgoingTransfer = await _clientCashFlowManager.GetByTransctionInfo(input.Id, input.TransactionType);
+                return new ClientBalanceDto()
+                {
+                    Balance = outgoingTransfer.CurrentBalance,
+                    ClientId = outgoingTransfer.ClientId,
+                    CurrencyId = outgoingTransfer.CurrencyId
+                };
+            }
         }
-
         [HttpPost]
         public ReadGrudDto GetForGrid([FromBody] BWireDataManagerRequest dm)
         {
-            var data = _clientManager.GetAllWithDetail();
+            IList<Client> data = new List<Client>();
+            using (CurrentUnitOfWork.SetTenantId(dm.tenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                data = _clientManager.GetAllWithDetail();
+            }
             IEnumerable<ReadClientDto> countries = ObjectMapper.Map<List<ReadClientDto>>(data);
 
             var operations = new DataOperations();
@@ -85,12 +95,20 @@ namespace Bwr.Exchange.Settings.Clients
         }
         public UpdateClientDto GetForEdit(int id)
         {
-            var client =  _clientManager.GetByIdWithDetail(id);
-            return ObjectMapper.Map<UpdateClientDto>(client);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var client = _clientManager.GetByIdWithDetail(id);
+                return ObjectMapper.Map<UpdateClientDto>(client);
+            }
         }
         public async Task<ClientDto> CreateAsync(CreateClientDto input)
         {
-            CheckBeforeCreate(input);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                CheckBeforeCreate(input);
+            }
 
             var client = ObjectMapper.Map<Client>(input);
 
@@ -100,9 +118,14 @@ namespace Bwr.Exchange.Settings.Clients
         }
         public async Task<ClientDto> UpdateAsync(UpdateClientDto input)
         {
-            CheckBeforeUpdate(input);
+            Client client = new Client();
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                CheckBeforeUpdate(input);
 
-            var client = await _clientManager.GetByIdAsync(input.Id);
+                client = await _clientManager.GetByIdAsync(input.Id);
+            }
 
             ObjectMapper.Map<UpdateClientDto, Client>(input, client);
 
@@ -112,7 +135,25 @@ namespace Bwr.Exchange.Settings.Clients
         }
         public async Task DeleteAsync(int id)
         {
-            await _clientManager.DeleteAsync(id);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                await _clientManager.DeleteAsync(id);
+            }
+        }
+        public ClientBalanceDto GetCurrentBalance(CurrentBalanceInputDto input)
+        {
+            ClientBalanceDto clientBalanceDto = new ClientBalanceDto()
+            {
+                ClientId = input.ClientId,
+                CurrencyId = input.CurrencyId
+            };
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                clientBalanceDto.Balance = _clientCashFlowManager.GetLastBalance(input.ClientId, input.CurrencyId, DateTime.Now);
+            }
+            return clientBalanceDto;
         }
 
         #region Helper methods
@@ -124,7 +165,6 @@ namespace Bwr.Exchange.Settings.Clients
             {
                 validationResultMessage = L(ValidationResultMessage.NameAleadyExist);
             }
-
             if (!string.IsNullOrEmpty(validationResultMessage))
                 throw new UserFriendlyException(validationResultMessage);
         }
@@ -136,27 +176,9 @@ namespace Bwr.Exchange.Settings.Clients
             {
                 validationResultMessage = L(ValidationResultMessage.NameAleadyExist);
             }
-
             if (!string.IsNullOrEmpty(validationResultMessage))
                 throw new UserFriendlyException(validationResultMessage);
         }
-
-        public ClientBalanceDto GetCurrentBalance(CurrentBalanceInputDto input)
-        {
-            ClientBalanceDto clientBalanceDto = new ClientBalanceDto()
-            {
-                ClientId = input.ClientId,
-                CurrencyId = input.CurrencyId
-            };
-            clientBalanceDto.Balance = _clientCashFlowManager.GetLastBalance(input.ClientId, input.CurrencyId, DateTime.Now);
-
-            return clientBalanceDto;
-        }
-
-        
-
-
-
         #endregion
     }
 }

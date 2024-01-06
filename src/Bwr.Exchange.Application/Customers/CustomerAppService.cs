@@ -13,7 +13,7 @@ namespace Bwr.Exchange.Customers
         private readonly ICustomerImageManager _customerImageManager;
 
         public CustomerAppService(
-            ICustomerManager customerManager, 
+            ICustomerManager customerManager,
             ICustomerImageManager customerImageManager)
         {
             _customerManager = customerManager;
@@ -22,19 +22,32 @@ namespace Bwr.Exchange.Customers
 
         public async Task<IList<CustomerDto>> GetAllAsync()
         {
-            var customers = await _customerManager.GetAllAsync();
-            return ObjectMapper.Map<List<CustomerDto>>(customers);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var customers = await _customerManager.GetAllAsync();
+                return ObjectMapper.Map<List<CustomerDto>>(customers);
+            }
         }
 
         public async Task<CustomerDto> GetByNameAsync(string symbol)
         {
-            var customer = await _customerManager.GetByNameAsync(symbol);
-            return ObjectMapper.Map<CustomerDto>(customer);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var customer = await _customerManager.GetByNameAsync(symbol);
+                return ObjectMapper.Map<CustomerDto>(customer);
+            }
         }
 
         public async Task<IList<FileUploadDto>> GetCustomerImagesAsync(int customerId)
         {
-            var customerImages = await _customerImageManager.GetAllAsync(customerId);
+            IList<CustomerImage> customerImages = new List<CustomerImage>();
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                customerImages = await _customerImageManager.GetAllAsync(customerId);
+            }
             var images = (from ci in customerImages
                           select new FileUploadDto()
                           {
@@ -49,12 +62,14 @@ namespace Bwr.Exchange.Customers
 
         public async Task<CustomerWithImagesDto> GetCustomerWithImagesAsync(int id)
         {
-            var customer = await _customerManager.GetCustomerWithImages(id);
-
-            var customerDto = ObjectMapper.Map<CustomerWithImagesDto>(customer);
-
+            Customer customer = new Customer();
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                customer = await _customerManager.GetCustomerWithImages(id);
+            }
             var images = await GetCustomerImagesAsync(customer.Id);
-
+            var customerDto = ObjectMapper.Map<CustomerWithImagesDto>(customer);
             customerDto.Images = images;
 
             return customerDto;
