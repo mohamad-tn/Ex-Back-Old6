@@ -7,7 +7,7 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers.Services
 {
     public interface IOutgoingTransferManager : IDomainService
     {
-        Task<OutgoingTransfer> CreateAsync(OutgoingTransfer input);
+        Task<OutgoingTransfer> CreateAsync(OutgoingTransfer input, int? currentTenantId);
         Task<OutgoingTransfer> UpdateAsync(OutgoingTransfer input);
         Task<OutgoingTransfer> DeleteAsync(OutgoingTransfer outgoingTransfer);
         Task<bool> DeleteCashFlowAsync(OutgoingTransfer input);

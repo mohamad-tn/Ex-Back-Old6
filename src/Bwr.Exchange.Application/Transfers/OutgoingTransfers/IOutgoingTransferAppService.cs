@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services;
+using Bwr.Exchange.Shared.DataManagerRequests;
 using Bwr.Exchange.Shared.Dto;
 using Bwr.Exchange.Transfers.OutgoingTransfers.Dto;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,7 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
         Task<OutgoingTransferDto> GetForEditAsync(int id);
         Task<IList<OutgoingTransferDto>> Get(SearchOutgoingTransferInputDto input);
         IList<ReadOutgoingTransferDto> GetForStatment(SearchOutgoingTransferInputDto input);
-        ReadGrudDto GetForGrid([FromBody] DataManagerRequest dm);
+        ReadGrudDto GetForGrid([FromBody] BWireDataManagerRequest dm);
         ReadGrudDto GetForSendingGrid([FromBody] SendingOutgoingDataManagerRequest dm);
         OutgoingTransferDto GetById(int id);
         Task SetAsCopiedAsync(List<int> ids);

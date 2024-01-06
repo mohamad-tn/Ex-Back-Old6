@@ -19,8 +19,12 @@ namespace Bwr.Exchange.Settings.Treasury
 
         public IList<TreasuryBalanceDto> GetAllWithDetails()
         {
-            var treasuryBalances = _treasuryBalanceManager.GetAllWithDetails();
-            return ObjectMapper.Map<List<TreasuryBalanceDto>>(treasuryBalances);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var treasuryBalances = _treasuryBalanceManager.GetAllWithDetails();
+                return ObjectMapper.Map<List<TreasuryBalanceDto>>(treasuryBalances);
+            }
         }
 
         public async Task<TreasuryBalanceDto> InsertAndGetAsync(TreasuryBalanceDto input)
@@ -34,8 +38,12 @@ namespace Bwr.Exchange.Settings.Treasury
 
         public async Task<TreasuryBalanceDto> UpdateAndGetAsync(TreasuryBalanceDto input)
         {
-            var treasuryBalance = await _treasuryBalanceManager.GetByIdAsync(input.Id);
-
+            TreasuryBalance treasuryBalance = new TreasuryBalance(0,0,0);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                treasuryBalance = await _treasuryBalanceManager.GetByIdAsync(input.Id);
+            }
             ObjectMapper.Map<TreasuryBalanceDto, TreasuryBalance>(input, treasuryBalance);
 
             var updatedTreasuryBalance = await _treasuryBalanceManager.UpdateAndGetAsync(treasuryBalance);

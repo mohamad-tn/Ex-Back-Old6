@@ -24,14 +24,22 @@ namespace Bwr.Exchange.Settings.Expenses
 
         public async Task<IList<ExpenseDto>> GetAllAsync()
         {
-            var expenses = await _expenseManager.GetAllAsync();
-
-            return ObjectMapper.Map<List<ExpenseDto>>(expenses);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var expenses = await _expenseManager.GetAllAsync();
+                return ObjectMapper.Map<List<ExpenseDto>>(expenses);
+            }
         }
         [HttpPost]
         public ReadGrudDto GetForGrid([FromBody] BWireDataManagerRequest dm)
         {
-            var data = _expenseManager.GetAll();
+            IList<Expense> data = new List<Expense>();
+            using (CurrentUnitOfWork.SetTenantId(dm.tenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                data = _expenseManager.GetAll();
+            }
             IEnumerable<ReadExpenseDto> expenses = ObjectMapper.Map<List<ReadExpenseDto>>(data);
 
             var operations = new DataOperations();
@@ -67,13 +75,20 @@ namespace Bwr.Exchange.Settings.Expenses
         }
         public UpdateExpenseDto GetForEdit(int id)
         {
-            var expense = AsyncHelper.RunSync(() => _expenseManager.GetByIdAsync(id));
-            return ObjectMapper.Map<UpdateExpenseDto>(expense);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var expense = AsyncHelper.RunSync(() => _expenseManager.GetByIdAsync(id));
+                return ObjectMapper.Map<UpdateExpenseDto>(expense);
+            }
         }
         public async Task<ExpenseDto> CreateAsync(CreateExpenseDto input)
         {
-            CheckBeforeCreate(input);
-
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                CheckBeforeCreate(input);
+            }
             var expense = ObjectMapper.Map<Expense>(input);
 
             var createdExpense = await _expenseManager.InsertAndGetAsync(expense);
@@ -82,10 +97,13 @@ namespace Bwr.Exchange.Settings.Expenses
         }
         public async Task<ExpenseDto> UpdateAsync(UpdateExpenseDto input)
         {
-            CheckBeforeUpdate(input);
-
-            var expense = await _expenseManager.GetByIdAsync(input.Id);
-
+            Expense expense = new Expense("");
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                CheckBeforeUpdate(input);
+                expense = await _expenseManager.GetByIdAsync(input.Id);
+            }
             ObjectMapper.Map<UpdateExpenseDto, Expense>(input, expense);
 
             var updatedExpense = await _expenseManager.UpdateAndGetAsync(expense);
@@ -94,7 +112,11 @@ namespace Bwr.Exchange.Settings.Expenses
         }
         public async Task DeleteAsync(int id)
         {
-            await _expenseManager.DeleteAsync(id);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                await _expenseManager.DeleteAsync(id);
+            }
         }
 
         #region Helper methods

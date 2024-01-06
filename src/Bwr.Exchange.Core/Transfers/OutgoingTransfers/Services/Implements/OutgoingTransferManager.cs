@@ -1,12 +1,17 @@
 ﻿using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.Events.Bus;
+using Abp.UI;
+using Bwr.Exchange.Settings.Companies;
 using Bwr.Exchange.Settings.Companies.Services;
+using Bwr.Exchange.Settings.Currencies;
+using Bwr.Exchange.Settings.Currencies.Services;
+using Bwr.Exchange.Transfers.OutgoingTransfers.Events;
 using Bwr.Exchange.Transfers.OutgoingTransfers.Factories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace Bwr.Exchange.Transfers.OutgoingTransfers.Services
@@ -17,20 +22,22 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers.Services
         private readonly ICompanyManager _companyManager;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IOutgoingTransferFactory _outgoingTransferFactory;
-        public IEventBus EventBus { get; set; }
+        private readonly ICurrencyManager _currencyManager;
+        //public IEventBus EventBus { get; set; }
 
         public OutgoingTransferManager(
             IRepository<OutgoingTransfer> outgoingTransferRepository,
             IUnitOfWorkManager unitOfWorkManager,
-            IOutgoingTransferFactory outgoingTransferFactory
-,
-            ICompanyManager companyManager)
+            IOutgoingTransferFactory outgoingTransferFactory,
+            ICompanyManager companyManager,
+            ICurrencyManager currencyManager)
         {
             _outgoingTransferRepository = outgoingTransferRepository;
             _unitOfWorkManager = unitOfWorkManager;
             _outgoingTransferFactory = outgoingTransferFactory;
-            EventBus = NullEventBus.Instance;
+            //EventBus = NullEventBus.Instance;
             _companyManager = companyManager;
+            _currencyManager = currencyManager;
         }
 
         //public async Task<OutgoingTransfer> CreateAsync(OutgoingTransfer input)
@@ -65,7 +72,7 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers.Services
             return _outgoingTransferRepository.GetAllIncluding(
                 b => b.Beneficiary,
                 s => s.Sender
-                ).Where(x=>x.Id == id).FirstOrDefault();
+                ).Where(x => x.Id == id).FirstOrDefault();
         }
 
         public async Task<IList<OutgoingTransfer>> GetAsync(Dictionary<string, object> dic)
@@ -107,11 +114,16 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers.Services
                 }
                 else
                 {
-                    if (dic["FromDate"] != null && dic["FromDate"] != null)
+                    if (dic["FromDate"] != null && dic["ToDate"] != null)
                     {
+                        //outgoingTransfers = outgoingTransfers.Where(x =>
+                        //  x.Date >= DateTime.Parse(dic["FromDate"].ToString()) &&
+                        //  x.Date <= DateTime.Parse(dic["ToDate"].ToString())).ToList();
+
                         outgoingTransfers = outgoingTransfers.Where(x =>
-                          x.Date >= DateTime.Parse(dic["FromDate"].ToString()) &&
-                          x.Date <= DateTime.Parse(dic["ToDate"].ToString())).ToList();
+                          x.Date >= DateTime.Parse(DateTime.Parse(dic["FromDate"].ToString()).ToString("dd/MM/yyyy")) &&
+                          x.Date <= DateTime.Parse(DateTime.Parse(dic["ToDate"].ToString()).ToString("dd/MM/yyyy"))).ToList();
+
                     }
                     if (dic["PaymentType"] != null)
                     {
@@ -186,36 +198,72 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers.Services
                     s => s.Sender,
                     b => b.Beneficiary,
                     ds => ds.Country,
-                    cu=>cu.Currency,
-                    t=>t.Treasury)
+                    cu => cu.Currency,
+                    t => t.Treasury)
                 .FirstOrDefault(x => x.Id == id);
         }
 
-        public async Task<OutgoingTransfer> CreateAsync(OutgoingTransfer input)
+        public async Task<OutgoingTransfer> CreateAsync(OutgoingTransfer input,int? currentTenantId)
         {
             var createdOutgoingTransfer = new OutgoingTransfer();
-            using (var unitOfWork = _unitOfWorkManager.Begin())
+            var toCompany = await _companyManager.GetByIdAsync(input.ToCompanyId);
+            var currentCurrency = await _currencyManager.GetByIdAsync(input.CurrencyId);
+
+            //Date and time
+            var currentDate = DateTime.Now;
+            input.Date = new DateTime(
+                input.Date.Year,
+                input.Date.Month,
+                input.Date.Day,
+                currentDate.Hour,
+                currentDate.Minute,
+                currentDate.Second
+                );
+
+            if (toCompany.TenantCompanyId == null)
             {
-                //Date and time
-                var currentDate = DateTime.Now;
-                input.Date = new DateTime(
-                    input.Date.Year,
-                    input.Date.Month,
-                    input.Date.Day,
-                    currentDate.Hour,
-                    currentDate.Minute,
-                    currentDate.Second
+                using (var unitOfWork = _unitOfWorkManager.Begin())
+                {
+                    input.Status = OutgoingTransferStatus.Accepted;
+                    var id = await _outgoingTransferRepository.InsertAndGetIdAsync(input);
+
+                    createdOutgoingTransfer = await _outgoingTransferRepository.GetAsync(id);
+
+                    IOutgoingTransferDomainService service = _outgoingTransferFactory.CreateService(createdOutgoingTransfer);
+                    await service.CreateCashFlowAsync(createdOutgoingTransfer);
+                    unitOfWork.Complete();
+                }
+            }
+            else
+            {
+                IList<Currency> toTenantCurrencies = new List<Currency>();
+                using (_unitOfWorkManager.Current.SetTenantId(toCompany.TenantCompanyId))
+                {
+                    _unitOfWorkManager.Current.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                    toTenantCurrencies = await _currencyManager.GetAllAsync();
+                }
+
+                if (!toTenantCurrencies.Any(x => x.Name.ToLower().Trim() == currentCurrency.Name.ToLower().Trim()))
+                {
+                    throw new UserFriendlyException("الشركة المرسلة إليها هذه الحوالة لا تتعامل بهذه العملة");
+                }
+
+                input.Status = OutgoingTransferStatus.Pending;
+                var id = await _outgoingTransferRepository.InsertAndGetIdAsync(input);
+                createdOutgoingTransfer = await _outgoingTransferRepository.GetAsync(id);                
+
+                var data = new CreateExternalTransferEventData(
+                    createdOutgoingTransfer.Date,createdOutgoingTransfer.Note,createdOutgoingTransfer.PaymentType,
+                    createdOutgoingTransfer.Amount,createdOutgoingTransfer.Commission,createdOutgoingTransfer.CompanyCommission,
+                    createdOutgoingTransfer.ClientCommission,createdOutgoingTransfer.Currency.Name,createdOutgoingTransfer.Beneficiary.Name,
+                    createdOutgoingTransfer.Sender.Name,currentTenantId,toCompany.TenantCompanyId,null,id
                     );
 
-                var id = await _outgoingTransferRepository.InsertAndGetIdAsync(input);
-
-                createdOutgoingTransfer = await _outgoingTransferRepository.GetAsync(id);
-
-                IOutgoingTransferDomainService service = _outgoingTransferFactory.CreateService(createdOutgoingTransfer);
-                await service.CreateCashFlowAsync(createdOutgoingTransfer);
-
-                unitOfWork.Complete();
+                await EventBus.Default.TriggerAsync(data);
             }
+
+
+
             return createdOutgoingTransfer;
 
         }
@@ -276,24 +324,25 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers.Services
                 outgoingTransfer.IsCopied = true;
 
                 await _outgoingTransferRepository.UpdateAsync(outgoingTransfer);
-            }            
+            }
         }
 
         public async Task<List<NotCopiedForCompany>> GetNotCopiedCount()
         {
+            IList<Company> companies = new List<Company>();
             var all = GetAllNotCopiedWithDetails();
-            var companies = await _companyManager.GetAllAsync();
+            companies = await _companyManager.GetAllAsync();
+            var companiesNotLinked = companies.Where(x => x.TenantCompanyId == null).ToList();
 
             List<NotCopiedForCompany> data = new List<NotCopiedForCompany>();
 
-            foreach (var company in companies)
-            {               
-
-                var allNotCopied = all.Where(x =>x.ToCompanyId == company.Id).ToList();
+            foreach (var company in companiesNotLinked)
+            {
+                var allNotCopied = all.Where(x => x.ToCompanyId == company.Id).ToList();
                 var allNotCopiedCount = allNotCopied.Count;
 
                 var message = string.IsNullOrEmpty(initialTransferCuurenyCountForCompany(allNotCopied)) ? "0" : initialTransferCuurenyCountForCompany(allNotCopied);
-                
+
                 var companyTranfer = new NotCopiedForCompany() { Name = company.Name + "   " + message, Id = company.Id };
                 data.Add(companyTranfer);
             }
@@ -340,7 +389,8 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers.Services
         private IQueryable<OutgoingTransfer> GetAllNotCopiedWithDetails()
         {
             return _outgoingTransferRepository
-                .GetAllIncluding(cu => cu.Currency).Where(x=>x.IsCopied == false);
+                .GetAllIncluding(cu => cu.Currency).Include(x => x.ToCompany)
+                .Where(x => x.IsCopied == false);
         }
         #endregion
 
@@ -352,5 +402,5 @@ public class NotCopiedForCompany
 {
     public string Name { get; set; }
     public int Id { get; set; }
-    
+
 }

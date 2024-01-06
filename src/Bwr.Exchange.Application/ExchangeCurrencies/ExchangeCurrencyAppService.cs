@@ -1,5 +1,4 @@
-﻿using Abp.Domain.Repositories;
-using Abp.Events.Bus;
+﻿using Abp.Events.Bus;
 using Abp.Runtime.Session;
 using Abp.UI;
 using Bwr.Exchange.CashFlows.ManagementStatement.Events;
@@ -13,11 +12,9 @@ using Bwr.Exchange.Shared.Dto;
 using Bwr.Exchange.Transfers;
 using Microsoft.AspNetCore.Mvc;
 using Syncfusion.EJ2.Base;
-using Syncfusion.EJ2.LinearGauge;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Bwr.Exchange.ExchangeCurrencies
@@ -46,166 +43,181 @@ namespace Bwr.Exchange.ExchangeCurrencies
 
         public async Task<CreateExchangeCurrencyDto> CreateAsync(CreateExchangeCurrencyDto input)
         {
-            var exchangeCurrency = ObjectMapper.Map<ExchangeCurrency>(input);
-            var createdExchangeCurrency = await _exchangeCurrencyManager.CreateAsync(exchangeCurrency);
-            return ObjectMapper.Map<CreateExchangeCurrencyDto>(createdExchangeCurrency);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var exchangeCurrency = ObjectMapper.Map<ExchangeCurrency>(input);
+                var createdExchangeCurrency = await _exchangeCurrencyManager.CreateAsync(exchangeCurrency);
+                return ObjectMapper.Map<CreateExchangeCurrencyDto>(createdExchangeCurrency);
+            }
         }
 
         public async Task<UpdateExchangeCurrencyDto> UpdateAsync(UpdateExchangeCurrencyDto input)
         {
             string before = "";
             string after = "";
-
-            var exchangeCurrency = await _exchangeCurrencyManager.GetByIdAsync(input.Id);
-
-            #region Before & After
-            if (exchangeCurrency.Note != input.Note)
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
             {
-                before = L("Note") + " : " + exchangeCurrency.Note;
-                after = L("Note") + " : " + input.Note;
-            }
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var exchangeCurrency = await _exchangeCurrencyManager.GetByIdAsync(input.Id);
 
-            if (exchangeCurrency.Number != input.Number)
-            {
-                before = before + " - " + L("Number") + " : " + exchangeCurrency.Number;
-                after = after + " - " + L("Number") + " : " + input.Number;
-            }
+                #region Before & After
+                if (exchangeCurrency.Note != input.Note)
+                {
+                    before = L("Note") + " : " + exchangeCurrency.Note;
+                    after = L("Note") + " : " + input.Note;
+                }
 
-            if (exchangeCurrency.AmountOfFirstCurrency != input.AmountOfFirstCurrency)
-            {
-                before = before + " - " + L("AmountOfFirstCurrency") + " : " + exchangeCurrency.AmountOfFirstCurrency;
-                after = after + " - " + L("AmountOfFirstCurrency") + " : " + input.AmountOfFirstCurrency;
-            }
+                if (exchangeCurrency.Number != input.Number)
+                {
+                    before = before + " - " + L("Number") + " : " + exchangeCurrency.Number;
+                    after = after + " - " + L("Number") + " : " + input.Number;
+                }
 
-            if (exchangeCurrency.AmoutOfSecondCurrency != input.AmoutOfSecondCurrency)
-            {
-                before = before + " - " + L("AmoutOfSecondCurrency") + " : " + exchangeCurrency.AmoutOfSecondCurrency;
-                after = after + " - " + L("AmoutOfSecondCurrency") + " : " + input.AmoutOfSecondCurrency;
-            }
+                if (exchangeCurrency.AmountOfFirstCurrency != input.AmountOfFirstCurrency)
+                {
+                    before = before + " - " + L("AmountOfFirstCurrency") + " : " + exchangeCurrency.AmountOfFirstCurrency;
+                    after = after + " - " + L("AmountOfFirstCurrency") + " : " + input.AmountOfFirstCurrency;
+                }
 
-            if (exchangeCurrency.PaidAmountOfFirstCurrency != input.PaidAmountOfFirstCurrency)
-            {
-                before = before + " - " + L("PaidAmountOfFirstCurrency") + " : " + exchangeCurrency.PaidAmountOfFirstCurrency;
-                after = after + " - " + L("PaidAmountOfFirstCurrency") + " : " + input.PaidAmountOfFirstCurrency;
-            }
+                if (exchangeCurrency.AmoutOfSecondCurrency != input.AmoutOfSecondCurrency)
+                {
+                    before = before + " - " + L("AmoutOfSecondCurrency") + " : " + exchangeCurrency.AmoutOfSecondCurrency;
+                    after = after + " - " + L("AmoutOfSecondCurrency") + " : " + input.AmoutOfSecondCurrency;
+                }
 
-            if (exchangeCurrency.ReceivedAmountOfFirstCurrency != input.ReceivedAmountOfFirstCurrency)
-            {
-                before = before + " - " + L("ReceivedAmountOfFirstCurrency") + " : " + exchangeCurrency.ReceivedAmountOfFirstCurrency;
-                after = after + " - " + L("ReceivedAmountOfFirstCurrency") + " : " + input.ReceivedAmountOfFirstCurrency;
-            }
+                if (exchangeCurrency.PaidAmountOfFirstCurrency != input.PaidAmountOfFirstCurrency)
+                {
+                    before = before + " - " + L("PaidAmountOfFirstCurrency") + " : " + exchangeCurrency.PaidAmountOfFirstCurrency;
+                    after = after + " - " + L("PaidAmountOfFirstCurrency") + " : " + input.PaidAmountOfFirstCurrency;
+                }
 
-            if (exchangeCurrency.PaidAmountOfSecondCurrency != input.PaidAmountOfSecondCurrency)
-            {
-                before = before + " - " + L("PaidAmountOfSecondCurrency") + " : " + exchangeCurrency.PaidAmountOfSecondCurrency;
-                after = after + " - " + L("PaidAmountOfSecondCurrency") + " : " + input.PaidAmountOfSecondCurrency;
-            }
+                if (exchangeCurrency.ReceivedAmountOfFirstCurrency != input.ReceivedAmountOfFirstCurrency)
+                {
+                    before = before + " - " + L("ReceivedAmountOfFirstCurrency") + " : " + exchangeCurrency.ReceivedAmountOfFirstCurrency;
+                    after = after + " - " + L("ReceivedAmountOfFirstCurrency") + " : " + input.ReceivedAmountOfFirstCurrency;
+                }
 
-            if (exchangeCurrency.ReceivedAmountOfSecondCurrency != input.ReceivedAmountOfSecondCurrency)
-            {
-                before = before + " - " + L("ReceivedAmountOfSecondCurrency") + " : " + exchangeCurrency.ReceivedAmountOfSecondCurrency;
-                after = after + " - " + L("ReceivedAmountOfSecondCurrency") + " : " + input.ReceivedAmountOfSecondCurrency;
-            }
+                if (exchangeCurrency.PaidAmountOfSecondCurrency != input.PaidAmountOfSecondCurrency)
+                {
+                    before = before + " - " + L("PaidAmountOfSecondCurrency") + " : " + exchangeCurrency.PaidAmountOfSecondCurrency;
+                    after = after + " - " + L("PaidAmountOfSecondCurrency") + " : " + input.PaidAmountOfSecondCurrency;
+                }
 
-            if (exchangeCurrency.ExchangePrice != input.ExchangePrice)
-            {
-                before = before + " - " + L("ExchangePrice") + " : " + exchangeCurrency.ExchangePrice;
-                after = after + " - " + L("ExchangePrice") + " : " + input.ExchangePrice;
-            }
+                if (exchangeCurrency.ReceivedAmountOfSecondCurrency != input.ReceivedAmountOfSecondCurrency)
+                {
+                    before = before + " - " + L("ReceivedAmountOfSecondCurrency") + " : " + exchangeCurrency.ReceivedAmountOfSecondCurrency;
+                    after = after + " - " + L("ReceivedAmountOfSecondCurrency") + " : " + input.ReceivedAmountOfSecondCurrency;
+                }
 
-            if ((int)exchangeCurrency.PaymentType != input.PaymentType)
-            {
-                before = before + " - " + L("PaymentType") + " : " + ((PaymentType)exchangeCurrency.PaymentType);
-                after = after + " - " + L("PaymentType") + " : " + ((PaymentType)input.PaymentType);
-            }
+                if (exchangeCurrency.ExchangePrice != input.ExchangePrice)
+                {
+                    before = before + " - " + L("ExchangePrice") + " : " + exchangeCurrency.ExchangePrice;
+                    after = after + " - " + L("ExchangePrice") + " : " + input.ExchangePrice;
+                }
 
-            if ((int)exchangeCurrency.ActionType != input.ActionType)
-            {
-                before = before + " - " + L("ActionType") + " : " + ((ActionType)exchangeCurrency.ActionType);
-                after = after + " - " + L("ActionType") + " : " + ((ActionType)input.ActionType);
-            }
-            
-            if (exchangeCurrency.FirstCurrencyId != input.FirstCurrencyId)
-            {
-                before = before + " - " + L("FirstCurrency") + " : " + (exchangeCurrency.FirstCurrencyId != null ? _currencyManager.GetCurrencyNameById((int)exchangeCurrency.FirstCurrencyId) : " ");
-                after = after + " - " + L("FirstCurrency") + " : " + (input.FirstCurrencyId != null ? _currencyManager.GetCurrencyNameById((int)input.FirstCurrencyId) : " ");
-            }
+                if ((int)exchangeCurrency.PaymentType != input.PaymentType)
+                {
+                    before = before + " - " + L("PaymentType") + " : " + ((PaymentType)exchangeCurrency.PaymentType);
+                    after = after + " - " + L("PaymentType") + " : " + ((PaymentType)input.PaymentType);
+                }
 
-            if (exchangeCurrency.SecondCurrencyId != input.SecondCurrencyId)
-            {
-                before = before + " - " + L("SecondCurrency") + " : " + (exchangeCurrency.SecondCurrencyId != null ? _currencyManager.GetCurrencyNameById((int)exchangeCurrency.SecondCurrencyId) : " ");
-                after = after + " - " + L("SecondCurrency") + " : " + (input.SecondCurrencyId != null ? _currencyManager.GetCurrencyNameById((int)input.SecondCurrencyId) : " ");
-            }
+                if ((int)exchangeCurrency.ActionType != input.ActionType)
+                {
+                    before = before + " - " + L("ActionType") + " : " + ((ActionType)exchangeCurrency.ActionType);
+                    after = after + " - " + L("ActionType") + " : " + ((ActionType)input.ActionType);
+                }
 
-            if (exchangeCurrency.MainCurrencyId != input.MainCurrencyId)
-            {
-                before = before + " - " + L("MainCurrency") + " : " + (exchangeCurrency.MainCurrencyId != null ? _currencyManager.GetCurrencyNameById((int)exchangeCurrency.MainCurrencyId) : " ");
-                after = after + " - " + L("MainCurrency") + " : " + (input.MainCurrencyId != null ? _currencyManager.GetCurrencyNameById((int)input.MainCurrencyId) : " ");
-            }
+                if (exchangeCurrency.FirstCurrencyId != input.FirstCurrencyId)
+                {
+                    before = before + " - " + L("FirstCurrency") + " : " + (exchangeCurrency.FirstCurrencyId != null ? _currencyManager.GetCurrencyNameById((int)exchangeCurrency.FirstCurrencyId) : " ");
+                    after = after + " - " + L("FirstCurrency") + " : " + (input.FirstCurrencyId != null ? _currencyManager.GetCurrencyNameById((int)input.FirstCurrencyId) : " ");
+                }
 
-            if (exchangeCurrency.ClientId != input.ClientId)
-            {
-                before = before + " - " + L("Client") + " : " + (exchangeCurrency.ClientId != null ? _clientManager.GetClientNameById((int)exchangeCurrency.ClientId) : " ");
-                after = after + " - " + L("Client") + " : " + (input.ClientId != null ? _clientManager.GetClientNameById((int)input.ClientId) : " ");
-            }
+                if (exchangeCurrency.SecondCurrencyId != input.SecondCurrencyId)
+                {
+                    before = before + " - " + L("SecondCurrency") + " : " + (exchangeCurrency.SecondCurrencyId != null ? _currencyManager.GetCurrencyNameById((int)exchangeCurrency.SecondCurrencyId) : " ");
+                    after = after + " - " + L("SecondCurrency") + " : " + (input.SecondCurrencyId != null ? _currencyManager.GetCurrencyNameById((int)input.SecondCurrencyId) : " ");
+                }
 
-            if (exchangeCurrency.CompanyId != input.CompanyId)
-            {
-                before = before + " - " + L("Company") + " : " + (exchangeCurrency.CompanyId != null ? _companyManager.GetCompanyNameById((int)exchangeCurrency.CompanyId): " ");
-                after = after + " - " + L("Company") + " : " + (input.CompanyId != null ? _companyManager.GetCompanyNameById((int)input.CompanyId) : " ");
-            }
-            #endregion
+                if (exchangeCurrency.MainCurrencyId != input.MainCurrencyId)
+                {
+                    before = before + " - " + L("MainCurrency") + " : " + (exchangeCurrency.MainCurrencyId != null ? _currencyManager.GetCurrencyNameById((int)exchangeCurrency.MainCurrencyId) : " ");
+                    after = after + " - " + L("MainCurrency") + " : " + (input.MainCurrencyId != null ? _currencyManager.GetCurrencyNameById((int)input.MainCurrencyId) : " ");
+                }
 
-            EventBus.Default.Trigger(
-                new CreateManagementEventData(
-                    3, null, exchangeCurrency.Date, (int?)exchangeCurrency.PaymentType, DateTime.Now, 0, exchangeCurrency.Number,
-                    (int?)exchangeCurrency.ActionType, null, before, after, exchangeCurrency.AmountOfFirstCurrency,
-                    exchangeCurrency.AmoutOfSecondCurrency, exchangeCurrency.PaidAmountOfFirstCurrency,
-                    exchangeCurrency.ReceivedAmountOfFirstCurrency, exchangeCurrency.PaidAmountOfSecondCurrency,
-                    exchangeCurrency.ReceivedAmountOfSecondCurrency, exchangeCurrency.Commission,
-                    exchangeCurrency.FirstCurrencyId, exchangeCurrency.SecondCurrencyId, null, exchangeCurrency.ClientId,
-                    AbpSession.GetUserId(), exchangeCurrency.CompanyId, null, null, null, (int?)exchangeCurrency.ActionType
-                    )
-                );
+                if (exchangeCurrency.ClientId != input.ClientId)
+                {
+                    before = before + " - " + L("Client") + " : " + (exchangeCurrency.ClientId != null ? _clientManager.GetClientNameById((int)exchangeCurrency.ClientId) : " ");
+                    after = after + " - " + L("Client") + " : " + (input.ClientId != null ? _clientManager.GetClientNameById((int)input.ClientId) : " ");
+                }
 
+                if (exchangeCurrency.CompanyId != input.CompanyId)
+                {
+                    before = before + " - " + L("Company") + " : " + (exchangeCurrency.CompanyId != null ? _companyManager.GetCompanyNameById((int)exchangeCurrency.CompanyId) : " ");
+                    after = after + " - " + L("Company") + " : " + (input.CompanyId != null ? _companyManager.GetCompanyNameById((int)input.CompanyId) : " ");
+                }
+                #endregion
 
-            var date = DateTime.Parse(input.Date);
-            date = new DateTime
-                    (
-                        date.Year,
-                        date.Month,
-                        date.Day,
-                        exchangeCurrency.Date.Hour,
-                        exchangeCurrency.Date.Minute,
-                        exchangeCurrency.Date.Second
+                EventBus.Default.Trigger(
+                    new CreateManagementEventData(
+                        3, null, exchangeCurrency.Date, (int?)exchangeCurrency.PaymentType, DateTime.Now, 0, exchangeCurrency.Number,
+                        (int?)exchangeCurrency.ActionType, null, before, after, exchangeCurrency.AmountOfFirstCurrency,
+                        exchangeCurrency.AmoutOfSecondCurrency, exchangeCurrency.PaidAmountOfFirstCurrency,
+                        exchangeCurrency.ReceivedAmountOfFirstCurrency, exchangeCurrency.PaidAmountOfSecondCurrency,
+                        exchangeCurrency.ReceivedAmountOfSecondCurrency, exchangeCurrency.Commission,
+                        exchangeCurrency.FirstCurrencyId, exchangeCurrency.SecondCurrencyId, null, exchangeCurrency.ClientId,
+                        AbpSession.GetUserId(), exchangeCurrency.CompanyId, null, null, null, (int?)exchangeCurrency.ActionType
+                        )
                     );
-            var cashFlowDeleted = await _exchangeCurrencyManager.DeleteCashFlowAsync(exchangeCurrency);
-            if (cashFlowDeleted)
-            {           
-
-                ObjectMapper.Map<UpdateExchangeCurrencyDto, ExchangeCurrency>(input, exchangeCurrency);
-                exchangeCurrency.Date = date;
-
-                var updatedTreasuryAction = await _exchangeCurrencyManager.UpdateAsync(exchangeCurrency);                
 
 
-                return ObjectMapper.Map<UpdateExchangeCurrencyDto>(updatedTreasuryAction);
-            }
-            else
-            {
-                throw new UserFriendlyException("Exception Message");
+                var date = DateTime.Parse(input.Date);
+                date = new DateTime
+                        (
+                            date.Year,
+                            date.Month,
+                            date.Day,
+                            exchangeCurrency.Date.Hour,
+                            exchangeCurrency.Date.Minute,
+                            exchangeCurrency.Date.Second
+                        );
+                var cashFlowDeleted = await _exchangeCurrencyManager.DeleteCashFlowAsync(exchangeCurrency);
+                if (cashFlowDeleted)
+                {
+
+                    ObjectMapper.Map<UpdateExchangeCurrencyDto, ExchangeCurrency>(input, exchangeCurrency);
+                    exchangeCurrency.Date = date;
+
+                    var updatedTreasuryAction = await _exchangeCurrencyManager.UpdateAsync(exchangeCurrency);
+
+
+                    return ObjectMapper.Map<UpdateExchangeCurrencyDto>(updatedTreasuryAction);
+                }
+                else
+                {
+                    throw new UserFriendlyException("Exception Message");
+                }
             }
         }
 
         public async Task<UpdateExchangeCurrencyDto> GetForEditAsync(int exchangeCurrencyId)
         {
-            ExchangeCurrency exchangeCurrency = await _exchangeCurrencyManager.GetByIdAsync(exchangeCurrencyId);
-            return ObjectMapper.Map<UpdateExchangeCurrencyDto>(exchangeCurrency);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                ExchangeCurrency exchangeCurrency = await _exchangeCurrencyManager.GetByIdAsync(exchangeCurrencyId);
+                return ObjectMapper.Map<UpdateExchangeCurrencyDto>(exchangeCurrency);
+            }
         }
 
         public int GetLastNumber()
         {
-            return _exchangeCurrencyManager.GetLastNumber();
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                return _exchangeCurrencyManager.GetLastNumber();
+            }
         }
 
         [HttpPost]
@@ -234,8 +246,13 @@ namespace Bwr.Exchange.ExchangeCurrencies
                 { "ToDate" , toDate},
                 { "CurrencyId" , dm.currencyId}
             };
-            var exchangeCurrencies = _exchangeCurrencyManager.Get(dic);
 
+            IList<ExchangeCurrency> exchangeCurrencies = new List<ExchangeCurrency>();
+            using (CurrentUnitOfWork.SetTenantId(dm.tenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                exchangeCurrencies = _exchangeCurrencyManager.Get(dic);
+            }
             IEnumerable<ExchangeCurrencyDto> data = ObjectMapper.Map<List<ExchangeCurrencyDto>>(exchangeCurrencies);
             switch (dm.paymentType)
             {
@@ -251,7 +268,7 @@ namespace Bwr.Exchange.ExchangeCurrencies
                             data = data.Where(x => x.CompanyId == dm.companyId);
                     }
                     break;
-                
+
                 default: break;
             }
 
@@ -275,22 +292,26 @@ namespace Bwr.Exchange.ExchangeCurrencies
 
         public async Task DeleteAsync(int id)
         {
-            var exchangeCurrency = await _exchangeCurrencyManager.GetByIdAsync(id);
-            if (exchangeCurrency != null)
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
             {
-                await _exchangeCurrencyManager.DeleteAsync(exchangeCurrency);
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var exchangeCurrency = await _exchangeCurrencyManager.GetByIdAsync(id);
+                if (exchangeCurrency != null)
+                {
+                    await _exchangeCurrencyManager.DeleteAsync(exchangeCurrency);
 
-                EventBus.Default.Trigger(
-                new CreateManagementEventData(
-                    3,null,exchangeCurrency.Date, (int?)exchangeCurrency.PaymentType,DateTime.Now,1,exchangeCurrency.Number,
-                    (int?)exchangeCurrency.ActionType,null,null,null,exchangeCurrency.AmountOfFirstCurrency,
-                    exchangeCurrency.AmoutOfSecondCurrency,exchangeCurrency.PaidAmountOfFirstCurrency,
-                    exchangeCurrency.ReceivedAmountOfFirstCurrency,exchangeCurrency.PaidAmountOfSecondCurrency,
-                    exchangeCurrency.ReceivedAmountOfSecondCurrency,exchangeCurrency.Commission,
-                    exchangeCurrency.FirstCurrencyId,exchangeCurrency.SecondCurrencyId,null,exchangeCurrency.ClientId,
-                    AbpSession.GetUserId(),exchangeCurrency.CompanyId,null,null,null, (int?)exchangeCurrency.ActionType
-                    )
-                );
+                    EventBus.Default.Trigger(
+                    new CreateManagementEventData(
+                        3, null, exchangeCurrency.Date, (int?)exchangeCurrency.PaymentType, DateTime.Now, 1, exchangeCurrency.Number,
+                        (int?)exchangeCurrency.ActionType, null, null, null, exchangeCurrency.AmountOfFirstCurrency,
+                        exchangeCurrency.AmoutOfSecondCurrency, exchangeCurrency.PaidAmountOfFirstCurrency,
+                        exchangeCurrency.ReceivedAmountOfFirstCurrency, exchangeCurrency.PaidAmountOfSecondCurrency,
+                        exchangeCurrency.ReceivedAmountOfSecondCurrency, exchangeCurrency.Commission,
+                        exchangeCurrency.FirstCurrencyId, exchangeCurrency.SecondCurrencyId, null, exchangeCurrency.ClientId,
+                        AbpSession.GetUserId(), exchangeCurrency.CompanyId, null, null, null, (int?)exchangeCurrency.ActionType
+                        )
+                    );
+                }
             }
         }
     }

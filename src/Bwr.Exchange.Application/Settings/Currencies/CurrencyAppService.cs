@@ -24,14 +24,22 @@ namespace Bwr.Exchange.Settings.Currencies
 
         public async Task<IList<CurrencyDto>> GetAllAsync()
         {
-            var countries = await _currencyManager.GetAllAsync();
-
-            return ObjectMapper.Map<List<CurrencyDto>>(countries);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var countries = await _currencyManager.GetAllAsync();
+                return ObjectMapper.Map<List<CurrencyDto>>(countries);
+            }
         }
         [HttpPost]
         public ReadGrudDto GetForGrid([FromBody] BWireDataManagerRequest dm)
         {
-            var data = _currencyManager.GetAll();
+            IList<Currency> data = new List<Currency>();
+            using (CurrentUnitOfWork.SetTenantId(dm.tenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                data = _currencyManager.GetAll();
+            }
             IEnumerable<ReadCurrencyDto> countries = ObjectMapper.Map<List<ReadCurrencyDto>>(data);
 
             var operations = new DataOperations();
@@ -67,13 +75,20 @@ namespace Bwr.Exchange.Settings.Currencies
         }
         public UpdateCurrencyDto GetForEdit(int id)
         {
-            var country = AsyncHelper.RunSync(() => _currencyManager.GetByIdAsync(id));
-            return ObjectMapper.Map<UpdateCurrencyDto>(country);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var country = AsyncHelper.RunSync(() => _currencyManager.GetByIdAsync(id));
+                return ObjectMapper.Map<UpdateCurrencyDto>(country);
+            }
         }
         public async Task<CurrencyDto> CreateAsync(CreateCurrencyDto input)
         {
-            CheckBeforeCreate(input);
-
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                CheckBeforeCreate(input);
+            }
             var country = ObjectMapper.Map<Currency>(input);
 
             var createdCurrency = await _currencyManager.InsertAndGetAsync(country);
@@ -82,19 +97,26 @@ namespace Bwr.Exchange.Settings.Currencies
         }
         public async Task<CurrencyDto> UpdateAsync(UpdateCurrencyDto input)
         {
-            CheckBeforeUpdate(input);
+            Currency currency = new Currency();
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                CheckBeforeUpdate(input);
+                currency = await _currencyManager.GetByIdAsync(input.Id);
+            }
+            ObjectMapper.Map<UpdateCurrencyDto, Currency>(input, currency);
 
-            var country = await _currencyManager.GetByIdAsync(input.Id);
-
-            ObjectMapper.Map<UpdateCurrencyDto, Currency>(input, country);
-
-            var updatedCurrency = await _currencyManager.UpdateAndGetAsync(country);
+            var updatedCurrency = await _currencyManager.UpdateAndGetAsync(currency);
 
             return ObjectMapper.Map<CurrencyDto>(updatedCurrency);
         }
         public async Task DeleteAsync(int id)
         {
-            await _currencyManager.DeleteAsync(id);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                await _currencyManager.DeleteAsync(id);
+            }
         }
 
         #region Helper methods

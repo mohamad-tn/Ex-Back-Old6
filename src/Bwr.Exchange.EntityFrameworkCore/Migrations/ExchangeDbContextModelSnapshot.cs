@@ -2317,6 +2317,52 @@ namespace Bwr.Exchange.Migrations
                     b.ToTable("ExchangeCurrencyHistories");
                 });
 
+            modelBuilder.Entity("Bwr.Exchange.LinkTenantsCompanies.LinkTenantCompany", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FirstTenantId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("SecondTenantId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LinkTenantCompanies");
+                });
+
             modelBuilder.Entity("Bwr.Exchange.MultiTenancy.Tenant", b =>
                 {
                     b.Property<int>("Id")
@@ -2618,6 +2664,9 @@ namespace Bwr.Exchange.Migrations
 
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TenantCompanyId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
@@ -3069,6 +3118,73 @@ namespace Bwr.Exchange.Migrations
                     b.ToTable("TreasuryBalances");
                 });
 
+            modelBuilder.Entity("Bwr.Exchange.Transfers.ExternalTransfers.ExtrenalTransfer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
+
+                    b.Property<string>("BeneficiaryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("ClientCommission")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Commission")
+                        .HasColumnType("float");
+
+                    b.Property<double>("CompanyCommission")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("CurrencyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("FromTenantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FromTenantName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OutgoingTransferId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PaymentType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SenderName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ExtrenalTransfers");
+                });
+
             modelBuilder.Entity("Bwr.Exchange.Transfers.IncomeTransfers.IncomeTransfer", b =>
                 {
                     b.Property<int>("Id")
@@ -3274,6 +3390,9 @@ namespace Bwr.Exchange.Migrations
                         .HasColumnType("float");
 
                     b.Property<int?>("SenderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<int?>("TenantId")

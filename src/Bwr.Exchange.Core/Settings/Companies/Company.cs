@@ -10,10 +10,11 @@ namespace Bwr.Exchange.Settings.Companies
         {
             CompanyBalances = new List<CompanyBalance>();
         }
+        public int? TenantCompanyId { get; set; }
+        public int? TenantId { get; set; }
         public string Name { get; set; }
         public string Phone { get; set; }
         public string Address { get; set; }
-        public int? TenantId { get; set; }
         public virtual IList<CompanyBalance> CompanyBalances { get; set; }
     }
 }

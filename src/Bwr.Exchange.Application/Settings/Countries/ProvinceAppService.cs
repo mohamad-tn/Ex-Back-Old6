@@ -16,14 +16,18 @@ namespace Bwr.Exchange.Settings.Countries
 
         public IList<ProvinceForDropdownDto> GetAllForDropdown()
         {
-            var provinces = _countryManager.GetAllWithDetail().ToList().SelectMany(x => x.Provinces);
-            return (from province in provinces
-                    select new ProvinceForDropdownDto()
-                    {
-                        CountryName = province.Country != null ? province.Country.Name : string.Empty,
-                        Name = province.Name,
-                        Id = province.Id
-                    }).ToList();
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var provinces = _countryManager.GetAllWithDetail().ToList().SelectMany(x => x.Provinces);
+                return (from province in provinces
+                        select new ProvinceForDropdownDto()
+                        {
+                            CountryName = province.Country != null ? province.Country.Name : string.Empty,
+                            Name = province.Name,
+                            Id = province.Id
+                        }).ToList();
+            }
         }
     }
 }

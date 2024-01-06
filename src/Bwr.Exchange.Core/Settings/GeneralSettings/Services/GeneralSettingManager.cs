@@ -48,8 +48,8 @@ namespace Bwr.Exchange.Settings.GeneralSettings.Services
             }
             else
             {
-                var id = await _repository.InsertAndGetIdAsync(generalSetting);
-                return await _repository.GetAsync(id);
+                return await _repository.InsertAsync(generalSetting);
+                //return await _repository.GetAsync(id);
             }
         }
 

@@ -12,6 +12,7 @@ namespace Bwr.Exchange.Settings.Clients.Dto
             ClientBalances = new List<ClientBalanceDto>();
             ClientPhones = new List<ClientPhoneDto>();
         }
+        public int? TenantId { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public bool Activated { get; set; }

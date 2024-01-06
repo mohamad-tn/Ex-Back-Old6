@@ -39,169 +39,189 @@ namespace Bwr.Exchange.CashFlows.CompanyCashFlows
 
         public IList<CompanyCashFlowDto> Get(GetCompanyCashFlowInput input)
         {
-            var companyCashFlows = _companyCashFlowManager.Get(input.CompanyId);
-            var companyCashFlowsDto = ObjectMapper.Map<List<CompanyCashFlowDto>>(companyCashFlows);
-            return companyCashFlowsDto;
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var companyCashFlows = _companyCashFlowManager.Get(input.CompanyId);
+                var companyCashFlowsDto = ObjectMapper.Map<List<CompanyCashFlowDto>>(companyCashFlows);
+                return companyCashFlowsDto;
+            }
         }
 
         public IList<CompanyCashFlowTotalDto> GetCompanysBalances(string date)
         {
-            var toDate = DateTime.Now;
-            if (!string.IsNullOrEmpty(date))
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
             {
-                toDate = DateTime.Parse(date);
-            }
-            toDate = new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59);
-
-            var dtos = new List<CompanyCashFlowTotalDto>();
-            var companys = _companyManager.GetAll();
-            var currencies = _currencyManager.GetAll();
-            foreach (var company in companys)
-            {
-                var dto = new CompanyCashFlowTotalDto()
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var toDate = DateTime.Now;
+                if (!string.IsNullOrEmpty(date))
                 {
-                    CompanyId = company.Id,
-                    CompanyName = company.Name
-                };
+                    toDate = DateTime.Parse(date);
+                }
+                toDate = new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59);
 
-                foreach (var currency in currencies)
+                var dtos = new List<CompanyCashFlowTotalDto>();
+                var companys = _companyManager.GetAll();
+                var currencies = _currencyManager.GetAll();
+                foreach (var company in companys)
                 {
-                    var balance = _companyCashFlowManager.GetLastBalance(company.Id, currency.Id, toDate);
-                    var currencyBalance = new CompanyCashFlowTotalDetailDto()
+                    var dto = new CompanyCashFlowTotalDto()
                     {
-                        CurrencyId = currency.Id,
-                        CurrencyName = currency.Name,
-                        CurrentBalance = balance
+                        CompanyId = company.Id,
+                        CompanyName = company.Name
                     };
 
-                    //التحقق في حال كانت الشركة نشطة اليوم
-                    dto.IsActiveToday = _companyCashFlowManager.CheckIsActiveToday(company.Id, toDate);
-                    dto.IsMatching = _companyCashFlowManager.CheckIsIfMatching(company.Id);
-                    dto.CurrencyBalances.Add(currencyBalance);
+                    foreach (var currency in currencies)
+                    {
+                        var balance = _companyCashFlowManager.GetLastBalance(company.Id, currency.Id, toDate);
+                        var currencyBalance = new CompanyCashFlowTotalDetailDto()
+                        {
+                            CurrencyId = currency.Id,
+                            CurrencyName = currency.Name,
+                            CurrentBalance = balance
+                        };
+
+                        //التحقق في حال كانت الشركة نشطة اليوم
+                        dto.IsActiveToday = _companyCashFlowManager.CheckIsActiveToday(company.Id, toDate);
+                        dto.IsMatching = _companyCashFlowManager.CheckIsIfMatching(company.Id);
+                        dto.CurrencyBalances.Add(currencyBalance);
+                    }
+
+
+                    dtos.Add(dto);
                 }
 
-                
-                dtos.Add(dto);
+                return dtos;
             }
-
-            return dtos;
         }
 
         public IList<SummaryCashFlowDto> Summary(string date)
         {
-            var toDate = DateTime.Now;
-            if (!string.IsNullOrEmpty(date))
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
             {
-                toDate = DateTime.Parse(date);
-            }
-            toDate = new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59);
-
-            var dtos = new List<SummaryCashFlowDto>();
-            var companys = _companyManager.GetAll();
-            var currencies = _currencyManager.GetAll();
-
-            foreach (var currency in currencies)
-            {
-                var dto = new SummaryCashFlowDto()
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var toDate = DateTime.Now;
+                if (!string.IsNullOrEmpty(date))
                 {
-                    Currency = ObjectMapper.Map<CurrencyDto>(currency),
-                };
-                foreach (var company in companys)
+                    toDate = DateTime.Parse(date);
+                }
+                toDate = new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59);
+
+                var dtos = new List<SummaryCashFlowDto>();
+                var companys = _companyManager.GetAll();
+                var currencies = _currencyManager.GetAll();
+
+                foreach (var currency in currencies)
                 {
-                    var balance = _companyCashFlowManager.GetLastBalance(company.Id, currency.Id, toDate);
-                    dto.TotalBalance += balance;
+                    var dto = new SummaryCashFlowDto()
+                    {
+                        Currency = ObjectMapper.Map<CurrencyDto>(currency),
+                    };
+                    foreach (var company in companys)
+                    {
+                        var balance = _companyCashFlowManager.GetLastBalance(company.Id, currency.Id, toDate);
+                        dto.TotalBalance += balance;
+                    }
+
+                    dtos.Add(dto);
                 }
 
-                dtos.Add(dto);
+                return dtos;
             }
-
-            return dtos;
         }
 
         public async Task<CurrentCompanyBalanceDto> GetCurrentBalanceAsync(GetCompanyCashFlowInput input)
         {
-            var toDate = DateTime.Now;
-            if (!string.IsNullOrEmpty(input.ToDate))
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
             {
-                toDate = DateTime.Parse(input.ToDate);
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var toDate = DateTime.Now;
+                if (!string.IsNullOrEmpty(input.ToDate))
+                {
+                    toDate = DateTime.Parse(input.ToDate);
+                }
+                toDate = new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59);
+
+                var balance = _companyCashFlowManager.GetLastBalance(input.CompanyId, input.CurrencyId, toDate);
+
+                var company = await _companyManager.GetByIdAsync(input.CompanyId);
+                var companyDto = ObjectMapper.Map<CompanyDto>(company);
+
+                var currency = await _currencyManager.GetByIdAsync(input.CurrencyId);
+                var currencyDto = ObjectMapper.Map<CurrencyDto>(currency);
+
+                return new CurrentCompanyBalanceDto(companyDto, currencyDto, balance);
             }
-            toDate = new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59);
-
-            var balance = _companyCashFlowManager.GetLastBalance(input.CompanyId, input.CurrencyId, toDate);
-
-            var company = await _companyManager.GetByIdAsync(input.CompanyId);
-            var companyDto = ObjectMapper.Map<CompanyDto>(company);
-
-            var currency = await _currencyManager.GetByIdAsync(input.CurrencyId);
-            var currencyDto = ObjectMapper.Map<CurrencyDto>(currency);
-
-            return new CurrentCompanyBalanceDto(companyDto, currencyDto, balance);
         }
 
         [HttpPost]
         public ReadGrudDto GetForGrid([FromBody] CashFlowDataManagerRequest dm)
         {
-            DateTime fromDate = new DateTime(), toDate = new DateTime();
-
-            if (!string.IsNullOrEmpty(dm.fromDate))
+            using (CurrentUnitOfWork.SetTenantId(dm.tenantId))
             {
-                DateTime.TryParse(dm.fromDate, out fromDate);
-                fromDate = new DateTime(fromDate.Year, fromDate.Month, fromDate.Day, 0, 0, 0);
-            }
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                DateTime fromDate = new DateTime(), toDate = new DateTime();
 
-            if (!string.IsNullOrEmpty(dm.toDate))
-            {
-                DateTime.TryParse(dm.toDate, out toDate);
-                toDate = new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59);
-            }
-
-            var companyCashFlowsDto = new List<CompanyCashFlowDto>();
-            if (dm.id != 0 && dm.currencyId != 0)
-            {
-                //Add Previous Balance
-                var previousBalance = _companyCashFlowManager.GetPreviousBalance2(dm.id, dm.currencyId, fromDate);
-                companyCashFlowsDto.Add(new CompanyCashFlowDto
+                if (!string.IsNullOrEmpty(dm.fromDate))
                 {
-                    CompanyId = dm.id,
-                    CurrencyId = dm.currencyId,
-                    CurrentBalance = previousBalance,
-                    Type = TransactionConst.PreviousBalance
-                });
+                    DateTime.TryParse(dm.fromDate, out fromDate);
+                    fromDate = new DateTime(fromDate.Year, fromDate.Month, fromDate.Day, 0, 0, 0);
+                }
 
-                //Get Company Cash Flows
-                var companyCashFlows = _companyCashFlowManager.Get(dm.id, dm.currencyId, fromDate, toDate).ToList();
-                
-                companyCashFlowsDto.AddRange(ObjectMapper.Map<List<CompanyCashFlowDto>>(companyCashFlows));
-                InitialBalance(companyCashFlowsDto);
+                if (!string.IsNullOrEmpty(dm.toDate))
+                {
+                    DateTime.TryParse(dm.toDate, out toDate);
+                    toDate = new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59);
+                }
+
+                var companyCashFlowsDto = new List<CompanyCashFlowDto>();
+                if (dm.id != 0 && dm.currencyId != 0)
+                {
+                    //Add Previous Balance
+                    var previousBalance = _companyCashFlowManager.GetPreviousBalance2(dm.id, dm.currencyId, fromDate);
+                    companyCashFlowsDto.Add(new CompanyCashFlowDto
+                    {
+                        CompanyId = dm.id,
+                        CurrencyId = dm.currencyId,
+                        CurrentBalance = previousBalance,
+                        Type = TransactionConst.PreviousBalance
+                    });
+
+                    //Get Company Cash Flows
+                    var companyCashFlows = _companyCashFlowManager.Get(dm.id, dm.currencyId, fromDate, toDate).ToList();
+
+                    companyCashFlowsDto.AddRange(ObjectMapper.Map<List<CompanyCashFlowDto>>(companyCashFlows));
+                    InitialBalance(companyCashFlowsDto);
+                }
+
+
+                IEnumerable<CompanyCashFlowDto> data = companyCashFlowsDto;
+                AddCreationUsers(data);
+
+                var operations = new DataOperations();
+
+                IEnumerable groupDs = new List<CompanyCashFlowDto>();
+                if (dm.Group != null)
+                {
+                    groupDs = operations.PerformSelect(data, dm.Group);
+                }
+
+                var count = data.Count();
+
+                if (dm.Skip != 0)
+                {
+                    data = operations.PerformSkip(data, dm.Skip);
+                }
+
+                if (dm.Take != 0)
+                {
+                    data = operations.PerformTake(data, dm.Take);
+                }
+
+
+
+                return new ReadGrudDto() { result = data, count = count, groupDs = groupDs };
             }
-
-
-            IEnumerable<CompanyCashFlowDto> data = companyCashFlowsDto;
-            AddCreationUsers(data);
-
-            var operations = new DataOperations();
-
-            IEnumerable groupDs = new List<CompanyCashFlowDto>();
-            if (dm.Group != null)
-            {
-                groupDs = operations.PerformSelect(data, dm.Group);
-            }
-
-            var count = data.Count();
-
-            if (dm.Skip != 0)
-            {
-                data = operations.PerformSkip(data, dm.Skip);
-            }
-
-            if (dm.Take != 0)
-            {
-                data = operations.PerformTake(data, dm.Take);
-            }
-
-            
-
-            return new ReadGrudDto() { result = data, count = count, groupDs = groupDs };
         }
 
         private void AddCreationUsers(IEnumerable<CompanyCashFlowDto> data)
@@ -218,22 +238,25 @@ namespace Bwr.Exchange.CashFlows.CompanyCashFlows
 
         public async Task<CompanyCashFlowMatchingDto> MatchAsync(CompanyCashFlowMatchingDto input)
         {
-
-            var matching = new CashFlowMatching()
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
             {
-                MatchingBy = input.MatchingBy,
-                MatchingWith = input.MatchingWith,
-                Description = input.Description
-            };
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var matching = new CashFlowMatching()
+                {
+                    MatchingBy = input.MatchingBy,
+                    MatchingWith = input.MatchingWith,
+                    Description = input.Description
+                };
 
-            var listDic = new List<Dictionary<string, object>>();
-            foreach (var item in input.Items)
-            {
-                listDic.Add(item.ToDictionary());
+                var listDic = new List<Dictionary<string, object>>();
+                foreach (var item in input.Items)
+                {
+                    listDic.Add(item.ToDictionary());
+                }
+                await _companyCashFlowManager.MatchAsync(matching, listDic);
+
+                return input;
             }
-            await _companyCashFlowManager.MatchAsync(matching, listDic);
-
-            return input;
         }
 
         private WhereFilter GetWhereFilter(List<WhereFilter> filterOptions, string name)

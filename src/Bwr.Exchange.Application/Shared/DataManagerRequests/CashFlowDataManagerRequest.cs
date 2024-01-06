@@ -2,7 +2,7 @@
 
 namespace Bwr.Exchange.Shared.DataManagerRequests
 {
-    public class CashFlowDataManagerRequest: DataManagerRequest
+    public class CashFlowDataManagerRequest: BWireDataManagerRequest
     {
         public int id { get; set; }
         public int currencyId { get; set; }

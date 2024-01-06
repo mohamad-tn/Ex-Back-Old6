@@ -24,16 +24,22 @@ namespace Bwr.Exchange.Settings.Countries
 
         public async Task<IList<CountryDto>> GetAllAsync()
         {
-            var countries = await _countryManager.GetAllAsync();
-
-            return ObjectMapper.Map<List<CountryDto>>(countries);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var countries = await _countryManager.GetAllAsync();
+                return ObjectMapper.Map<List<CountryDto>>(countries);
+            }
         }
 
         public IList<CountryDto> GetAllWithDetail()
         {
-            var countries = _countryManager.GetAllWithDetail();
-
-            return ObjectMapper.Map<List<CountryDto>>(countries);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var countries = _countryManager.GetAllWithDetail();
+                return ObjectMapper.Map<List<CountryDto>>(countries);
+            }
         }
 
         [HttpPost]
@@ -81,13 +87,20 @@ namespace Bwr.Exchange.Settings.Countries
         }
         public UpdateCountryDto GetForEdit(int id)
         {
-            var country =  _countryManager.GetByIdWithDetail(id);
-            return ObjectMapper.Map<UpdateCountryDto>(country);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var country = _countryManager.GetByIdWithDetail(id);
+                return ObjectMapper.Map<UpdateCountryDto>(country);
+            }
         }
         public async Task<CountryDto> CreateAsync(CreateCountryDto input)
         {
-            CheckBeforeCreate(input);
-
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                CheckBeforeCreate(input);
+            }
             var country = ObjectMapper.Map<Country>(input);
 
             var createdCountry = await _countryManager.InsertAndGetAsync(country);
@@ -96,10 +109,13 @@ namespace Bwr.Exchange.Settings.Countries
         }
         public async Task<CountryDto> UpdateAsync(UpdateCountryDto input)
         {
-            CheckBeforeUpdate(input);
-
-            var country = await _countryManager.GetByIdAsync(input.Id);
-
+            Country country = new Country();
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                CheckBeforeUpdate(input);
+                country = await _countryManager.GetByIdAsync(input.Id);
+            }
             ObjectMapper.Map<UpdateCountryDto, Country>(input, country);
 
             var updatedCountry = await _countryManager.UpdateAndGetAsync(country);
@@ -108,7 +124,11 @@ namespace Bwr.Exchange.Settings.Countries
         }
         public async Task DeleteAsync(int id)
         {
-            await _countryManager.DeleteAsync(id);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                await _countryManager.DeleteAsync(id);
+            }
         }
 
         #region Helper methods

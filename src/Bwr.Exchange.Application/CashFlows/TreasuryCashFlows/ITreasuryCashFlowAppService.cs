@@ -1,6 +1,7 @@
 ﻿using Abp.Application.Services;
 using Bwr.Exchange.CashFlows.Shared.Dto;
 using Bwr.Exchange.CashFlows.TreasuryCashFlows.Dto;
+using Bwr.Exchange.Shared.DataManagerRequests;
 using Bwr.Exchange.Shared.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Syncfusion.EJ2.Base;
@@ -14,7 +15,7 @@ namespace Bwr.Exchange.CashFlows.TreasuryCashFlows
     {
         IList<TreasuryCashFlowDto> Get(GetTreasuryCashFlowInput input);
         Task<IList<SummaryCashFlowDto>> Summary(string date);
-        ReadGrudDto GetForGrid([FromBody] DataManagerRequest dm);
+        ReadGrudDto GetForGrid([FromBody] BWireDataManagerRequest dm);
         //Task<TreasuryCashFlowMatchingDto> MatchAsync(TreasuryCashFlowMatchingDto input);
     }
 }

@@ -18,6 +18,7 @@ using Bwr.Exchange.Authorization.Accounts;
 using Bwr.Exchange.Authorization.Roles;
 using Bwr.Exchange.Authorization.Users;
 using Bwr.Exchange.Roles.Dto;
+using Bwr.Exchange.Shared.DataManagerRequests;
 using Bwr.Exchange.Shared.Dto;
 using Bwr.Exchange.Users.Dto;
 using Microsoft.AspNetCore.Identity;
@@ -80,32 +81,43 @@ namespace Bwr.Exchange.Users
 
         public override async Task<UserDto> UpdateAsync(UserDto input)
         {
-            CheckUpdatePermission();
-
-            var user = await _userManager.GetUserByIdAsync(input.Id);
-
-            MapToEntity(input, user);
-
-            CheckErrors(await _userManager.UpdateAsync(user));
-
-            if (input.RoleNames != null)
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
             {
-                CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
-            }
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                CheckUpdatePermission();
+                var user = await _userManager.GetUserByIdAsync(input.Id);
 
-            return await GetAsync(input);
+                MapToEntity(input, user);
+
+                CheckErrors(await _userManager.UpdateAsync(user));
+
+                if (input.RoleNames != null)
+                {
+                    CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
+                }
+
+                return await GetAsync(input);
+            }
         }
 
         public override async Task DeleteAsync(EntityDto<long> input)
         {
-            var user = await _userManager.GetUserByIdAsync(input.Id);
-            await _userManager.DeleteAsync(user);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var user = await _userManager.GetUserByIdAsync(input.Id);
+                await _userManager.DeleteAsync(user);
+            }
         }
 
         public async Task<ListResultDto<RoleDto>> GetRoles()
         {
-            var roles = await _roleRepository.GetAllListAsync();
-            return new ListResultDto<RoleDto>(ObjectMapper.Map<List<RoleDto>>(roles));
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var roles = await _roleRepository.GetAllListAsync();
+                return new ListResultDto<RoleDto>(ObjectMapper.Map<List<RoleDto>>(roles));
+            }
         }
 
         public async Task ChangeLanguage(ChangeUserLanguageDto input)
@@ -144,15 +156,23 @@ namespace Bwr.Exchange.Users
 
         protected override IQueryable<User> CreateFilteredQuery(PagedUserResultRequestDto input)
         {
-            return Repository.GetAllIncluding(x => x.Roles)
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                return Repository.GetAllIncluding(x => x.Roles)
                 .WhereIf(!input.Keyword.IsNullOrWhiteSpace(), x => x.UserName.Contains(input.Keyword) || x.Name.Contains(input.Keyword) || x.EmailAddress.Contains(input.Keyword))
                 .WhereIf(input.IsActive.HasValue, x => x.IsActive == input.IsActive);
+            }
         }
 
         protected override async Task<User> GetEntityByIdAsync(long id)
         {
-            var user = await Repository.GetAllIncluding(x => x.Roles).FirstOrDefaultAsync(x => x.Id == id);
-
+            User user = new User();
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                user = await Repository.GetAllIncluding(x => x.Roles).FirstOrDefaultAsync(x => x.Id == id);
+            }
             if (user == null)
             {
                 throw new EntityNotFoundException(typeof(User), id);
@@ -227,9 +247,14 @@ namespace Bwr.Exchange.Users
         }
 
         [HttpPost]
-        public async Task<ReadGrudDto> GetForGrid([FromBody] DataManagerRequest dm)
+        public async Task<ReadGrudDto> GetForGrid([FromBody] BWireDataManagerRequest dm)
         {
-            var data = await this.Repository.GetAllListAsync();
+            IList<User> data = new List<User>();
+            using (CurrentUnitOfWork.SetTenantId(dm.tenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                data = await this.Repository.GetAllListAsync();
+            }
             IEnumerable<ReadUserDto> users = ObjectMapper.Map<List<ReadUserDto>>(data);
 
             var operations = new DataOperations();
@@ -260,8 +285,12 @@ namespace Bwr.Exchange.Users
 
         public async Task<IList<UserForDropdownDto>> GetUsersForDropdown()
         {
-            var users = await this.Repository.GetAllListAsync();
-            return ObjectMapper.Map<List<UserForDropdownDto>>(users);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var users = await this.Repository.GetAllListAsync();
+                return ObjectMapper.Map<List<UserForDropdownDto>>(users);
+            }
         }
 
     }

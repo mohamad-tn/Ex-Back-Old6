@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services;
+using Bwr.Exchange.LinkTenantsCompanies.Dto;
 using Bwr.Exchange.Settings.Companies.Dto;
 using Bwr.Exchange.Settings.Companies.Dto.CompanyBalance;
 using Bwr.Exchange.Settings.Companies.Dto.CompanyBalances;
@@ -12,6 +13,9 @@ namespace Bwr.Exchange.Settings.Companies
     {
         CompanyBalanceDto GetCurrentBalance(CompanyBalanceInputDto input);
         Task<IList<CompanyBalanceWithCurrencyDto>> GetAllBalances(int companyId);
-        Task<CompanyBalanceDto> GetBalanceForEdit(CompanyBalanceForEditInputDto input);        
+        Task<CompanyBalanceDto> GetBalanceForEdit(CompanyBalanceForEditInputDto input);
+        List<CompanyDto> GetAllCompaniesOfTenant(int? tenantId);
+        Task LinkCompanyWithTenant(LinkTenantCompanyDto input);
+        Task<CompanyDto> GetCompanyLikedWithTenant(int tenantId);
     }
 }

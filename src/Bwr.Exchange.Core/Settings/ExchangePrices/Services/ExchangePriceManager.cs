@@ -14,8 +14,8 @@ namespace Bwr.Exchange.Settings.ExchangePrices.Services
 
         public async Task<ExchangePrice> CreateAsync(ExchangePrice exchangePrice)
         {
-            var id = await _exchangePriceRepository.InsertAndGetIdAsync(exchangePrice);
-            return await _exchangePriceRepository.GetAsync(id);
+            return await _exchangePriceRepository.InsertAsync(exchangePrice);
+            //return await _exchangePriceRepository.GetAsync(id);
         }
 
         public async Task<ExchangePrice> GetByCurrencyIdAsync(int id)

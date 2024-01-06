@@ -24,14 +24,22 @@ namespace Bwr.Exchange.Settings.Commisions
 
         public async Task<IList<CommisionDto>> GetAllAsync()
         {
-            var commisions = await _commisionManager.GetAllAsync();
-
-            return ObjectMapper.Map<List<CommisionDto>>(commisions);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var commisions = await _commisionManager.GetAllAsync();
+                return ObjectMapper.Map<List<CommisionDto>>(commisions);
+            }
         }
         [HttpPost]
         public ReadGrudDto GetForGrid([FromBody] BWireDataManagerRequest dm)
         {
-            var data = _commisionManager.GetAllWithDetails();
+            IList<Commision> data = new List<Commision>();
+            using (CurrentUnitOfWork.SetTenantId(dm.tenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                data = _commisionManager.GetAllWithDetails();
+            }
             IEnumerable<ReadCommisionDto> commisions = ObjectMapper.Map<List<ReadCommisionDto>>(data);
 
             var operations = new DataOperations();
@@ -67,8 +75,12 @@ namespace Bwr.Exchange.Settings.Commisions
         }
         public UpdateCommisionDto GetForEdit(int id)
         {
-            var commision = AsyncHelper.RunSync(() => _commisionManager.GetByIdAsync(id));
-            return ObjectMapper.Map<UpdateCommisionDto>(commision);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var commision = AsyncHelper.RunSync(() => _commisionManager.GetByIdAsync(id));
+                return ObjectMapper.Map<UpdateCommisionDto>(commision);
+            }
         }
         public async Task<CommisionDto> CreateAsync(CreateCommisionDto input)
         {
@@ -82,9 +94,13 @@ namespace Bwr.Exchange.Settings.Commisions
         }
         public async Task<CommisionDto> UpdateAsync(UpdateCommisionDto input)
         {
+            Commision commision = new Commision();
             //CheckBeforeUpdate(input);
-
-            var commision = await _commisionManager.GetByIdAsync(input.Id);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                commision = await _commisionManager.GetByIdAsync(input.Id);
+            }
 
             ObjectMapper.Map<UpdateCommisionDto, Commision>(input, commision);
 
@@ -94,7 +110,11 @@ namespace Bwr.Exchange.Settings.Commisions
         }
         public async Task DeleteAsync(int id)
         {
-            await _commisionManager.DeleteAsync(id);
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                await _commisionManager.DeleteAsync(id);
+            }
         }
 
         #region Helper methods

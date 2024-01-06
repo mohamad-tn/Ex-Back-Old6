@@ -286,6 +286,21 @@
 	  <text name="ChangeDate">تاريخ التعديل</text>
 	  <text name="ChangeType">الإجراء</text>
 
+	  <text name="IncomeTransferNotAccepted">حوالات الفروع</text>
+	  <text name="TheOutgoingTransferHasBeenDisbursedItCannotBeModified">
+		  لايمكن التعديل, تم صرف هذه الحوالة
+	  </text>
+	  <text name="DoYouWantToRejectThisIncomeTransfer">هل تريد رفض هذه الحوالة ؟</text>
+	  <text name="DoYouWantToAcceptThisIncomeTransfer">هل تريد قبول هذه الحوالة ؟</text>
+	  <text name="SuccessfullyAccepted">تم قبول الحوالة بنجاح</text>
+	  <text name="SuccessfullyRejected">تم رفض الحوالة بنجاح</text>
+	  <text name="Accept">قبول</text>
+	  <text name="Reject">رفض</text>
+
+
+	  <text name="BranchTransfersCounter">عداد حوالات الفروع</text>
+
+	  <text name="TheDestinationBranchDoseNotDealInThisCurrency">الفرع المرسل إليه هذه الحوالة لا يتعامل بهذه العملة</text>
 
 
   </texts>

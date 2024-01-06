@@ -7,6 +7,7 @@ using Bwr.Exchange.CashFlows.TreasuryCashFlows.Services;
 using Bwr.Exchange.Settings.Currencies.Dto;
 using Bwr.Exchange.Settings.Currencies.Services;
 using Bwr.Exchange.Settings.Treasuries.Services;
+using Bwr.Exchange.Shared.DataManagerRequests;
 using Bwr.Exchange.Shared.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Syncfusion.EJ2.Base;
@@ -36,90 +37,97 @@ namespace Bwr.Exchange.CashFlows.TreasuryCashFlows
 
         public IList<TreasuryCashFlowDto> Get(GetTreasuryCashFlowInput input)
         {
-            var treasury = AsyncHelper.RunSync(_treasuryManager.GetTreasuryAsync);
-            var treasuryCashFlows = _treasuryCashFlowManager.Get(input.TreasuryId, input.CurrencyId, input.FromDate, input.ToDate);
-            var treasuryCashFlowsDto = ObjectMapper.Map<List<TreasuryCashFlowDto>>(treasuryCashFlows);
-            return treasuryCashFlowsDto;
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
+            {
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var treasury = AsyncHelper.RunSync(_treasuryManager.GetTreasuryAsync);
+                var treasuryCashFlows = _treasuryCashFlowManager.Get(input.TreasuryId, input.CurrencyId, input.FromDate, input.ToDate);
+                var treasuryCashFlowsDto = ObjectMapper.Map<List<TreasuryCashFlowDto>>(treasuryCashFlows);
+                return treasuryCashFlowsDto;
+            }
         }
 
         [HttpPost]
-        public ReadGrudDto GetForGrid([FromBody] DataManagerRequest dm)
+        public ReadGrudDto GetForGrid([FromBody] BWireDataManagerRequest dm)
         {
-            var treasury = AsyncHelper.RunSync(_treasuryManager.GetTreasuryAsync);
-            if (treasury == null)
+            using (CurrentUnitOfWork.SetTenantId(dm.tenantId))
             {
-                throw new UserFriendlyException(L(ValidationResultMessage.YouMustCreateTreasuryFirst));
-            }
-
-            int currencyId = 0;
-            DateTime fromDate = new DateTime(), toDate = new DateTime();
-            if (dm.Where != null)
-            {
-                var currencyFilter = GetWhereFilter(dm.Where, "currencyId");
-                if (currencyFilter != null)
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var treasury = AsyncHelper.RunSync(_treasuryManager.GetTreasuryAsync);
+                if (treasury == null)
                 {
-                    int.TryParse(currencyFilter.value.ToString(), out currencyId);
+                    throw new UserFriendlyException(L(ValidationResultMessage.YouMustCreateTreasuryFirst));
                 }
 
-                var fromDateFilter = GetWhereFilter(dm.Where, "fromDate");
-                if (fromDateFilter != null)
+                int currencyId = 0;
+                DateTime fromDate = new DateTime(), toDate = new DateTime();
+                if (dm.Where != null)
                 {
-                    DateTime.TryParse(fromDateFilter.value.ToString(), out fromDate);
-                    fromDate = new DateTime(fromDate.Year, fromDate.Month, fromDate.Day, 0, 0, 0);
+                    var currencyFilter = GetWhereFilter(dm.Where, "currencyId");
+                    if (currencyFilter != null)
+                    {
+                        int.TryParse(currencyFilter.value.ToString(), out currencyId);
+                    }
+
+                    var fromDateFilter = GetWhereFilter(dm.Where, "fromDate");
+                    if (fromDateFilter != null)
+                    {
+                        DateTime.TryParse(fromDateFilter.value.ToString(), out fromDate);
+                        fromDate = new DateTime(fromDate.Year, fromDate.Month, fromDate.Day, 0, 0, 0);
+                    }
+
+                    var toDateFilter = GetWhereFilter(dm.Where, "toDate");
+                    if (toDateFilter != null)
+                    {
+                        DateTime.TryParse(toDateFilter.value.ToString(), out toDate);
+                        toDate = new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59);
+                    }
                 }
 
-                var toDateFilter = GetWhereFilter(dm.Where, "toDate");
-                if (toDateFilter != null)
+                var treasuryCashFlowsDto = new List<TreasuryCashFlowDto>();
+                if (treasury != null && currencyId != 0)
                 {
-                    DateTime.TryParse(toDateFilter.value.ToString(), out toDate);
-                    toDate = new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59);
+                    //Add Previous Balance
+                    var previousBalance = _treasuryCashFlowManager.GetPreviousBalance2(treasury.Id, currencyId, fromDate);
+                    treasuryCashFlowsDto.Add(new TreasuryCashFlowDto
+                    {
+                        TreasuryId = treasury.Id,
+                        CurrencyId = currencyId,
+                        CurrentBalance = previousBalance,
+                        Type = TransactionConst.PreviousBalance
+                    });
+
+                    //Get Treasury Cash Flows
+                    var treasuryCashFlows = _treasuryCashFlowManager.Get(treasury.Id, currencyId, fromDate, toDate);
+                    treasuryCashFlowsDto.AddRange(ObjectMapper.Map<List<TreasuryCashFlowDto>>(treasuryCashFlows));
+
+                    InitialBalance(treasuryCashFlowsDto);
                 }
-            }
 
-            var treasuryCashFlowsDto = new List<TreasuryCashFlowDto>();
-            if (treasury != null && currencyId != 0)
-            {
-                //Add Previous Balance
-                var previousBalance = _treasuryCashFlowManager.GetPreviousBalance2(treasury.Id, currencyId, fromDate);
-                treasuryCashFlowsDto.Add(new TreasuryCashFlowDto
+                IEnumerable<TreasuryCashFlowDto> data = treasuryCashFlowsDto;
+
+                var operations = new DataOperations();
+
+                IEnumerable groupDs = new List<TreasuryCashFlowDto>();
+                if (dm.Group != null)
                 {
-                    TreasuryId = treasury.Id,
-                    CurrencyId = currencyId,
-                    CurrentBalance = previousBalance,
-                    Type = TransactionConst.PreviousBalance
-                });
+                    groupDs = operations.PerformSelect(data, dm.Group);
+                }
 
-                //Get Treasury Cash Flows
-                var treasuryCashFlows = _treasuryCashFlowManager.Get(treasury.Id, currencyId, fromDate, toDate);
-                treasuryCashFlowsDto.AddRange(ObjectMapper.Map<List<TreasuryCashFlowDto>>(treasuryCashFlows));
+                var count = data.Count();
 
-                InitialBalance(treasuryCashFlowsDto);
+                if (dm.Skip != 0)
+                {
+                    data = operations.PerformSkip(data, dm.Skip);
+                }
+
+                if (dm.Take != 0)
+                {
+                    data = operations.PerformTake(data, dm.Take);
+                }
+
+                return new ReadGrudDto() { result = data, count = 0, groupDs = groupDs };
             }
-
-            IEnumerable<TreasuryCashFlowDto> data = treasuryCashFlowsDto;
-
-            var operations = new DataOperations();
-
-            IEnumerable groupDs = new List<TreasuryCashFlowDto>();
-            if (dm.Group != null)
-            {
-                groupDs = operations.PerformSelect(data, dm.Group);
-            }
-
-            var count = data.Count();
-
-            if (dm.Skip != 0)
-            {
-                data = operations.PerformSkip(data, dm.Skip);
-            }
-
-            if (dm.Take != 0)
-            {
-                data = operations.PerformTake(data, dm.Take);
-            }
-
-            return new ReadGrudDto() { result = data, count = 0, groupDs = groupDs };
-
         }
 
         private void InitialBalance(List<TreasuryCashFlowDto> treasuryCashFlows)
@@ -134,33 +142,37 @@ namespace Bwr.Exchange.CashFlows.TreasuryCashFlows
 
         public async Task<IList<SummaryCashFlowDto>> Summary(string date)
         {
-            var toDate = DateTime.Now;
-            if (!string.IsNullOrEmpty(date))
+            using (CurrentUnitOfWork.SetTenantId(AbpSession.TenantId))
             {
-                toDate = DateTime.Parse(date);
-            }
-            toDate = new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59);
-
-            var dtos = new List<SummaryCashFlowDto>();
-            var treasuries = await _treasuryManager.GetAllAsync();
-            var currencies = _currencyManager.GetAll();
-
-            foreach (var currency in currencies)
-            {
-                var dto = new SummaryCashFlowDto()
+                CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
+                var toDate = DateTime.Now;
+                if (!string.IsNullOrEmpty(date))
                 {
-                    Currency = ObjectMapper.Map<CurrencyDto>(currency),
-                };
-                foreach (var treasury in treasuries)
+                    toDate = DateTime.Parse(date);
+                }
+                toDate = new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59);
+
+                var dtos = new List<SummaryCashFlowDto>();
+                var treasuries = await _treasuryManager.GetAllAsync();
+                var currencies = _currencyManager.GetAll();
+
+                foreach (var currency in currencies)
                 {
-                    var balance = _treasuryCashFlowManager.GetLastBalance(treasury.Id, currency.Id, toDate);
-                    dto.TotalBalance += balance;
+                    var dto = new SummaryCashFlowDto()
+                    {
+                        Currency = ObjectMapper.Map<CurrencyDto>(currency),
+                    };
+                    foreach (var treasury in treasuries)
+                    {
+                        var balance = _treasuryCashFlowManager.GetLastBalance(treasury.Id, currency.Id, toDate);
+                        dto.TotalBalance += balance;
+                    }
+
+                    dtos.Add(dto);
                 }
 
-                dtos.Add(dto);
+                return dtos;
             }
-
-            return dtos;
         }
 
         //public async Task<TreasuryCashFlowMatchingDto> MatchAsync(TreasuryCashFlowMatchingDto input)

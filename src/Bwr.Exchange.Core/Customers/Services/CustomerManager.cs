@@ -61,8 +61,8 @@ namespace Bwr.Exchange.Customers.Services
                 newCustomer.Address = input.Address;
                 newCustomer.IdentificationNumber = input.IdentificationNumber;
 
-                var id = await _customerRepository.InsertAndGetIdAsync(newCustomer);
-                return await _customerRepository.GetAsync(id);
+                return await _customerRepository.InsertAsync(newCustomer);
+                //return await _customerRepository.GetAsync(id);
             }
         }
 

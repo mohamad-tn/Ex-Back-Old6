@@ -70,18 +70,18 @@ namespace Bwr.Exchange.Settings.Companies.Services
 
         public async Task<Company> InsertAndGetAsync(Company company)
         {
-            using (var unitOfWork = _unitOfWorkManager.Begin())
-            {
-                var companyId = await _companyRepository.InsertAndGetIdAsync(company);
+            //using (var unitOfWork = _unitOfWorkManager.Begin())
+            //{
+                var createdCompany = await _companyRepository.InsertAsync(company);
 
                 //Update companyBalances
                 //var companyBalances = company.CompanyBalances.ToList();//Don't remove ToList()
                 //await RemoveCompanyBalances(companyId, companyBalances);
                 //await AddNewCompanyBalances(companyId, companyBalances);
 
-                unitOfWork.Complete();
-            }
-            return await GetByIdAsync(company.Id);
+            //    unitOfWork.Complete();
+            //}
+            return createdCompany;
         }
 
         public async Task<Company> UpdateAndGetAsync(Company company)
@@ -118,6 +118,12 @@ namespace Bwr.Exchange.Settings.Companies.Services
             return company.Name;
         }
 
+        public Company GetByCompanyTenantId(int companyTenantId)
+        {
+            var company = _companyRepository.GetAll().FirstOrDefault(x => x.TenantCompanyId == companyTenantId);
+            return company;
+        }
+
         #region Helper Methods
         private async Task RemoveCompanyBalances(int companyId, IList<CompanyBalance> newCompanyBalances)
         {
@@ -144,9 +150,9 @@ namespace Bwr.Exchange.Settings.Companies.Services
                     await _companyBalanceRepository.InsertAsync(newCompanyBalance);
                 }
             }
-        }
+        }       
 
-        
+
         #endregion
     }
 }
