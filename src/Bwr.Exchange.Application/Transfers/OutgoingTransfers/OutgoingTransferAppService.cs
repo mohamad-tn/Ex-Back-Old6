@@ -25,6 +25,7 @@ using Bwr.Exchange.Settings.Clients.Services;
 using Bwr.Exchange.Settings.Companies.Services;
 using Bwr.Exchange.Settings.Currencies.Services;
 using Bwr.Exchange.Shared.DataManagerRequests;
+using Bwr.Exchange.Transfers.IncomeTransfers;
 
 namespace Bwr.Exchange.Transfers.OutgoingTransfers
 {
@@ -32,6 +33,7 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
     {
         private readonly IOutgoingTransferManager _outgoingTransferManager;
         private readonly ICustomerManager _customerManager;
+        private readonly ICustomerImageManager _customerImageManager;
         private readonly ITreasuryManager _treasuryManager;
         private readonly ICompanyManager _companyManager;
         private readonly IClientManager _clientManager;
@@ -45,7 +47,8 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
             IClientManager clientManager,
             ICurrencyManager currencyManager,
             IWebHostEnvironment webHostEnvironment
-            )
+,
+            ICustomerImageManager customerImageManager)
         {
             _outgoingTransferManager = outgoingTransferManager;
             _customerManager = customerManager;
@@ -54,6 +57,7 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
             _clientManager = clientManager;
             _currencyManager = currencyManager;
             _webHostEnvironment = webHostEnvironment;
+            _customerImageManager = customerImageManager;
         }
 
         public async Task<OutgoingTransferDto> CreateAsync(OutgoingTransferDto input)
@@ -74,6 +78,34 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
                 outgoingTransfer.Sender = sender;
 
                 outgoingTransfer.TreasuryId = treasury.Id;
+
+                //Images
+                var images = new List<CustomerImage>();
+                if (input.Images.Any())
+                {
+                    var rootPath = _webHostEnvironment.WebRootPath;
+                    foreach (var fileUploadDto in input.Images)
+                    {
+                        if (string.IsNullOrEmpty(fileUploadDto.FilePath))
+                        {
+                            var imagePath = fileUploadDto.SaveFileAndGetUrl(rootPath, "customers");
+
+                            images.Add(new CustomerImage()
+                            {
+                                CustomerId = outgoingTransfer.BeneficiaryId,
+                                Path = imagePath,
+                                Name = fileUploadDto.FileName,
+                                Size = fileUploadDto.FileSize,
+                                Type = fileUploadDto.FileType
+                            });
+                        }
+                    }
+                    EventBus.Default.Trigger(
+                        new AddImageToCustomerEventData(
+                            images: images
+                            )
+                        );
+                }
 
                 var createdOutgoingTransfer = await _outgoingTransferManager.CreateAsync(outgoingTransfer,AbpSession.TenantId);
                 return ObjectMapper.Map<OutgoingTransferDto>(createdOutgoingTransfer);
@@ -206,6 +238,35 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
 
                     outgoingTransfer.Beneficiary = beneficiary;
                     outgoingTransfer.Sender = sender;
+
+                    //Images
+                    var images = new List<CustomerImage>();
+                    if (input.Images.Any())
+                    {
+                        var rootPath = _webHostEnvironment.WebRootPath;
+                        foreach (var fileUploadDto in input.Images)
+                        {
+                            if (string.IsNullOrEmpty(fileUploadDto.FilePath))
+                            {
+                                var imagePath = fileUploadDto.SaveFileAndGetUrl(rootPath, "customers");
+
+                                images.Add(new CustomerImage()
+                                {
+                                    CustomerId = outgoingTransfer.BeneficiaryId,
+                                    Path = imagePath,
+                                    Name = fileUploadDto.FileName,
+                                    Size = fileUploadDto.FileSize,
+                                    Type = fileUploadDto.FileType
+                                });
+                            }
+                        }
+
+                        EventBus.Default.Trigger(
+                        new AddImageToCustomerEventData(
+                            images: images
+                            )
+                        );
+                    }
 
                     var updatedOutgoingTransfer = await _outgoingTransferManager.UpdateAsync(outgoingTransfer);
                     return ObjectMapper.Map<OutgoingTransferDto>(updatedOutgoingTransfer);
@@ -489,7 +550,9 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers
             {
                 CurrentUnitOfWork.DisableFilter(Abp.Domain.Uow.AbpDataFilters.MayHaveTenant);
                 var customer = ObjectMapper.Map<Customer>(customerDto);
-                return await _customerManager.CreateOrUpdateAsync(customer);
+                var createdCustomer = await _customerManager.CreateOrUpdateAsync(customer);
+                
+                return createdCustomer;
             }
         }
 

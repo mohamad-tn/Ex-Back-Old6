@@ -14,7 +14,9 @@ using Bwr.Exchange.Authorization.Roles;
 using Bwr.Exchange.Authorization.Users;
 using Bwr.Exchange.Editions;
 using Bwr.Exchange.MultiTenancy.Dto;
+using Bwr.Exchange.Settings.Treasuries.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 
 namespace Bwr.Exchange.MultiTenancy
 {
@@ -25,15 +27,18 @@ namespace Bwr.Exchange.MultiTenancy
         private readonly EditionManager _editionManager;
         private readonly UserManager _userManager;
         private readonly RoleManager _roleManager;
+        private readonly ITreasuryManager _treasuryManager;
         private readonly IAbpZeroDbMigrator _abpZeroDbMigrator;
-
+        private readonly IConfiguration _configuration;
         public TenantAppService(
             IRepository<Tenant, int> repository,
             TenantManager tenantManager,
             EditionManager editionManager,
             UserManager userManager,
             RoleManager roleManager,
-            IAbpZeroDbMigrator abpZeroDbMigrator)
+            IAbpZeroDbMigrator abpZeroDbMigrator,
+            IConfiguration configuration,
+            ITreasuryManager treasuryManager)
             : base(repository)
         {
             _tenantManager = tenantManager;
@@ -41,12 +46,16 @@ namespace Bwr.Exchange.MultiTenancy
             _userManager = userManager;
             _roleManager = roleManager;
             _abpZeroDbMigrator = abpZeroDbMigrator;
+            _configuration = configuration;
+            _treasuryManager = treasuryManager;
         }
 
         public override async Task<TenantDto> CreateAsync(CreateTenantDto input)
         {
             CheckCreatePermission();
 
+            var connectionSerting = _configuration.GetConnectionString("Default");
+            input.ConnectionString = connectionSerting.Replace("ex", input.ConnectionString);
             // Create tenant
             var tenant = ObjectMapper.Map<Tenant>(input);
             tenant.ConnectionString = input.ConnectionString.IsNullOrEmpty()
@@ -85,6 +94,9 @@ namespace Bwr.Exchange.MultiTenancy
 
                 // Assign admin user to role!
                 CheckErrors(await _userManager.AddToRoleAsync(adminUser, adminRole.Name));
+                await CurrentUnitOfWork.SaveChangesAsync();
+
+                await _treasuryManager.CreateMainTreasuryForTenantAsync(tenant.Id);
                 await CurrentUnitOfWork.SaveChangesAsync();
             }
 

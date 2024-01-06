@@ -16,7 +16,6 @@ using Bwr.Exchange.Transfers;
 using Bwr.Exchange.CashFlows.ClientCashFlows;
 using Bwr.Exchange.CashFlows.CompanyCashFlows;
 using Bwr.Exchange.CashFlows.TreasuryCashFlows;
-using System.Transactions;
 using Bwr.Exchange.TreasuryActions;
 using Bwr.Exchange.Transfers.IncomeTransfers;
 using Bwr.Exchange.Settings.ExchangePrices;

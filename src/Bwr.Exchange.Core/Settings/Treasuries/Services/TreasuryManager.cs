@@ -47,6 +47,14 @@ namespace Bwr.Exchange.Settings.Treasuries.Services
             
         }
 
+        public async Task CreateMainTreasuryForTenantAsync(int? tenantId)
+        {
+            var treasury = new Treasury();
+            treasury.Name = "الصندوق الرئيسي";
+            treasury.TenantId = tenantId;
+            var createdTreasury = await _treasuryRepository.InsertAsync(treasury);
+        }
+
         public async Task<IList<Treasury>> GetAllAsync()
         {
             return await _treasuryRepository.GetAllListAsync();

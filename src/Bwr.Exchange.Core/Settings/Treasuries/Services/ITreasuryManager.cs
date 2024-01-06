@@ -9,5 +9,6 @@ namespace Bwr.Exchange.Settings.Treasuries.Services
         Task<Treasury> GetTreasuryAsync();
         Task<IList<Treasury>> GetAllAsync();
         Task CreateMainTreasuryAsync();
+        Task CreateMainTreasuryForTenantAsync(int? tenantId);
     }
 }
