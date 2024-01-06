@@ -23,7 +23,7 @@ namespace Bwr.Exchange.EntityFrameworkCore.Seed.Tenants
 
         private void CreateTreasury()
         {
-            var treasury = _context.Treasuries.IgnoreQueryFilters().FirstOrDefault(r => r.Id == _tenantId && e.Name.Trim() == "الصندوق الرئيسي");
+            var treasury = _context.Treasuries.IgnoreQueryFilters().FirstOrDefault(x => x.Id == _tenantId && x.Name.Trim() == "الصندوق الرئيسي");
             if (treasury == null)
             {
                 treasury = new Treasury { Name = "الصندوق الرئيسي" };
