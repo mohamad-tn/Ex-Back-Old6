@@ -1,11 +1,12 @@
-﻿using Abp.Domain.Entities.Auditing;
+﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
 using Bwr.Exchange.Settings.Countries;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Bwr.Exchange.Settings.Clients
 {
-    public class Client : FullAuditedEntity
+    public class Client : FullAuditedEntity, IMayHaveTenant
     {
         public Client()
         {
@@ -15,7 +16,7 @@ namespace Bwr.Exchange.Settings.Clients
         public string Name { get; set; }
         public string Address { get; set; }
         public bool Activated { get; set; }
-
+        public int? TenantId { get; set; }
         #region Province
         public int ProvinceId { get; set; }
         [ForeignKey("ProvinceId")]

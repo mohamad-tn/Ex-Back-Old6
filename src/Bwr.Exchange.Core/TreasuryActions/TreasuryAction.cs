@@ -1,4 +1,5 @@
-﻿using Abp.Domain.Entities.Auditing;
+﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
 using Bwr.Exchange.Settings.Clients;
 using Bwr.Exchange.Settings.Companies;
 using Bwr.Exchange.Settings.Currencies;
@@ -11,8 +12,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Bwr.Exchange.TreasuryActions
 {
-    public class TreasuryAction : FullAuditedEntity
+    public class TreasuryAction : FullAuditedEntity, IMayHaveTenant
     {
+        public int? TenantId { get; set; }
         public int Number { get; set; }
         public TreasuryActionType ActionType { get; set; }
         public DateTime Date { get; set; }

@@ -65,6 +65,17 @@ namespace Bwr.Exchange.CashFlows.ManagementStatement.Services
             IEnumerable<ManagementDto> data = ObjectMapper.Map<List<ManagementDto>>(managements);
             var operations = new DataOperations();
 
+            //if (dm.Where != null && dm.Where.Count > 0)
+            //{
+            //    data = operations.PerformFiltering(data, dm.Where, "and");
+            //}
+
+            if (dm.Sorted != null && dm.Sorted.Count > 0)
+            {
+                data = operations.PerformSorting(data, dm.Sorted);
+            }
+
+
             IEnumerable groupDs = new List<ReadOutgoingTransferDto>();
             if (dm.Group != null)
             {

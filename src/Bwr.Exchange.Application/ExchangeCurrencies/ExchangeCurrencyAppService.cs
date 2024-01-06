@@ -151,8 +151,8 @@ namespace Bwr.Exchange.ExchangeCurrencies
 
             if (exchangeCurrency.CompanyId != input.CompanyId)
             {
-                before = before + " - " + L("Company") + " : " + (exchangeCurrency.CompanyId != null ? _companyManager.GetByIdWithDetail((int)exchangeCurrency.CompanyId): " ");
-                after = after + " - " + L("Company") + " : " + (input.CompanyId != null ? _companyManager.GetByIdWithDetail((int)input.CompanyId) : " ");
+                before = before + " - " + L("Company") + " : " + (exchangeCurrency.CompanyId != null ? _companyManager.GetCompanyNameById((int)exchangeCurrency.CompanyId): " ");
+                after = after + " - " + L("Company") + " : " + (input.CompanyId != null ? _companyManager.GetCompanyNameById((int)input.CompanyId) : " ");
             }
             #endregion
 

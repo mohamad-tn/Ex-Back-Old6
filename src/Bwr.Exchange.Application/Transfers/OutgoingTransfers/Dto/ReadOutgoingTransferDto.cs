@@ -21,6 +21,7 @@ namespace Bwr.Exchange.Transfers.OutgoingTransfers.Dto
         public string InstrumentNo { get; set; } //رقم الصك
         public string Reason { get; set; }
         public string Note { get; set; }
+        public bool IsCopied { get; set; }
 
         public int CountryId { get; set; }
         public CountryDto Country { get; set; }

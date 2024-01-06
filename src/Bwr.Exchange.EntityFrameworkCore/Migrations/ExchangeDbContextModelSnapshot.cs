@@ -1605,6 +1605,9 @@ namespace Bwr.Exchange.Migrations
                     b.Property<string>("MatchingWith")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("CashFlowMatchings");
@@ -1677,6 +1680,9 @@ namespace Bwr.Exchange.Migrations
 
                     b.Property<bool?>("Shaded")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
 
                     b.Property<int>("TransactionId")
                         .HasColumnType("int");
@@ -1765,6 +1771,9 @@ namespace Bwr.Exchange.Migrations
 
                     b.Property<bool?>("Shaded")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
 
                     b.Property<int>("TransactionId")
                         .HasColumnType("int");
@@ -1887,6 +1896,9 @@ namespace Bwr.Exchange.Migrations
                     b.Property<int?>("SenderId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("ToCompanyId")
                         .HasColumnType("int");
 
@@ -1998,7 +2010,7 @@ namespace Bwr.Exchange.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("Shaded")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<int>("TransactionId")
                         .HasColumnType("int");
@@ -2062,7 +2074,7 @@ namespace Bwr.Exchange.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -2087,7 +2099,7 @@ namespace Bwr.Exchange.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Size")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
@@ -2204,7 +2216,7 @@ namespace Bwr.Exchange.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("SecondSellingPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.HasKey("Id");
 
@@ -2281,7 +2293,7 @@ namespace Bwr.Exchange.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("SecondSellingPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.HasKey("Id");
 
@@ -2395,6 +2407,9 @@ namespace Bwr.Exchange.Migrations
                     b.Property<int>("ProvinceId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProvinceId");
@@ -2440,6 +2455,9 @@ namespace Bwr.Exchange.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
@@ -2482,7 +2500,7 @@ namespace Bwr.Exchange.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -2527,7 +2545,7 @@ namespace Bwr.Exchange.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<double>("Percentage")
-                        .HasColumnType("float");
+                        .HasColumnType("double");
 
                     b.Property<double>("To")
                         .HasColumnType("float");
@@ -2578,7 +2596,7 @@ namespace Bwr.Exchange.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -2623,6 +2641,9 @@ namespace Bwr.Exchange.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
@@ -2662,7 +2683,7 @@ namespace Bwr.Exchange.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -2702,7 +2723,7 @@ namespace Bwr.Exchange.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -2744,7 +2765,7 @@ namespace Bwr.Exchange.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -2790,7 +2811,7 @@ namespace Bwr.Exchange.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("SellingPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(65,30)");
 
                     b.HasKey("Id");
 
@@ -2829,7 +2850,7 @@ namespace Bwr.Exchange.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -2874,6 +2895,9 @@ namespace Bwr.Exchange.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("GeneralSettings");
@@ -2909,7 +2933,7 @@ namespace Bwr.Exchange.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -2946,7 +2970,7 @@ namespace Bwr.Exchange.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -3041,6 +3065,9 @@ namespace Bwr.Exchange.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
@@ -3102,6 +3129,9 @@ namespace Bwr.Exchange.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ToClientId")
@@ -3172,7 +3202,7 @@ namespace Bwr.Exchange.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("InstrumentNo")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2");
@@ -3196,6 +3226,9 @@ namespace Bwr.Exchange.Migrations
                         .HasColumnType("float");
 
                     b.Property<int?>("SenderId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
                     b.Property<int>("ToCompanyId")
@@ -3303,6 +3336,9 @@ namespace Bwr.Exchange.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
                     b.Property<int?>("TreasuryId")

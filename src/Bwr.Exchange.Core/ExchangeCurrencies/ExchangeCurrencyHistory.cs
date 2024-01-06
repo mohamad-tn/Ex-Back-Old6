@@ -1,4 +1,5 @@
-﻿using Abp.Domain.Entities.Auditing;
+﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,8 +7,9 @@ using System.Text;
 
 namespace Bwr.Exchange.ExchangeCurrencies
 {
-    public class ExchangeCurrencyHistory: FullAuditedEntity
+    public class ExchangeCurrencyHistory: FullAuditedEntity, IMayHaveTenant
     {
+        public int? TenantId { get; set; }
         public int? FirstCurrencyId { get; set; }
         public decimal? FirstMainPrice { get; set; }
         public decimal? FirstPurchasingPrice { get; set; }

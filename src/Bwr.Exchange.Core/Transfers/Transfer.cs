@@ -1,11 +1,12 @@
-﻿using Abp.Domain.Entities.Auditing;
+﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
 using Bwr.Exchange.Customers;
 using Bwr.Exchange.Settings.Currencies;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Bwr.Exchange.Transfers
 {
-    public class Transfer : AuditedEntity
+    public class Transfer : AuditedEntity, IMayHaveTenant
     {
         #region Currency
         public int CurrencyId { get; set; }
@@ -26,6 +27,7 @@ namespace Bwr.Exchange.Transfers
         #endregion
 
         public PaymentType PaymentType { get; set; }
+        public int? TenantId { get; set; }
         public double Amount { get; set; }
         public double Commission { get; set; }
         public double CompanyCommission { get; set; }

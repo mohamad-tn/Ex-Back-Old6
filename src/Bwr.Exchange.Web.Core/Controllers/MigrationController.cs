@@ -92,7 +92,7 @@ namespace Bwr.Exchange.Controllers
             var success = true;
             var currencyIds = new List<int>();
             var currencies = _currencyManager.GetAll();
-            using (var connection = new MySqlConnection(_connectionSerting))
+            using (var connection = new SqlConnection(_connectionSerting))
             {
                 connection.Open();
                 var transaction = connection.BeginTransaction();
@@ -160,7 +160,7 @@ namespace Bwr.Exchange.Controllers
         private bool ClearDb(string query,string connectionSerting)
         {
             var success = true;
-            using (var connection = new MySqlConnection(connectionSerting))
+            using (var connection = new SqlConnection(connectionSerting))
             {
                 connection.Open();
                 var transaction = connection.BeginTransaction();
