@@ -11,6 +11,9 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="..\..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\src\Bwr.Exchange.Application\Bwr.Exchange.Application.csproj" />
     <ProjectReference Include="..\..\src\Bwr.Exchange.EntityFrameworkCore\Bwr.Exchange.EntityFrameworkCore.csproj" />
   </ItemGroup>
