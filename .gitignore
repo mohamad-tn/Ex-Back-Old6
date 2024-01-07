@@ -254,3 +254,7 @@ paket-files/
 src/Bwr.Exchange.Web.Mvc/secrets.json
 src/Bwr.Exchange.Web.Host/secrets.json
 src/Bwr.Exchange.Migrator/secrets.json
+/src/Bwr.Exchange.Web.Host/App_Data/Logs/Logs.txt.3
+/src/Bwr.Exchange.Web.Host/App_Data/Logs/Logs.txt
+/src/Bwr.Exchange.Web.Host/App_Data/Logs/Logs.txt.1
+/src/Bwr.Exchange.Web.Host/App_Data/Logs/Logs.txt.2
